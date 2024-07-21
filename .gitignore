@@ -33,3 +33,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# NEVER update manually ios and android folders
+# they're meant to be generated on the fly by expo
+# on your local machine
+ios
+android
