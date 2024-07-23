@@ -46,12 +46,14 @@ const styles = StyleSheet.create({
     height: 270,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: "5%"
+    marginLeft: "5%",
+    marginBottom: -40,
   },
   title: {
     fontSize: 40,
     textAlign: 'center',
     fontWeight: 'bold',
+    margimTop: -20,
   },
   button: {
     flexDirection: 'row', 
