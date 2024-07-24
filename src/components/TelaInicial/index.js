@@ -7,7 +7,6 @@ const logo = require('../../../assets/logo_gerocuidado.png');
 export default function TelaInicial() {
   return (
     <View style={styles.container}>
-      {/* Centraliza a imagem no contêiner */}
       <View style={styles.imageContainer}>
         <Image
           source={logo}
