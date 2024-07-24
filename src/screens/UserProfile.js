@@ -17,24 +17,28 @@ const UserProfile = () => {
         style={styles.logo_caregiver} />
         <Text style={styles.helloMessage}>Olá, nome do usuário</Text>
       </View>
-      <OptionProfile
-        name="Perfil"
-        // icon="https://example.com/icon1.png" // Substitua pelo URL do ícone
-        description="Edite sua conta"
-        smallImage={require('../../assets/engrenagem.png')} // Imagem do icone da engrenagem
-        rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
-        onPress={() => handlePress('Perfil')}
-        style={styles.optionSpacing} // Adiciona espaçamento ao primeiro botão
-      />
-      <OptionProfile
-        name="Idosos"
-        // icon="https://example.com/icon2.png" // Substitua pelo URL do ícone
-        description="Gerenciar idosos"
-        smallImage={require('../../assets/IconIdoso.png')} // Imagem do icone Idoso
-        rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
-        onPress={() => handlePress('Idosos')}
-        style={styles.optionSpacing} // Adiciona espaçamento ao segundo botão
-      />
+      <View style={styles.optionWrapper}>
+        <OptionProfile
+          name="Perfil"
+          // icon="https://example.com/icon1.png" // Substitua pelo URL do ícone
+          description="Edite sua conta"
+          smallImage={require('../../assets/engrenagem.png')} // Imagem do icone da engrenagem
+          rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
+          onPress={() => handlePress('Perfil')}
+          style={styles.optionSpacing} // Adiciona espaçamento ao primeiro botão
+        />
+      </View>
+      <View style={styles.optionWrapper}>
+        <OptionProfile
+          name="Idosos"
+          // icon="https://example.com/icon2.png" // Substitua pelo URL do ícone
+          description="Gerenciar idosos"
+          smallImage={require('../../assets/IconIdoso.png')} // Imagem do icone Idoso
+          rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
+          onPress={() => handlePress('Idosos')}
+          style={styles.optionSpacing} // Adiciona espaçamento ao segundo botão
+        />
+      </View>
     </View>
   );
 }
@@ -64,6 +68,12 @@ const styles = StyleSheet.create({
   optionSpacing: {
     marginTop: 40, // add espaçamento do primeiro botão
     marginBottom: -10, // Adiciona espaçamento ao segundo botão
+  },
+  optionWrapper: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: -10, // Espaço entre os botões
+    marginTop: 20, // Espaço do topo
   },
 });
 

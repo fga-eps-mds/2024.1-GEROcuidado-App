@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 const OptionProfile = ({ name, icon, description, smallImage, rightImage ,onPress }) => {
   return (
-    <TouchableOpacity style={[styles.optionContainer, style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.optionContainer]} onPress={onPress}>
     <View style={styles.iconContainer1}>
         <Image source={{ uri: icon }} style={styles.icon} />
         <Image source={smallImage} style={styles.smallImage} />
