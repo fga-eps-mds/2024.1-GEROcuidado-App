@@ -4,7 +4,7 @@ import styles from "./styles";
 
 const logo = require('../../../assets/logo_gerocuidado.png');
 
-export default function TelaInicial() {
+export default function TelaInicial({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -19,7 +19,10 @@ export default function TelaInicial() {
         <Text style={styles.textButton}>Acesse o Fórum</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.greenButton}>
+      <TouchableOpacity 
+        style={styles.greenButton}
+        onPress={() => navigation.navigate('Login')}
+      >
         <Text style={styles.textButton}>Login</Text>
       </TouchableOpacity>
 

@@ -1,14 +1,12 @@
 import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import { database } from './src/db';
-import TelaInicial from './src/components/TelaInicial';
-import Login from './src/components/Login';
+import AppNavigator from './AppNavigator'; // ajuste o caminho conforme necessário
+
+
+
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <TelaInicial/>
-    </View>
-  );
+  return <AppNavigator />;
 }
 
 const styles = StyleSheet.create({
