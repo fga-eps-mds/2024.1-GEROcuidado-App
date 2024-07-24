@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const logo = require('../../../assets/logo_login_gerocuidado.png');
 
-export default function Login() {
+export default function Login({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -34,7 +34,10 @@ export default function Login() {
                 />
             </View>
   
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('TelaInicial')}
+            >
                 <Text style={styles.buttonText}>Entrar</Text>
             </TouchableOpacity>
         </View>
