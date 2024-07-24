@@ -1,55 +1,59 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { AppRegistry, StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Image } from 'react-native';
+import OptionProfile from '../components/OptionProfile';
 
 const UserProfile = () => {
+
+  const handlePress = (message) => {
+    console.log(message);
+    // navigation.navigate('NextPage'); TO-DO: Substituir'NextPage' pelo nome da página para a qual você deseja navegar
+  };
+
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <View style={styles.container}>
-        <Text>Oiii</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Image source={require('../../assets/icon_caregiver.png')} 
+        style={styles.logo_caregiver} />
+        <Text style={styles.helloMessage}>Olá, nome do usuário</Text>
       </View>
-    </SafeAreaView>
+      <OptionProfile
+        name="Perfil 1"
+        icon="https://example.com/icon1.png" // Substitua pelo URL do ícone
+        description="Descrição do perfil 1"
+        onPress={() => handlePress('Perfil 1')}
+      />
+      <OptionProfile
+        name="Perfil 2"
+        icon="https://example.com/icon2.png" // Substitua pelo URL do ícone
+        description="Descrição do perfil 2"
+        onPress={() => handlePress('Perfil 2')}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
   container: {
     flex: 1,
+    alignItems: 'center'
+  },
+  header: {
+    height: "20%",
+    width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'pink'
+    paddingLeft: 20,
+    backgroundColor: "#2CCDB5"
   },
-  logo: {
-    width: 270,
-    height: 270,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: "5%",
-    marginBottom: -40,
+  logo_caregiver: {
+    width: 72,
+    height: 72,
+    marginRight: 10,
   },
-  title: {
-    fontSize: 40,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    margimTop: -20,
-  },
-  button: {
-    flexDirection: 'row', 
-    height: 51,
-    width: "65%",
-    backgroundColor: '#2CCDB5',
-    alignItems: 'center',
-    justifyContent: 'center', 
-    elevation: 3,
-    borderRadius: 20
-  },
-  text: {
-    fontSize: 25,
-    textAlign: 'center',
-    color: "#ffff",
+  helloMessage: {
+    fontSize: 20,
+    color: 'white',
   },
 });
 
