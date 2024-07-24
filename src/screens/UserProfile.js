@@ -18,16 +18,22 @@ const UserProfile = () => {
         <Text style={styles.helloMessage}>Olá, nome do usuário</Text>
       </View>
       <OptionProfile
-        name="Perfil 1"
-        icon="https://example.com/icon1.png" // Substitua pelo URL do ícone
-        description="Descrição do perfil 1"
-        onPress={() => handlePress('Perfil 1')}
+        name="Perfil"
+        // icon="https://example.com/icon1.png" // Substitua pelo URL do ícone
+        description="Edite sua conta"
+        smallImage={require('../../assets/engrenagem.png')} // Imagem do icone da engrenagem
+        rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
+        onPress={() => handlePress('Perfil')}
+        style={styles.optionSpacing} // Adiciona espaçamento ao primeiro botão
       />
       <OptionProfile
-        name="Perfil 2"
-        icon="https://example.com/icon2.png" // Substitua pelo URL do ícone
-        description="Descrição do perfil 2"
-        onPress={() => handlePress('Perfil 2')}
+        name="Idosos"
+        // icon="https://example.com/icon2.png" // Substitua pelo URL do ícone
+        description="Gerenciar idosos"
+        smallImage={require('../../assets/IconIdoso.png')} // Imagem do icone Idoso
+        rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
+        onPress={() => handlePress('Idosos')}
+        style={styles.optionSpacing} // Adiciona espaçamento ao segundo botão
       />
     </View>
   );
@@ -54,6 +60,10 @@ const styles = StyleSheet.create({
   helloMessage: {
     fontSize: 20,
     color: 'white',
+  },
+  optionSpacing: {
+    marginTop: 40, // add espaçamento do primeiro botão
+    marginBottom: -10, // Adiciona espaçamento ao segundo botão
   },
 });
 
