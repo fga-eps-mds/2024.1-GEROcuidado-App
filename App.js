@@ -1,12 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
 import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import { database } from './src/db';
+import TelaInicial from './src/components/TelaInicial';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <TelaInicial/>
     </View>
   );
 }
@@ -14,7 +13,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F2F1F7',
     alignItems: 'center',
     justifyContent: 'center',
   },
