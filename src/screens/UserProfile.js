@@ -12,11 +12,26 @@ const UserProfile = () => {
 
   return (
     <View style={styles.container}>
+
       <View style={styles.header}>
         <Image source={require('../../assets/icon_caregiver.png')} 
         style={styles.logo_caregiver} />
         <Text style={styles.helloMessage}>Olá, nome do usuário</Text>
+
+        {/* Adição do logout button */}
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => alert('Tem certeza que deseja sair?')}
+          >
+            <Image
+              source={require('../../assets/logout.png')} // Substitua pelo caminho da sua imagem
+              style={styles.buttonImage}
+            />
+          </TouchableOpacity> 
+        </View>
       </View>
+
       <View style={styles.optionWrapper}>
         <OptionProfile
           name="Perfil"
@@ -28,6 +43,7 @@ const UserProfile = () => {
           style={styles.optionSpacing} // Adiciona espaçamento ao primeiro botão
         />
       </View>
+
       <View style={styles.optionWrapper}>
         <OptionProfile
           name="Idosos"
@@ -62,7 +78,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   helloMessage: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
   },
   optionSpacing: {
@@ -74,6 +90,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: -10, // Espaço entre os botões
     marginTop: 20, // Espaço do topo
+  },
+  buttonImage: {
+    width: 35,
+    height: 35,
+    marginLeft: 15,// Espaço entre a imagem e o text
+    marginTop: 8, 
   },
 });
 
