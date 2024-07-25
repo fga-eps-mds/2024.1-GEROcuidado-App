@@ -19,7 +19,7 @@ const OptionProfile = ({ name, icon, description, smallImage, rightImage ,onPres
 
 const styles = StyleSheet.create({
   optionContainer: {
-    width: 323,
+    width: "88%",
     height: 74,
     borderRadius: 16,
     flexDirection: 'row',
@@ -31,18 +31,18 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 5, // sombra maior
+    elevation: 5,
   },
   iconContainer1: {
-    marginRight: -5, // reduz o espaço entre o texto e icon
-    marginLeft: 5, // add margem esquerda ao icon
-    alignItems: 'center', // Centraliza as imagens verticalmente
+    marginRight: -5,
+    marginLeft: 5,
+    alignItems: 'center',
   },
   rightImage: {
     width: 8,
     height: 11,
-    marginRight: 5, //
-    marginTop: -20, // reduz a margem do topo
+    marginRight: 5,
+    marginTop: -20,
   },
   icon: { 
     width: 50,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 7, // Adiciona espaçamento entre o título e a descrição
+    marginBottom: 7,
   },
   description: {
     fontSize: 14,
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
   smallImage: {
     width: 30,
     height: 30,
-    // Add margem ao smallImage
     marginRight: 20,
     marginTop: -55,
   },

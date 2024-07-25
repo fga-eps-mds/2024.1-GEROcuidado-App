@@ -78,6 +78,7 @@ const AppNavigator = () => {
           {props => <ElderList {...props} elders={elders} />}
         </Stack.Screen>
         <Stack.Screen name="ElderRegistration" component={ElderRegistration} />
+        <Stack.Screen name="ElderVisualization" component={ElderRegistration} />
       </Stack.Navigator>
     </NavigationContainer>
   );

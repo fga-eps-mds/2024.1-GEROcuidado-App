@@ -4,21 +4,17 @@ import OptionProfile from '../components/OptionProfile';
 import Footer from '../components/Footer';
 
 const UserProfile = ({ navigation }) => {
-
   const handlePress = (message) => {
     console.log(message);
   };
 
   return (
     <View style={styles.container}>
-
       <View style={styles.header}>
-        <Image source={require('../../assets/icon_caregiver.png')} 
-        style={styles.logo_caregiver} />
+        <Image source={require('../../assets/icon_caregiver.png')} style={styles.logo_caregiver} />
         <Text style={styles.helloMessage}>Olá, nome do usuário</Text>
 
-        {/* Adição do logout button */}
-        <View style={styles.header}>
+        <View style={styles.logoutContainer}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => alert('Tem certeza que deseja sair?')}
@@ -27,50 +23,55 @@ const UserProfile = ({ navigation }) => {
               source={require('../../assets/logout.png')}
               style={styles.LogoutImage}
             />
-          </TouchableOpacity> 
+          </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.optionWrapper}>
         <OptionProfile
-          name="Perfil"
-          // icon="https://example.com/icon1.png"
+          name="Perfil de usuário"
           description="Edite sua conta"
-          smallImage={require('../../assets/engrenagem.png')} // Imagem do icone da engrenagem
-          rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
+          smallImage={require('../../assets/engrenagem.png')}
+          rightImage={require('../../assets/Arrow.png')}
           onPress={() => handlePress('Perfil')}
-          style={styles.optionSpacing} // Adiciona espaçamento ao primeiro botão
+          style={styles.optionSpacing}
         />
       </View>
 
       <View style={styles.optionWrapper}>
         <OptionProfile
-          name="Idosos"
-          // icon="https://example.com/icon2.png"
-          description="Gerenciar idosos"
-          smallImage={require('../../assets/IconIdoso.png')} // Imagem do icone Idoso
-          rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
+          name="Gerenciar idosos"
+          description="Visualize e edite idosos"
+          smallImage={require('../../assets/IconIdoso.png')}
+          rightImage={require('../../assets/Arrow.png')}
           onPress={() => navigation.navigate('ElderList')}
-          style={styles.optionSpacing} // Adiciona espaçamento ao segundo botão
+          style={styles.optionSpacing}
         />
       </View>
-      <Footer/> {/* Chamando o componente footer */}
+      <Footer/>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   header: {
-    height: "20%",
+    height: '20%',
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 20,
-    backgroundColor: "#2CCDB5"
+    backgroundColor: "#2CCDB5",
+  },
+  logoutContainer: {
+    position: 'absolute',
+    right: 25,
+    height: '20%',
+    flexDirection: 'row',
+    paddingLeft: 0,
   },
   logo_caregiver: {
     width: 65,
@@ -82,21 +83,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
-  optionSpacing: {
-    marginTop: 40, // add espaçamento do primeiro botão
-    marginBottom: -10, // Adiciona espaçamento ao segundo botão
+  LogoutImage: {
+    width: 35,
+    height: 35,
   },
   optionWrapper: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: -20, // Espaço entre os botões
-    marginTop: 20, // Espaço do topo
+    marginBottom: -20,
+    marginTop: 20,
   },
-  LogoutImage: {
-    width: 35,
-    height: 35,
-    marginLeft: 15,// Espaço entre a imagem e o text
-    marginTop: 8, // espaço do topo
+  optionSpacing: {
+    marginTop: 40,
+    marginBottom: -10,
   },
 });
 

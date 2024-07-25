@@ -23,7 +23,7 @@ const ElderList = ({ elders, navigation }) => {
             phone={elder.phone}
             description={elder.description}
             image={elder.image}
-            onPress={() => alert(`${elder.name} selected`)}
+            onPress={() => navigation.navigate('ElderVisualization')}
           />
         ))}
       </ScrollView>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-const ElderRegistration = ({ navigation }) => {
+const ElderVisualization = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ElderRegistration
+export default ElderVisualization
