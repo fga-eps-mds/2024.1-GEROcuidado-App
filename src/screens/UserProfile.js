@@ -2,6 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { AppRegistry, StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Image } from 'react-native';
 import OptionProfile from '../components/OptionProfile';
+import Footer from '../components/Footer';
 
 const UserProfile = () => {
 
@@ -25,8 +26,8 @@ const UserProfile = () => {
             onPress={() => alert('Tem certeza que deseja sair?')}
           >
             <Image
-              source={require('../../assets/logout.png')} // Substitua pelo caminho da sua imagem
-              style={styles.buttonImage}
+              source={require('../../assets/logout.png')}
+              style={styles.LogoutImage}
             />
           </TouchableOpacity> 
         </View>
@@ -35,7 +36,7 @@ const UserProfile = () => {
       <View style={styles.optionWrapper}>
         <OptionProfile
           name="Perfil"
-          // icon="https://example.com/icon1.png" // Substitua pelo URL do ícone
+          // icon="https://example.com/icon1.png"
           description="Edite sua conta"
           smallImage={require('../../assets/engrenagem.png')} // Imagem do icone da engrenagem
           rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
@@ -47,7 +48,7 @@ const UserProfile = () => {
       <View style={styles.optionWrapper}>
         <OptionProfile
           name="Idosos"
-          // icon="https://example.com/icon2.png" // Substitua pelo URL do ícone
+          // icon="https://example.com/icon2.png"
           description="Gerenciar idosos"
           smallImage={require('../../assets/IconIdoso.png')} // Imagem do icone Idoso
           rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
@@ -55,6 +56,7 @@ const UserProfile = () => {
           style={styles.optionSpacing} // Adiciona espaçamento ao segundo botão
         />
       </View>
+      <Footer/> {/* Chamando o componente footer */}
     </View>
   );
 }
@@ -73,9 +75,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#2CCDB5"
   },
   logo_caregiver: {
-    width: 72,
-    height: 72,
+    width: 65,
+    height: 65,
     marginRight: 10,
+    marginTop: 10,
   },
   helloMessage: {
     fontSize: 18,
@@ -88,15 +91,15 @@ const styles = StyleSheet.create({
   optionWrapper: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: -10, // Espaço entre os botões
+    marginBottom: -20, // Espaço entre os botões
     marginTop: 20, // Espaço do topo
   },
-  buttonImage: {
+  LogoutImage: {
     width: 35,
     height: 35,
     marginLeft: 15,// Espaço entre a imagem e o text
-    marginTop: 8, 
+    marginTop: 8, // espaço do topo
   },
 });
 
-export default UserProfile
+export default UserProfile;
