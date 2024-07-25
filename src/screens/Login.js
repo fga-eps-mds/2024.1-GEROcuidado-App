@@ -1,10 +1,9 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { AppRegistry, StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 
 const Login = () => {
   
-  const handleLogin = () => {
+  const handleLogin = ({ navigation }) => {
     console.log('Login button pressed');
     // navigation.navigate('NextPage'); TO-DO: Substituir'NextPage' pelo nome da página para a qual você deseja navegar
   };

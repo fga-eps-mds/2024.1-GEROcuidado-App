@@ -1,13 +1,11 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { AppRegistry, StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import OptionProfile from '../components/OptionProfile';
 
-const UserProfile = () => {
+const UserProfile = ({ navigation }) => {
 
   const handlePress = (message) => {
     console.log(message);
-    // navigation.navigate('NextPage'); TO-DO: Substituir'NextPage' pelo nome da página para a qual você deseja navegar
   };
 
   return (
@@ -51,7 +49,7 @@ const UserProfile = () => {
           description="Gerenciar idosos"
           smallImage={require('../../assets/IconIdoso.png')} // Imagem do icone Idoso
           rightImage={require('../../assets/Arrow.png')} // Imagem do arrow
-          onPress={() => handlePress('Idosos')}
+          onPress={() => navigation.navigate('ElderList')}
           style={styles.optionSpacing} // Adiciona espaçamento ao segundo botão
         />
       </View>
