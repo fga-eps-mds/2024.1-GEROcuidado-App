@@ -1,21 +1,20 @@
+// App.js
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { AppRegistry, StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Image } from 'react-native';
-import Login from './src/screens/Login';
-import UserProfile from './src/screens/UserProfile';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import AppNavigator from './AppNavigator'; 
 
 const App = () => {
   return (
-    <View style={styles.wrapper}>
-      <UserProfile />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <AppNavigator />
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  wrapper: {
+  container: {
     flex: 1,
   },
 });
 
-export default App
+export default App;
