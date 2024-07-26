@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backButton: {
-    top: 15,
-    left: 5,
+    top: 35,
+    left: 15,
   },
   backButtonImage: {
     width: 43,

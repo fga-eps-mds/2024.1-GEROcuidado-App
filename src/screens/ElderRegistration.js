@@ -124,12 +124,9 @@ const ElderRegistration = ({ navigation }) => {
       </View>
 
       {/* Buttons */}
-      <View style={styles.buttonCadastro}>
-        <Button title="Cadastrar" onPress={handleSubmit(onSubmit)} color="#2CCDB5" />
-      </View>
-      <View style={styles.buttonCancelar}>
-        <Button title="Cancelar" onPress={() => navigation.navigate('ElderList')} color="#FF6347" />
-      </View>
+      <TouchableOpacity style={styles.buttonCadastro} onPress={handleSubmit(onSubmit)}>
+        <Text style={styles.buttonText}>Cadastrar</Text>
+      </TouchableOpacity>
 
     </ScrollView>
   );
@@ -146,6 +143,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginBottom: 20,
+    marginTop: 10,
   },
   elderImage: {
     width: 150,
@@ -193,20 +191,35 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 20,
   },
   input: {
-    height: 30,
+    height: 20,
     borderColor: 'gray',
     borderBottomWidth: 1, // add input em linha
     marginBottom: 10,
     paddingHorizontal: 10,
     borderRadius: 5, // tamanho do input
   },
+  textInputWithPadding: {
+    paddingLeft: 50, // adicionando espaço entre o texto e a imagem
+  },
   buttonCadastro: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginTop: 50,
+    backgroundColor: '#2CCDB5',
+    padding: 10,
+    borderRadius: 8,
+    width: 128,
+    height: 40,
+    alignItems: 'center',
+    marginBottom: 20, // Espaçamento entre os botões
+    marginTop: 30,
+    marginLeft: 93,
+  },
+  buttonText: {
+    color: '#ffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStyle: 'normal',
   },
   errorText: {
     color: 'red',
