@@ -25,7 +25,7 @@ const ElderRegistration = ({ navigation }) => {
       {/* conteiner principal */}
       <View style={styles.formContainer}>
 
-        {/* Img do icon */}
+        {/* Primeiro field */}
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/user.png')} style={styles.iconUser} />
         </View>
@@ -39,10 +39,34 @@ const ElderRegistration = ({ navigation }) => {
               onChangeText={onChange}
               value={value}
             />
-        )}
+            )}
         name="name"
         />
         {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+        
+        {/* SEGUNDO field */}
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/birthday.png')} style={styles.IconBirthday} />
+        </View>
+          <Controller
+              control={control}
+              rules={{ required: 'A data de nascimento é Obrigatória' }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInputMask
+                  type={'datetime'}
+                  options={{
+                      format: 'DD/MM/YYYY'
+                  }}
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+          name="birthdate"
+        />
+        {errors.birthdate && <Text style={styles.errorText}>{errors.birthdate.message}</Text>}
+
       </View>
     </ScrollView>
   );
@@ -73,7 +97,12 @@ iconUser: {
   height: 20.012,
   marginBottom: -15,
   marginRight: 270,
-  // marginEnd: 1,
+},
+IconBirthday:{
+  width: 18,
+  height: 22,
+  marginBottom: -9,
+  marginRight: 270,
 },
 formContainer: {
   marginBottom: 20,
