@@ -123,10 +123,17 @@ const ElderRegistration = ({ navigation }) => {
         name="notes"
         />
       </View>
+
+      {/* Buttons */}
+      <View style={styles.buttonCadastro}>
+        <Button title="Cadastrar" onPress={handleSubmit(onSubmit)} color="#2CCDB5" />
+      </View>
+      <View style={styles.buttonCancelar}>
+        <Button title="Cancelar" onPress={() => navigation.navigate('ElderList')} color="#FF6347" />
+      </View>
+
     </ScrollView>
   );
-    
-
 }
 
 const styles = StyleSheet.create({
@@ -191,6 +198,11 @@ input: {
   marginBottom: 10,
   paddingHorizontal: 10,
   borderRadius: 5, // tamanho do input
+},
+buttonCadastro: {
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  marginTop: 50,
 },
 });
 
