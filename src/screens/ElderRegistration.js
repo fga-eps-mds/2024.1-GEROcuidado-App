@@ -127,6 +127,9 @@ const ElderRegistration = ({ navigation }) => {
       <TouchableOpacity style={styles.buttonCadastro} onPress={handleSubmit(onSubmit)}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.cancelButton} onPress={handleSubmit(onSubmit)}>
+        <Text style={styles.cancelButtonText}>Cancelar</Text>
+      </TouchableOpacity>
 
     </ScrollView>
   );
@@ -221,9 +224,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontStyle: 'normal',
   },
+  cancelButton: {
+    padding: 10,
+    width: 128,
+    height: 40,
+    alignItems: 'center',
+    marginBottom: 20, // Espaçamento entre os botões
+    marginTop: -10,
+    marginLeft: 93,
+},
+  cancelButtonText: {
+    color: 'red',
+    fontStyle: 'normal',
+    fontSize: 16,
+},
   errorText: {
     color: 'red',
     marginBottom: -20,
+    paddingLeft: 50,
   },
 });
 export default ElderRegistration;
