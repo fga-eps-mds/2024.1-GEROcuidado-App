@@ -15,10 +15,6 @@ export default function TelaInicial({ navigation }) {
       </View>
       <Text style={styles.textCuidador}>Seja um GEROcuidador!</Text>
 
-      <TouchableOpacity style={styles.greenButton}>
-        <Text style={styles.textButton}>Acesse o Fórum</Text>
-      </TouchableOpacity>
-
       <TouchableOpacity 
         style={styles.greenButton}
         onPress={() => navigation.navigate('Login')}
