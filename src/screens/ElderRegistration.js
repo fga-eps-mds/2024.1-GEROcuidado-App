@@ -13,12 +13,12 @@ const ElderRegistration = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
-            <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
+          <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
+      </TouchableOpacity>
 
-        <View style={styles.imageContainer}>
-            <Image source={require('../../assets/elders/elder_1.png')} style={styles.elderImage} />
+      <View style={styles.imageContainer}>
+        <Image source={require('../../assets/elders/elder_1.png')} style={styles.elderImage} />
       </View>
 
       {/* conteiner principal */}
@@ -27,100 +27,110 @@ const ElderRegistration = ({ navigation }) => {
         {/* Primeiro field */}
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/user.png')} style={styles.iconUser} />
-        </View>
-        <Controller
-            control={control}
-            rules={{ required: 'O nome é obrigatório' }}
-            render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
+          <View style={styles.inputContainer}>
+            {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+            <Controller
+              control={control}
+              rules={{ required: 'O nome é obrigatório' }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={[styles.input, styles.textInputWithPadding]}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="name"
             />
-            )}
-        name="name"
-        />
-        {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+          </View>
+        </View>
         
-        {/* SEGUNDO field */}
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/birthday.png')} style={styles.IconBirthday} />
-        </View>
-          <Controller
+          <View style={styles.inputContainer}>
+            {errors.birthdate && <Text style={styles.errorText}>{errors.birthdate.message}</Text>}
+            <Controller
               control={control}
-              rules={{ required: 'A data de nascimento é Obrigatória' }}
+              rules={{ required: 'A data de nascimento é obrigatória' }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInputMask
                   type={'datetime'}
                   options={{
                       format: 'DD/MM/YYYY'
                   }}
-                  style={styles.input}
+                  style={[styles.input, styles.textInputWithPadding]}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
                 />
               )}
-          name="birthdate"
-        />
-        {errors.birthdate && <Text style={styles.errorText}>{errors.birthdate.message}</Text>}
+            name="birthdate"
+            />
+          </View>
+        </View>
         
         {/* TERCEIRO field */}
         <View style={styles.inputWrapper}>
-            <Image source={require('../../assets/registerElder/tipo_sanguineo.png')} style={styles.bloodIcon} />
-        </View>
-        <Controller
-          control={control}
-          rules={{ required: 'O tipo sanguíneo é obrigatório' }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
+          <Image source={require('../../assets/registerElder/tipo_sanguineo.png')} style={styles.bloodIcon} />
+          <View style={styles.inputContainer}>
+            {errors.bloodType && <Text style={styles.errorText}>{errors.bloodType.message}</Text>}
+            <Controller
+              control={control}
+              rules={{ required: 'O tipo sanguíneo é obrigatório' }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={[styles.input, styles.textInputWithPadding]}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="bloodType"
             />
-          )}
-          name="bloodType"
-        />
-        {errors.bloodType && <Text style={styles.errorText}>{errors.bloodType.message}</Text>}
+          </View>
+        </View>
         
         {/* QUARTO field */}
         <View style={styles.inputWrapper}>
-            <Image source={require('../../assets/registerElder/phone.png')} style={styles.iconPhone} />
-        </View>
-        <Controller
-          control={control}
-          rules={{ required: 'O telefone é Obrigatório' }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
+          <Image source={require('../../assets/registerElder/phone.png')} style={styles.iconPhone} />
+          <View style={styles.inputContainer}>
+            {errors.phone && <Text style={styles.errorText}>{errors.phone.message}</Text>}
+            <Controller
+              control={control}
+              rules={{ required: 'O telefone é obrigatório' }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={[styles.input, styles.textInputWithPadding]}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="phone"
             />
-          )}
-          name="phone"
-        />
-        {errors.phone && <Text style={styles.errorText}>{errors.phone.message}</Text>}
+          </View>
+        </View>
           
         {/* Quinto field */}
         <View style={styles.inputWrapper}>
-            <Image source={require('../../assets/registerElder/nota.png')} style={styles.iconNota} />
-        </View>
-        <Controller
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={[styles.input, { height: 30 }]}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              multiline
+          <Image source={require('../../assets/registerElder/nota.png')} style={styles.iconNota} />
+          <View style={styles.inputContainer}>
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={[styles.input, { height: 30 }, styles.textInputWithPadding]}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  multiline
+                />
+              )}
+              name="notes"
             />
-          )}
-        name="notes"
-        />
+          </View>
+        </View>
+        
       </View>
 
       {/* Buttons */}
@@ -139,6 +149,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  inputContainer: {
+    flex: 1,
   },
   imageContainer: {
     alignItems: 'center',
@@ -194,7 +207,7 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 45,
   },
   input: {
     height: 20,
@@ -215,8 +228,8 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     marginBottom: 20, // Espaçamento entre os botões
-    marginTop: 30,
-    marginLeft: 93,
+    marginTop: 70,
+    marginLeft: 115,
   },
   buttonText: {
     color: '#ffff',
@@ -231,7 +244,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20, // Espaçamento entre os botões
     marginTop: -10,
-    marginLeft: 93,
+    marginLeft: 115,
 },
   cancelButtonText: {
     color: 'red',
@@ -240,7 +253,7 @@ const styles = StyleSheet.create({
 },
   errorText: {
     color: 'red',
-    marginBottom: -20,
+    marginBottom: -18,
     paddingLeft: 50,
   },
 });
