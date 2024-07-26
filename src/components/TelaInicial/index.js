@@ -26,7 +26,10 @@ export default function TelaInicial({ navigation }) {
         <Text style={styles.textButton}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.purpleButton}>
+      <TouchableOpacity 
+        style={styles.greenButton}
+        onPress={() => navigation.navigate('TelaCadastro')}
+      >
         <Text style={styles.textButton}>Cadastre-se</Text>
       </TouchableOpacity>
     </View>
