@@ -66,6 +66,25 @@ const ElderRegistration = ({ navigation }) => {
           name="birthdate"
         />
         {errors.birthdate && <Text style={styles.errorText}>{errors.birthdate.message}</Text>}
+        
+        {/* TERCEIRO field */}
+        <View style={styles.inputWrapper}>
+            <Image source={require('../../assets/registerElder/tipo_sanguineo.png')} style={styles.bloodIcon} />
+        </View>
+        <Controller
+          control={control}
+          rules={{ required: 'O tipo sanguíneo é obrigatório' }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="bloodType"
+        />
+        {errors.bloodType && <Text style={styles.errorText}>{errors.bloodType.message}</Text>}
 
       </View>
     </ScrollView>
@@ -102,6 +121,12 @@ IconBirthday:{
   width: 18,
   height: 22,
   marginBottom: -9,
+  marginRight: 270,
+},
+bloodIcon:{
+  width: 29,
+  height: 24,
+  marginBottom: -12,
   marginRight: 270,
 },
 formContainer: {
