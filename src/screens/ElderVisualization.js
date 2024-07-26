@@ -7,6 +7,11 @@ const ElderVisualization = ({ navigation }) => {
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
+      <View>
+        <Text>
+            Aqui entra a visualização do perfil do idoso
+        </Text>
+      </View>
     </View>
   );
 }
@@ -25,4 +30,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ElderVisualization
+export default ElderVisualization;
