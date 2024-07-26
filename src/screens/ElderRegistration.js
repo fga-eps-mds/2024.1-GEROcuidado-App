@@ -104,7 +104,24 @@ const ElderRegistration = ({ navigation }) => {
           name="phone"
         />
         {errors.phone && <Text style={styles.errorText}>{errors.phone.message}</Text>}
-
+          
+        {/* Quinto field */}
+        <View style={styles.inputWrapper}>
+            <Image source={require('../../assets/registerElder/nota.png')} style={styles.iconNota} />
+        </View>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, { height: 30 }]}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              multiline
+            />
+          )}
+        name="notes"
+        />
       </View>
     </ScrollView>
   );
@@ -151,6 +168,12 @@ bloodIcon:{
 iconPhone:{
   width: 18,
   height: 18,
+  marginBottom: -10,
+  marginRight: 270,
+},
+iconNota:{
+  width: 22,
+  height: 22,
   marginBottom: -10,
   marginRight: 270,
 },
