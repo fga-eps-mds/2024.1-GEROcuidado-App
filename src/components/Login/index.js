@@ -8,28 +8,31 @@ const logo = require('../../../assets/logo_login_gerocuidado.png');
 export default function Login({ navigation }) {
     return (
         <View style={styles.container}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TelaInicial')}>
+                    <Image source={require('../../../assets/back_button.png')} style={styles.backButtonImage} />
+                  </TouchableOpacity>
             <View style={styles.imageContainer}>
                 <Image
                     source={logo}
                     style={styles.image}
                 />
             </View>
-            <Text style={styles.welcomeText}>Bem-vindo de volta!</Text>
+            <Text style={styles.welcomeText}>Bem Vindo de volta!</Text>
             
             <View style={styles.inputContainer}>
-                <Icon name="email" size={20} color="#CCCCCC" style={styles.icon} />
+                <Icon name="email" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
-                    placeholder="Digite seu e-mail"
+                    placeholder="Email"
                     keyboardType="email-address"
                 />
             </View>
             
             <View style={styles.inputContainer}>
-                <Icon name="lock" size={20} color="#CCCCCC" style={styles.icon} />
+                <Icon name="lock" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
-                    placeholder="Digite sua senha"
+                    placeholder="Senha"
                     secureTextEntry
                 />
             </View>
