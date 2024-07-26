@@ -1,33 +1,50 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image, Button, ScrollView, TextInput} from 'react-native';
+import {useForm, Controller} from 'react-hook-form'
+import {TextInputMask} from 'react-native-masked-text';
 
 const ElderRegistration = ({ navigation }) => {
+  const {control, handleSubmit, formState: {errors} } = useForm();
+
+  const onSubmit = data => {
+      console.log(data);
+      // Aqui você pode adicionar o código para enviar os dados para o backend
+      alert('Idoso cadastrado com sucesso!');
+  };
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
-        <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
-      </TouchableOpacity>
-      <View>
-        <Text>
-            Aqui entra o registro do idoso
-        </Text>
+    <ScrollView contentContainerStyle={styles.container}>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
+            <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
+        </TouchableOpacity>
+
+        <View style={styles.imageContainer}>
+            <Image source={require('../../assets/elders/elder_1.png')} style={styles.elderImage} />
       </View>
-    </View>
+    </ScrollView>
   );
+    
+
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  imageContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
   },
   backButton: {
-    top: 15,
-    left: 5,
+    marginBottom: 20,
+  },
+  elderImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 5,
   },
   backButtonImage: {
-    width: 43,
-    height: 43,
-  },
+    marginTop: 10,
+  width: 40,
+  height: 40,
+},
 });
 
 export default ElderRegistration;
