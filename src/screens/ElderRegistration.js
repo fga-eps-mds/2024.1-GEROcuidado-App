@@ -8,7 +8,6 @@ const ElderRegistration = ({ navigation }) => {
 
   const onSubmit = data => {
       console.log(data);
-      // Aqui você pode adicionar o código para enviar os dados para o backend
       alert('Idoso cadastrado com sucesso!');
   };
 
@@ -137,6 +136,10 @@ const ElderRegistration = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
   imageContainer: {
     alignItems: 'center',
     marginBottom: 10,
@@ -151,59 +154,63 @@ const styles = StyleSheet.create({
   },
   backButtonImage: {
     marginTop: 10,
-  width: 40,
-  height: 40,
-},
-iconUser: {
-  width: 20.218,
-  height: 20.012,
-  marginBottom: -15,
-  marginRight: 270,
-},
-IconBirthday:{
-  width: 18,
-  height: 22,
-  marginBottom: -9,
-  marginRight: 270,
-},
-bloodIcon:{
-  width: 29,
-  height: 24,
-  marginBottom: -12,
-  marginRight: 270,
-},
-iconPhone:{
-  width: 18,
-  height: 18,
-  marginBottom: -10,
-  marginRight: 270,
-},
-iconNota:{
-  width: 22,
-  height: 22,
-  marginBottom: -10,
-  marginRight: 270,
-},
-formContainer: {
-  marginBottom: 20,
-},
-inputWrapper: {
-  alignItems: 'center',
-  marginBottom: 10,
-},
-input: {
-  height: 30,
-  borderColor: 'gray',
-  borderBottomWidth: 1, // add input em linha
-  marginBottom: 10,
-  paddingHorizontal: 10,
-  borderRadius: 5, // tamanho do input
-},
-buttonCadastro: {
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  marginTop: 50,
-},
+    width: 40,
+    height: 40,
+  },
+  iconUser: {
+    width: 20.218,
+    height: 20.012,
+    marginBottom: -15,
+    marginRight: 270,
+  },
+  IconBirthday:{
+    width: 18,
+    height: 22,
+    marginBottom: -9,
+    marginRight: 270,
+  },
+  bloodIcon:{
+    width: 29,
+    height: 24,
+    marginBottom: -12,
+    marginRight: 270,
+  },
+  iconPhone:{
+    width: 18,
+    height: 18,
+    marginBottom: -10,
+    marginRight: 270,
+  },
+  iconNota:{
+    width: 22,
+    height: 22,
+    marginBottom: -10,
+    marginRight: 270,
+  },
+  formContainer: {
+    marginBottom: 10,
+    marginTop: 30,
+  },
+  inputWrapper: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  input: {
+    height: 30,
+    borderColor: 'gray',
+    borderBottomWidth: 1, // add input em linha
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5, // tamanho do input
+  },
+  buttonCadastro: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginTop: 50,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: -20,
+  },
 });
-
 export default ElderRegistration;
