@@ -85,6 +85,25 @@ const ElderRegistration = ({ navigation }) => {
           name="bloodType"
         />
         {errors.bloodType && <Text style={styles.errorText}>{errors.bloodType.message}</Text>}
+        
+        {/* QUARTO field */}
+        <View style={styles.inputWrapper}>
+            <Image source={require('../../assets/registerElder/phone.png')} style={styles.iconPhone} />
+        </View>
+        <Controller
+          control={control}
+          rules={{ required: 'O telefone é Obrigatório' }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+          name="phone"
+        />
+        {errors.phone && <Text style={styles.errorText}>{errors.phone.message}</Text>}
 
       </View>
     </ScrollView>
@@ -127,6 +146,12 @@ bloodIcon:{
   width: 29,
   height: 24,
   marginBottom: -12,
+  marginRight: 270,
+},
+iconPhone:{
+  width: 18,
+  height: 18,
+  marginBottom: -10,
   marginRight: 270,
 },
 formContainer: {
