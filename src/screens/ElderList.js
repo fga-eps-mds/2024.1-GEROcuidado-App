@@ -86,11 +86,12 @@ const styles = StyleSheet.create({
   plusButtonImage: {
     width: 64,
     height: 64,
+    marginTop: -10,
   },
   plusText: {
     fontSize: 18,
     textAlign: 'center',
-    marginBottom: 33,
+    marginBottom: 20,
     fontWeight: '400'
   },
 });
