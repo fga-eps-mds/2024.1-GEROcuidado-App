@@ -34,8 +34,11 @@ export default function TelaCadastro({ navigation }) {
         navigation.navigate('Login');
     };
 
-    return (
+    return (        
         <View style={styles.container}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TelaInicial')}>
+                    <Image source={require('../../../assets/back_button.png')} style={styles.backButtonImage} />
+                  </TouchableOpacity>            
             <View style={styles.imageContainer}>
                 <Image
                     source={logo}
