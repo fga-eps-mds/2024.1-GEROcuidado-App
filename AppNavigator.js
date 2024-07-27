@@ -14,7 +14,7 @@ const AppNavigator = () => {
     {
       name: 'Elder 1',
       birthdate: '01/01/1950',
-      bloodType: 'O+',
+      bloodtype: 'O+',
       phone: '123-456-7890',
       description: 'Description for Elder 1',
       image: require('./assets/elders/elder_1.png'),
@@ -22,7 +22,7 @@ const AppNavigator = () => {
     {
       name: 'Elder 2',
       birthdate: '02/02/1950',
-      bloodType: 'A-',
+      bloodtype: 'A-',
       phone: '234-567-8901',
       description: 'Description for Elder 2',
       image: require('./assets/elders/elder_2.png'),
@@ -30,7 +30,7 @@ const AppNavigator = () => {
     {
       name: 'Elder 1',
       birthdate: '01/01/1950',
-      bloodType: 'O+',
+      bloodtype: 'O+',
       phone: '123-456-7890',
       description: 'Description for Elder 1',
       image: require('./assets/elders/elder_1.png'),
@@ -38,7 +38,7 @@ const AppNavigator = () => {
     {
       name: 'Elder 2',
       birthdate: '02/02/1950',
-      bloodType: 'A-',
+      bloodtype: 'A-',
       phone: '234-567-8901',
       description: 'Description for Elder 2',
       image: require('./assets/elders/elder_2.png'),
@@ -46,7 +46,7 @@ const AppNavigator = () => {
     {
       name: 'Elder 2',
       birthdate: '02/02/1950',
-      bloodType: 'A-',
+      bloodtype: 'A-',
       phone: '234-567-8901',
       description: 'Description for Elder 2',
       image: require('./assets/elders/elder_2.png'),
@@ -54,7 +54,7 @@ const AppNavigator = () => {
     {
       name: 'Elder 1',
       birthdate: '01/01/1950',
-      bloodType: 'O+',
+      bloodtype: 'O+',
       phone: '123-456-7890',
       description: 'Description for Elder 1',
       image: require('./assets/elders/elder_1.png'),
@@ -62,7 +62,7 @@ const AppNavigator = () => {
     {
       name: 'Elder 2',
       birthdate: '02/02/1950',
-      bloodType: 'A-',
+      bloodtype: 'A-',
       phone: '234-567-8901',
       description: 'Description for Elder 2',
       image: require('./assets/elders/elder_2.png'),

@@ -1,32 +1,31 @@
-import React from 'react';
-import { View, Button, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Elder from '../components/Elder';
 import database, { idososCollection } from '../db';
+import { useFocusEffect } from '@react-navigation/native';
 
-const ElderList = ({ elders, navigation }) => {
+const ElderList = ({ navigation }) => {
+  const [elders, setElders] = useState([]);
 
-  const createIdoso = async () => {
-    const idoso = await idososCollection.query().fetch()
-    console.log(idoso)
-  
-    await database.write(async () => {
-      try {
-        await idososCollection.create((idoso) => {
-          idoso.nome = 'Jurema';
-          idoso.dataNascimento = new Date('1955-12-12'); 
-          idoso.telefoneResponsavel = '123456789';
-        });
-        console.log("Idoso criado com sucesso!");
-      } catch (error) {
-        console.error("Erro ao criar idoso:", error);
-      }
-    });
-  };  
+  const fetchElders = async () => {
+    const idosoRecords = await idososCollection.query().fetch();
+    const idosoData = idosoRecords.map((idoso) => ({
+      id: idoso._raw.id,
+      name: idoso._raw.nome,
+      birthdate: new Date(idoso._raw.dataNascimento).toLocaleDateString(),
+      bloodType: idoso._raw.tipoSanguineo,
+      phone: idoso._raw.telefoneResponsavel,
+      description: idoso._raw.descricao,
+      image: require('../../assets/elders/elder_1.png'),
+    }));
+    setElders(idosoData);
+  };
 
-  const testar = async () => {
-    const idoso = await idososCollection.query().fetch()
-    console.log(idoso)
-  }; 
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchElders();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -34,24 +33,21 @@ const ElderList = ({ elders, navigation }) => {
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
       <Text style={styles.headerText}>De quem está{"\n"}cuidando?</Text>
-      <Button title='Criar' onPress={createIdoso}/>
-      <Button title='Testa' onPress={testar}/>
-
 
       <ScrollView 
         contentContainerStyle={styles.scrollContainer}
         style={styles.scrollView}
       >
-        {elders.map((elder, index) => (
+        {elders.map((elder) => (
           <Elder
-            key={index}
+            key={elder.id}
             name={elder.name}
             birthdate={elder.birthdate}
             bloodType={elder.bloodType}
             phone={elder.phone}
             description={elder.description}
             image={elder.image}
-            onPress={() => navigation.navigate('ElderVisualization')}
+            onPress={() => navigation.navigate('ElderVisualization', { elderId: elder.id })}
           />
         ))}
       </ScrollView>
@@ -71,12 +67,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   backButton: {
-    top: 35,
-    left: 15,
+    marginTop: 25,
+    marginLeft: 15,
+    width: 40,
+    height: 40,
   },
   backButtonImage: {
-    width: 43,
-    height: 43,
+    width: 40,
+    height: 40,
   },
   headerText: {
     fontSize: 24,

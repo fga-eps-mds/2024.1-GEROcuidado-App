@@ -2,7 +2,7 @@
 import React from 'react';
 import { Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const Elder = ({ name, birthdate, bloodType, phone, description, image, onPress }) => (
+const Elder = ({ name, birthdate, bloodtype, phone, description, image, onPress }) => (
   <TouchableOpacity style={styles.elder} onPress={onPress}>
     <Image source={image} style={styles.image} />
     <Text style={styles.name}>{name}</Text>
