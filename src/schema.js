@@ -1,6 +1,7 @@
+// src/schema.js
 import { appSchema, tableSchema } from '@nozbe/watermelondb';
 
-export const MySchema = appSchema({
+export default appSchema({
   version: 1,
   tables: [
     tableSchema({
@@ -12,8 +13,6 @@ export const MySchema = appSchema({
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' },
       ],
-    })
-  ]
+    }),
+  ],
 });
-
-export default MySchema;
