@@ -1,33 +1,55 @@
-// Elder.js
 import React from 'react';
-import { Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const Elder = ({ name, birthdate, bloodtype, phone, description, image, onPress }) => (
-  <TouchableOpacity style={styles.elder} onPress={onPress}>
-    <Image source={image} style={styles.image} />
-    <Text style={styles.name}>{name}</Text>
-  </TouchableOpacity>
-);
+const Elder = ({ name, birthdate, bloodType, phone, description, image, onPress, onEdit }) => {
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onPress} style={styles.imageContainer}>
+        <Image source={image} style={styles.image} />
+        <TouchableOpacity onPress={onEdit} style={styles.editButton}>
+          <Image source={require('../../assets/edit_button.png')} style={styles.editButtonImage} />
+        </TouchableOpacity>
+      </TouchableOpacity>
+      <Text style={styles.name}>{name}</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  elder: {
-    width: '48%', // Adjust to fit two items per row with some margin
-    aspectRatio: 1, 
-    margin: '1%',
-    justifyContent: 'center',
-    alignItems: 'center',
+  container: {
+    width: '45%',
+    marginBottom: 20,
+    position: 'relative',
+  },
+  imageContainer: {
+    position: 'relative',
   },
   image: {
-    width: '80%',
-    height: '80%',
-    resizeMode: 'cover',
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
     borderRadius: 10,
   },
+  editButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  editButtonImage: {
+    width: 20,
+    height: 20,
+  },
   name: {
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 5,
+    fontWeight: '500',
   },
 });
 
-export default Elder;
+export default Elder;

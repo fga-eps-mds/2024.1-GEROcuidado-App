@@ -27,6 +27,10 @@ const ElderList = ({ navigation }) => {
     }, [])
   );
 
+  const handleEdit = (elderId) => {
+    navigation.navigate('ElderEdit', { elderId });
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfile')}>
@@ -48,6 +52,7 @@ const ElderList = ({ navigation }) => {
             description={elder.description}
             image={elder.image}
             onPress={() => navigation.navigate('ElderVisualization', { elderId: elder.id })}
+            onEdit={() => handleEdit(elder.id)}
           />
         ))}
       </ScrollView>
@@ -122,4 +127,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ElderList;
+export default ElderList;
