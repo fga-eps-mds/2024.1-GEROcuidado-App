@@ -1,8 +1,43 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
 import database, { idososCollection } from '../db';
+
+// Função para verificar se um ano é bissexto
+const eAnoBissexto = (ano) => {
+  return (ano % 4 === 0 && ano % 100 !== 0) || (ano % 400 === 0);
+};
+
+// Função para validar a data de nascimento
+const validarData = (dia, mes, ano) => {
+  const diasNoMes = {
+    1: 31,
+    2: eAnoBissexto(ano) ? 29 : 28,
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31,
+  };
+
+  if (ano < 1900 || ano > 2024) {
+    return false;
+  }
+  if (mes < 1 || mes > 12) {
+    return false;
+  }
+  if (dia < 1 || dia > diasNoMes[mes]) {
+    return false;
+  }
+  return true;
+};
+
 
 const ElderRegistration = ({ navigation }) => {
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -33,6 +68,16 @@ const ElderRegistration = ({ navigation }) => {
   };
 
   const onSubmit = async (data) => {
+    const telefoneResponsavel = data.phone;
+    const [dia, mes, ano] = data.birthdate.split('/').map(Number);
+
+    // Validar data
+    if (!validarData(dia, mes, ano)) {
+      Alert.alert("Erro", "Data de nascimento inválida.");
+      return;
+    }
+
+    // Prosseguir com a criação do idoso ou qualquer outra lógica
     console.log(data);
     await createIdoso(data);
     navigation.navigate('ElderList');
