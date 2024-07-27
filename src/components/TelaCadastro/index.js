@@ -3,6 +3,7 @@ import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-nat
 import styles from "./style";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import database from '../../db';
+import { Q } from '@nozbe/watermelondb';
 
 const logo = require('../../../assets/logo_login_gerocuidado.png');
 
@@ -68,7 +69,7 @@ export default function TelaCadastro({ navigation }) {
         setSenhaCompatibilidadeError('');
     };
 
-    const handleCadastro = () => {
+    const handleCadastro = async () => {
         let valid = true;
 
         if (!nome) {
@@ -109,8 +110,14 @@ export default function TelaCadastro({ navigation }) {
         }
 
         if (valid) {
-            createUser();
+            const users = await database.collections.get('users').query(Q.where('email', email)).fetch();
+            if(users.length > 0){
+                Alert.alert("Erro", "Já existe um usuário cadastrado com esse email.");
+            } else {
+                createUser();
+            }
         }
+
     };
 
     const checkPasswordStrength = (password) => {
