@@ -12,6 +12,12 @@ export default function TelaCadastro({ navigation }) {
     const [confirmEmail, setConfirmEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
+    
+    const [nomeError, setNomeError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [confirmEmailError, setConfirmEmailError] = useState('');
+    const [senhaError, setSenhaError] = useState('');
+    const [confirmSenhaError, setConfirmSenhaError] = useState('');
 
     const createUser = async () => {
         await database.write(async () => {
@@ -23,52 +29,87 @@ export default function TelaCadastro({ navigation }) {
                     user.created_at = new Date().toISOString();
                     user.updated_at = new Date().toISOString();
                 });
-                
+
                 console.log('Usuário criado com sucesso!');
-                
+
                 const savedUser = await database.collections.get('users').find(newUser.id);
                 if (savedUser) {
                     console.log('Usuário salvo:', savedUser);
                     Alert.alert("Sucesso", "Usuário cadastrado com sucesso.");
+                    resetForm();
+                    navigation.navigate('Login');
                 } else {
                     console.error("Erro: o usuário não foi encontrado após a criação.");
                     Alert.alert("Erro", "O usuário não foi encontrado após o cadastro.");
                 }
-
-                navigation.navigate('Login');
             } catch (error) {
                 console.error("Erro ao criar usuário:", error);
                 Alert.alert("Erro", "Houve um erro ao criar o usuário.");
             }
         });
-    }
+    };
+
+    const resetForm = () => {
+        setNome('');
+        setEmail('');
+        setConfirmEmail('');
+        setSenha('');
+        setConfirmSenha('');
+        setNomeError('');
+        setEmailError('');
+        setConfirmEmailError('');
+        setSenhaError('');
+        setConfirmSenhaError('');
+    };
 
     const handleCadastro = () => {
-        if (!nome || !email || !confirmEmail || !senha || !confirmSenha) {
-            Alert.alert("Erro", "Todos os campos são obrigatórios.");
-            return;
+        let valid = true;
+        
+        if (!nome) {
+            setNomeError("Nome é obrigatório.");
+            valid = false;
+        } else {
+            setNomeError("");
         }
+        
+        if (!email) {
+            setEmailError("Email é obrigatório.");
+            valid = false;
+        } else {
+            setEmailError("");
+        }
+        
         if (email !== confirmEmail) {
-            Alert.alert("Erro", "Os e-mails não correspondem.");
-            return;
+            setConfirmEmailError("Os e-mails não correspondem.");
+            valid = false;
+        } else {
+            setConfirmEmailError("");
         }
+        
         if (senha.length < 8) {
-            Alert.alert("Erro", "A senha deve ter pelo menos 8 caracteres.");
-            return;
+            setSenhaError("A senha deve ter pelo menos 8 caracteres.");
+            valid = false;
+        } else {
+            setSenhaError("");
         }
+        
         if (senha !== confirmSenha) {
-            Alert.alert("Erro", "As senhas não correspondem.");
-            return;
+            setConfirmSenhaError("As senhas não correspondem.");
+            valid = false;
+        } else {
+            setConfirmSenhaError("");
         }
-
-        createUser();
+        
+        if (valid) {
+            createUser();
+        }
     };
 
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TelaInicial')}>
                 <Image source={require('../../../assets/back_button.png')} style={styles.backButtonImage} />
-            </TouchableOpacity>            
+            </TouchableOpacity>
             <View style={styles.imageContainer}>
                 <Image source={logo} style={styles.image} />
             </View>
@@ -82,8 +123,9 @@ export default function TelaCadastro({ navigation }) {
                     value={nome}
                     onChangeText={setNome}
                 />
-            </View> 
-            
+            </View>
+            {nomeError ? <Text style={styles.errorText}>{nomeError}</Text> : null}
+
             <View style={styles.inputContainer}>
                 <Icon name="email" size={20} color="#CCCCCC" style={styles.icon} />
                 <TextInput
@@ -94,6 +136,7 @@ export default function TelaCadastro({ navigation }) {
                     onChangeText={setEmail}
                 />
             </View>
+            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
             <View style={styles.inputContainer}>
                 <Icon name="email" size={20} color="#CCCCCC" style={styles.icon} />
@@ -104,8 +147,9 @@ export default function TelaCadastro({ navigation }) {
                     value={confirmEmail}
                     onChangeText={setConfirmEmail}
                 />
-            </View>            
-            
+            </View>
+            {confirmEmailError ? <Text style={styles.errorText}>{confirmEmailError}</Text> : null}
+
             <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#CCCCCC" style={styles.icon} />
                 <TextInput
@@ -116,6 +160,7 @@ export default function TelaCadastro({ navigation }) {
                     onChangeText={setSenha}
                 />
             </View>
+            {senhaError ? <Text style={styles.errorText}>{senhaError}</Text> : null}
 
             <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#CCCCCC" style={styles.icon} />
@@ -126,8 +171,9 @@ export default function TelaCadastro({ navigation }) {
                     value={confirmSenha}
                     onChangeText={setConfirmSenha}
                 />
-            </View>            
-  
+            </View>
+            {confirmSenhaError ? <Text style={styles.errorText}>{confirmSenhaError}</Text> : null}
+
             <TouchableOpacity
                 style={styles.button}
                 onPress={handleCadastro}
