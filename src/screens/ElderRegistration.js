@@ -38,6 +38,11 @@ const validarData = (dia, mes, ano) => {
   return true;
 };
 
+// Função para validar o número de telefone
+const validarTelefone = (telefone) => {
+  const regexTelefone = /^\d{11}$/; // Ajuste o regex se necessário
+  return regexTelefone.test(telefone);
+};
 
 const ElderRegistration = ({ navigation }) => {
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -70,6 +75,12 @@ const ElderRegistration = ({ navigation }) => {
   const onSubmit = async (data) => {
     const telefoneResponsavel = data.phone;
     const [dia, mes, ano] = data.birthdate.split('/').map(Number);
+
+    // Validar telefone
+    if (!validarTelefone(telefoneResponsavel)) {
+      Alert.alert("Erro", "Número de telefone inválido. Deve conter 11 dígitos.");
+      return;
+    }
 
     // Validar data
     if (!validarData(dia, mes, ano)) {
