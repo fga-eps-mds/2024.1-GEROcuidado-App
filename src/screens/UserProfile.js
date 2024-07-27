@@ -45,13 +45,13 @@ const UserProfile = ({ navigation }) => {
       >
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Deseja mesmo sair do aplicativo?</Text>
-          <Text style={styles.modalBody}>Esta ação não poderá ser desfeita!</Text>
+          <Text style={styles.modalBody}></Text>
           <View style={styles.modalButtons}>
-            <TouchableOpacity style={styles.modalButton} onPress={hideModal}>
-              <Text style={styles.modalButtonText}>Não</Text>
+            <TouchableOpacity style={[styles.modalButton, styles.noButton]} onPress={hideModal}>
+              <Text style={[styles.modalButtonText, styles.noButtonText]}>Não</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={handleLogout}>
-              <Text style={styles.modalButtonText}>Sim</Text>
+            <TouchableOpacity style={[styles.modalButton, styles.yesButton]} onPress={handleLogout}>
+              <Text style={[styles.modalButtonText, styles.yesButtonText]}>Sim</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    marginTop: 5,
   },
   modalBody: {
     fontSize: 16,
@@ -158,20 +159,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   noButton: {
-    borderColor: 'red', 
+    borderColor: '#838383', 
   },
   yesButton: {
-    borderColor: 'green', 
+    borderColor: '#2CCDB5', 
+    backgroundColor: '#2CCDB5',
   },
   modalButtonText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   noButtonText: {
-    color: 'red', 
+    color: '#FF0000', 
   },
   yesButtonText: {
-    color: 'green',
-}}
-);
+    color: '#FFFFFF',
+  },
+});
 
 export default UserProfile;
