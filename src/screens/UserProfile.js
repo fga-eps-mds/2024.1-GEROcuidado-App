@@ -1,38 +1,27 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import Modal from 'react-native-modal';
 import OptionProfile from '../components/OptionProfile';
 import Footer from '../components/Footer';
 
 const UserProfile = ({ navigation }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const handlePress = (message) => {
     console.log(message);
   };
 
-  // Function para o botão de alerta ao clicar no logout
-  const alertButton = () => {
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
-    Alert.alert(
-      // title
-      'Tem certeza que deseja disso?',
-      // Body
-      'Esta ação não poderá ser desfeita!',
-      [
-        // Botão de não
-        {
-          text: 'Não',
-          onPress: () => {
-            console.log('Não Pressionado');
-          }
-        },
-        // Botão de sim
-        {
-          text: 'Sim',
-          onPress: () => {
-            console.log('Sim Pressionado');
-          }
-        }
-      ]
-    )
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleLogout = () => {
+    console.log('Sim Pressionado');
+    hideModal();
   };
 
   return (
@@ -42,17 +31,31 @@ const UserProfile = ({ navigation }) => {
         <Text style={styles.helloMessage}>Olá, nome do usuário</Text>
 
         <View style={styles.logoutContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={alertButton}
-          >
-            <Image
-              source={require('../../assets/logout.png')}
-              style={styles.LogoutImage}
-            />
+          <TouchableOpacity style={styles.button} onPress={showModal}>
+            <Image source={require('../../assets/logout.png')} style={styles.LogoutImage} />
           </TouchableOpacity>
         </View>
       </View>
+
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={hideModal}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Deseja mesmo sair do aplicativo?</Text>
+          <Text style={styles.modalBody}>Esta ação não poderá ser desfeita!</Text>
+          <View style={styles.modalButtons}>
+            <TouchableOpacity style={styles.modalButton} onPress={hideModal}>
+              <Text style={styles.modalButtonText}>Não</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={handleLogout}>
+              <Text style={styles.modalButtonText}>Sim</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.optionWrapper}>
         <OptionProfile
@@ -75,10 +78,11 @@ const UserProfile = ({ navigation }) => {
           style={styles.optionSpacing}
         />
       </View>
-      <Footer/>
+      <Footer />
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -124,6 +128,50 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: -10,
   },
-});
+  modalContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalBody: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  noButton: {
+    borderColor: 'red', 
+  },
+  yesButton: {
+    borderColor: 'green', 
+  },
+  modalButtonText: {
+    fontSize: 16,
+  },
+  noButtonText: {
+    color: 'red', 
+  },
+  yesButtonText: {
+    color: 'green',
+}}
+);
 
 export default UserProfile;
