@@ -5,17 +5,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
-        backgroundColor: '#F2F1F7', 
+        backgroundColor: '#F2F1F7',
     },
     imageContainer: {
-        alignItems: 'center', 
-        marginBottom: 10, 
-        marginTop: -30, 
+        alignItems: 'center',
+        marginBottom: 10,
+        marginTop: -30,
     },
     image: {
-        width: 278, 
-        height: 96, 
-        resizeMode: 'contain', 
+        width: 278,
+        height: 96,
+        resizeMode: 'contain',
     },
     inputContainer: {
         flexDirection: 'row',
@@ -30,39 +30,38 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        height: 50,
-        backgroundColor: '#F2F1F7',
-        paddingHorizontal: 10,
-        color: '#000000',
+        height: 40,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
     },
     button: {
-           backgroundColor: '#2CCDB5',
-           borderRadius: 8,
-           paddingVertical: 10,
-           alignItems: 'center',
-           width: '50%',
-           bottom: -55,
-           left: '25%',
-       },
-       buttonText: {
-           color: '#FFFFFF',
-           fontSize: 18,
-           fontWeight: 'bold',
-       },
-    backButton: {
-        position: 'absolute',
-        top: 20,
-        left: 5,
-        borderRadius: 5,
+        backgroundColor: '#2CCDB5',
+        borderRadius: 8,
         paddingVertical: 10,
-        paddingHorizontal: 15,
         alignItems: 'center',
-        justifyContent: 'center',
+        width: '50%',
+        bottom: -55,
+        left: '25%',
+    },
+    buttonText: {
+        color: '#FFFFFF',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     errorText: {
         color: 'red',
-        marginTop: 5,
-        fontSize: 12,
+        fontSize: 14,
+        marginTop: -10,
+    },
+    feedbackText: {
+        fontSize: 14, // Uniform font size for all feedback messages
+        marginTop: -10,
+    },
+    mediumPassword: {
+        color: '#DAA520', // Vibrant yellow color
+    },
+    passwordStrength: {
+        color: '#004d00', // Darker green color
     },
 });
 

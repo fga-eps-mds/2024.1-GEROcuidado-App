@@ -12,12 +12,15 @@ export default function TelaCadastro({ navigation }) {
     const [confirmEmail, setConfirmEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
-    
+
     const [nomeError, setNomeError] = useState('');
     const [emailError, setEmailError] = useState('');
     const [confirmEmailError, setConfirmEmailError] = useState('');
     const [senhaError, setSenhaError] = useState('');
     const [confirmSenhaError, setConfirmSenhaError] = useState('');
+    const [senhaFeedback, setSenhaFeedback] = useState('');
+    const [senhaFeedbackColor, setSenhaFeedbackColor] = useState('');
+    const [senhaCompatibilidadeError, setSenhaCompatibilidadeError] = useState('');
 
     const createUser = async () => {
         await database.write(async () => {
@@ -60,18 +63,21 @@ export default function TelaCadastro({ navigation }) {
         setConfirmEmailError('');
         setSenhaError('');
         setConfirmSenhaError('');
+        setSenhaFeedback('');
+        setSenhaFeedbackColor('');
+        setSenhaCompatibilidadeError('');
     };
 
     const handleCadastro = () => {
         let valid = true;
-        
+
         if (!nome) {
             setNomeError("Nome é obrigatório.");
             valid = false;
         } else {
             setNomeError("");
         }
-        
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email) {
             setEmailError("Email é obrigatório.");
@@ -82,30 +88,62 @@ export default function TelaCadastro({ navigation }) {
         } else {
             setEmailError("");
         }
-        
+
         if (email !== confirmEmail) {
             setConfirmEmailError("Os e-mails não correspondem.");
             valid = false;
         } else {
             setConfirmEmailError("");
         }
-        
+
         if (senha.length < 8) {
-            setSenhaError("A senha deve ter pelo menos 8 caracteres.");
             valid = false;
         } else {
             setSenhaError("");
         }
-        
+
         if (senha !== confirmSenha) {
-            setConfirmSenhaError("As senhas não correspondem.");
             valid = false;
         } else {
             setConfirmSenhaError("");
         }
-        
+
         if (valid) {
             createUser();
+        }
+    };
+
+    const checkPasswordStrength = (password) => {
+        let feedback = '';
+        let color = 'red';
+
+        if (password.length >= 8) {
+            if (/[A-Z]/.test(password) && /[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                feedback = 'Senha forte';
+                color = styles.passwordStrength.color; // Darker green color
+            } else {
+                feedback = 'Senha média. Reforce a senha usando letras maiúsculas e caracteres especiais Ex: !@#$%"*()';
+                color = styles.mediumPassword.color; // Vibrant yellow color
+            }
+        } else {
+            feedback = 'Senha fraca! A senha deve ter pelo menos 8 caracteres!';
+            color = 'red';
+        }
+
+        setSenhaFeedback(feedback);
+        setSenhaFeedbackColor(color);
+    };
+
+    const checkPasswordCompatibility = (password, confirmPassword) => {
+        // Show compatibility error only if both fields are filled
+        if (password && confirmPassword) {
+            if (password !== confirmPassword) {
+                setSenhaCompatibilidadeError("As senhas não correspondem.");
+            } else {
+                setSenhaCompatibilidadeError('');
+            }
+        } else {
+            setSenhaCompatibilidadeError(''); // Clear error if either field is empty
         }
     };
 
@@ -128,7 +166,7 @@ export default function TelaCadastro({ navigation }) {
                     onChangeText={setNome}
                 />
             </View>
-            {nomeError ? <Text style={styles.errorText}>{nomeError}</Text> : null}
+            {nomeError ? <Text style={[styles.messageText, styles.errorText]}>{nomeError}</Text> : null}
 
             <View style={styles.inputContainer}>
                 <Icon name="email" size={20} color="#333333" style={styles.icon} />
@@ -140,7 +178,7 @@ export default function TelaCadastro({ navigation }) {
                     onChangeText={setEmail}
                 />
             </View>
-            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+            {emailError ? <Text style={[styles.messageText, styles.errorText]}>{emailError}</Text> : null}
 
             <View style={styles.inputContainer}>
                 <Icon name="email" size={20} color="#333333" style={styles.icon} />
@@ -152,7 +190,7 @@ export default function TelaCadastro({ navigation }) {
                     onChangeText={setConfirmEmail}
                 />
             </View>
-            {confirmEmailError ? <Text style={styles.errorText}>{confirmEmailError}</Text> : null}
+            {confirmEmailError ? <Text style={[styles.messageText, styles.errorText]}>{confirmEmailError}</Text> : null}
 
             <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#333333" style={styles.icon} />
@@ -161,10 +199,19 @@ export default function TelaCadastro({ navigation }) {
                     placeholder="Digite sua senha"
                     secureTextEntry
                     value={senha}
-                    onChangeText={setSenha}
+                    onChangeText={(text) => {
+                        setSenha(text);
+                        checkPasswordStrength(text);
+                        checkPasswordCompatibility(text, confirmSenha);
+                    }}
                 />
             </View>
-            {senhaError ? <Text style={styles.errorText}>{senhaError}</Text> : null}
+            {senha.length > 0 && senhaFeedback ? (
+                <Text style={[styles.messageText, { color: senhaFeedbackColor }]}>
+                    {senhaFeedback}
+                </Text>
+            ) : null}
+            {senhaError ? <Text style={[styles.messageText, styles.errorText]}>{senhaError}</Text> : null}
 
             <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#333333" style={styles.icon} />
@@ -173,10 +220,18 @@ export default function TelaCadastro({ navigation }) {
                     placeholder="Confirme sua senha"
                     secureTextEntry
                     value={confirmSenha}
-                    onChangeText={setConfirmSenha}
+                    onChangeText={(text) => {
+                        setConfirmSenha(text);
+                        checkPasswordCompatibility(senha, text);
+                    }}
                 />
             </View>
-            {confirmSenhaError ? <Text style={styles.errorText}>{confirmSenhaError}</Text> : null}
+            {confirmSenha.length > 0 && senhaCompatibilidadeError ? (
+                <Text style={[styles.messageText, styles.errorText]}>
+                    {senhaCompatibilidadeError}
+                </Text>
+            ) : null}
+            {confirmSenhaError ? <Text style={[styles.messageText, styles.errorText]}>{confirmSenhaError}</Text> : null}
 
             <TouchableOpacity
                 style={styles.button}
