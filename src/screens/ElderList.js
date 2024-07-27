@@ -1,14 +1,42 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Button, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Elder from '../components/Elder';
+import database, { idososCollection } from '../db';
 
 const ElderList = ({ elders, navigation }) => {
+
+  const createIdoso = async () => {
+    const idoso = await idososCollection.query().fetch()
+    console.log(idoso)
+  
+    await database.write(async () => {
+      try {
+        await idososCollection.create((idoso) => {
+          idoso.nome = 'Jurema';
+          idoso.dataNascimento = new Date('1955-12-12'); 
+          idoso.telefoneResponsavel = '123456789';
+        });
+        console.log("Idoso criado com sucesso!");
+      } catch (error) {
+        console.error("Erro ao criar idoso:", error);
+      }
+    });
+  };  
+
+  const testar = async () => {
+    const idoso = await idososCollection.query().fetch()
+    console.log(idoso)
+  }; 
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfile')}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
       <Text style={styles.headerText}>De quem está{"\n"}cuidando?</Text>
+      <Button title='Criar' onPress={createIdoso}/>
+      <Button title='Testa' onPress={testar}/>
+
 
       <ScrollView 
         contentContainerStyle={styles.scrollContainer}

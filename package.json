@@ -23,7 +23,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@babel/plugin-proposal-decorators": "^7.24.7"
+    "@babel/plugin-proposal-decorators": "^7.24.7",
+    "better-sqlite3": "^11.1.2"
   },
   "private": true
 }
