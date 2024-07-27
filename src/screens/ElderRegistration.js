@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+//import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
+import Modal from 'react-native-modal';
 import database, { idososCollection } from '../db';
 
 // Função para verificar se um ano é bissexto
@@ -54,6 +56,9 @@ const ElderRegistration = ({ navigation }) => {
       description: '',
     }
   });
+  
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState('');
 
   const createIdoso = async (data) => {
     await database.write(async () => {
@@ -72,6 +77,11 @@ const ElderRegistration = ({ navigation }) => {
     });
   };
 
+  const showSuccessModal = (message) => {
+    setSuccessModalMessage(message);
+    setSuccessModalVisible(true);
+  };
+
   const onSubmit = async (data) => {
     const telefoneResponsavel = data.phone;
     const [dia, mes, ano] = data.birthdate.split('/').map(Number);
@@ -87,11 +97,19 @@ const ElderRegistration = ({ navigation }) => {
       Alert.alert("Erro", "Data de nascimento inválida.");
       return;
     }
+    try {
+      // Prosseguir com a criação do idoso
+      await createIdoso(data);
+      showSuccessModal("Cadastro realizado com sucesso!");
 
-    // Prosseguir com a criação do idoso ou qualquer outra lógica
-    console.log(data);
-    await createIdoso(data);
-    navigation.navigate('ElderList');
+      // Fechar o modal e navegar após 2 segundos
+      setTimeout(() => {
+        setSuccessModalVisible(false);
+        navigation.navigate('ElderList');
+      }, 2000); // Ajuste o tempo se necessário
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao criar idoso: " + error.message);
+    }
   };
 
   return (
@@ -220,7 +238,13 @@ const ElderRegistration = ({ navigation }) => {
       <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.navigate('ElderList')}>
         <Text style={styles.cancelButtonText}>Cancelar</Text>
       </TouchableOpacity>
-
+      <Modal isVisible={successModalVisible} onBackdropPress={() => setSuccessModalVisible(false)}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalText}>{successModalMessage}</Text>
+          <TouchableOpacity style={styles.modalButton} onPress={() => setSuccessModalVisible(false)}>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
