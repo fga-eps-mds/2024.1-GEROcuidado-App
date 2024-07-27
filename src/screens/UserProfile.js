@@ -1,11 +1,38 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native';
 import OptionProfile from '../components/OptionProfile';
 import Footer from '../components/Footer';
 
 const UserProfile = ({ navigation }) => {
   const handlePress = (message) => {
     console.log(message);
+  };
+
+  // Function para o botão de alerta ao clicar no logout
+  const alertButton = () => {
+
+    Alert.alert(
+      // title
+      'Tem certeza que deseja disso?',
+      // Body
+      'Esta ação não poderá ser desfeita!',
+      [
+        // Botão de não
+        {
+          text: 'Não',
+          onPress: () => {
+            console.log('Não Pressionado');
+          }
+        },
+        // Botão de sim
+        {
+          text: 'Sim',
+          onPress: () => {
+            console.log('Sim Pressionado');
+          }
+        }
+      ]
+    )
   };
 
   return (
@@ -17,7 +44,7 @@ const UserProfile = ({ navigation }) => {
         <View style={styles.logoutContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => alert('Tem certeza que deseja sair?')}
+            onPress={alertButton}
           >
             <Image
               source={require('../../assets/logout.png')}
