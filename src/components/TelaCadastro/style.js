@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F2F1F7',
         borderBottomWidth: 1,
-        borderBottomColor: '#CCCCCC',
+        borderBottomColor: '#333333',
         marginBottom: 15,
     },
     icon: {
@@ -38,11 +38,11 @@ const styles = StyleSheet.create({
     button: {
            backgroundColor: '#2CCDB5',
            borderRadius: 8,
-           paddingVertical: 15,
+           paddingVertical: 10,
            alignItems: 'center',
-           width: '57%',
+           width: '50%',
            bottom: -55,
-           left: '20%',
+           left: '25%',
        },
        buttonText: {
            color: '#FFFFFF',

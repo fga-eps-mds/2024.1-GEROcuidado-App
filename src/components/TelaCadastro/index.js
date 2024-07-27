@@ -119,7 +119,7 @@ export default function TelaCadastro({ navigation }) {
             </View>
 
             <View style={styles.inputContainer}>
-                <Icon name="person" size={20} color="#CCCCCC" style={styles.icon} />
+                <Icon name="person" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Nome completo"
@@ -131,7 +131,7 @@ export default function TelaCadastro({ navigation }) {
             {nomeError ? <Text style={styles.errorText}>{nomeError}</Text> : null}
 
             <View style={styles.inputContainer}>
-                <Icon name="email" size={20} color="#CCCCCC" style={styles.icon} />
+                <Icon name="email" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Digite seu e-mail"
@@ -143,7 +143,7 @@ export default function TelaCadastro({ navigation }) {
             {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
             <View style={styles.inputContainer}>
-                <Icon name="email" size={20} color="#CCCCCC" style={styles.icon} />
+                <Icon name="email" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Confirme seu e-mail"
@@ -155,7 +155,7 @@ export default function TelaCadastro({ navigation }) {
             {confirmEmailError ? <Text style={styles.errorText}>{confirmEmailError}</Text> : null}
 
             <View style={styles.inputContainer}>
-                <Icon name="lock" size={20} color="#CCCCCC" style={styles.icon} />
+                <Icon name="lock" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Digite sua senha"
@@ -167,7 +167,7 @@ export default function TelaCadastro({ navigation }) {
             {senhaError ? <Text style={styles.errorText}>{senhaError}</Text> : null}
 
             <View style={styles.inputContainer}>
-                <Icon name="lock" size={20} color="#CCCCCC" style={styles.icon} />
+                <Icon name="lock" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
                     placeholder="Confirme sua senha"
