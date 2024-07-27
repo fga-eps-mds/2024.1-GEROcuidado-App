@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-//import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
 import Modal from 'react-native-modal';
 import database, { idososCollection } from '../db';
+
+
 
 // Função para verificar se um ano é bissexto
 const eAnoBissexto = (ano) => {
@@ -56,7 +57,10 @@ const ElderRegistration = ({ navigation }) => {
       description: '',
     }
   });
-  
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [successModalMessage, setSuccessModalMessage] = useState('');
 
@@ -77,6 +81,11 @@ const ElderRegistration = ({ navigation }) => {
     });
   };
 
+  const showErrorModal = (message) => {
+    setModalMessage(message);
+    setModalVisible(true);
+  };
+
   const showSuccessModal = (message) => {
     setSuccessModalMessage(message);
     setSuccessModalVisible(true);
@@ -88,27 +97,26 @@ const ElderRegistration = ({ navigation }) => {
 
     // Validar telefone
     if (!validarTelefone(telefoneResponsavel)) {
-      Alert.alert("Erro", "Número de telefone inválido. Deve conter 11 dígitos.");
+      showErrorModal("Número de telefone inválido. Deve conter 11 dígitos.");
       return;
     }
 
     // Validar data
     if (!validarData(dia, mes, ano)) {
-      Alert.alert("Erro", "Data de nascimento inválida.");
+      showErrorModal("Data de nascimento inválida.");
       return;
     }
+
+
     try {
-      // Prosseguir com a criação do idoso
       await createIdoso(data);
       showSuccessModal("Cadastro realizado com sucesso!");
-
-      // Fechar o modal e navegar após 2 segundos
       setTimeout(() => {
         setSuccessModalVisible(false);
         navigation.navigate('ElderList');
-      }, 2000); // Ajuste o tempo se necessário
+      }, 2000); // Aguarda 2 segundos para o usuário ver a mensagem antes de navegar
     } catch (error) {
-      Alert.alert("Erro", "Erro ao criar idoso: " + error.message);
+      showErrorModal("Erro ao criar idoso: " + error.message);
     }
   };
 
@@ -238,16 +246,26 @@ const ElderRegistration = ({ navigation }) => {
       <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.navigate('ElderList')}>
         <Text style={styles.cancelButtonText}>Cancelar</Text>
       </TouchableOpacity>
+
+      <Modal isVisible={modalVisible} onBackdropPress={() => setModalVisible(false)}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalText}>{modalMessage}</Text>
+          <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+            <Text style={styles.modalButtonText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <Modal isVisible={successModalVisible} onBackdropPress={() => setSuccessModalVisible(false)}>
         <View style={styles.modalContent}>
           <Text style={styles.modalText}>{successModalMessage}</Text>
           <TouchableOpacity style={styles.modalButton} onPress={() => setSuccessModalVisible(false)}>
+          <Text style={styles.modalButtonText}></Text>
           </TouchableOpacity>
         </View>
       </Modal>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -347,6 +365,28 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: -20,
   },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+
+  modalButton: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'flex-end',
+    
+  },
+  modalButtonText: {
+    color: 'red',
+    fontSize: 16,
+  },
 });
 
 export default ElderRegistration;
