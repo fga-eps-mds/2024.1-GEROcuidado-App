@@ -72,8 +72,12 @@ export default function TelaCadastro({ navigation }) {
             setNomeError("");
         }
         
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email) {
             setEmailError("Email é obrigatório.");
+            valid = false;
+        } else if (!emailRegex.test(email)) {
+            setEmailError("Digite um email válido.");
             valid = false;
         } else {
             setEmailError("");
