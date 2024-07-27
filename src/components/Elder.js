@@ -32,15 +32,15 @@ const styles = StyleSheet.create({
   },
   editButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    bottom: 3, // Posiciona o botão 10 unidades do fundo
+    right: 3,  // Posiciona o botão 10 unidades da direita
     width: 30,
     height: 30,
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
+    backgroundColor: '#1b8068',
+  },  
   editButtonImage: {
     width: 20,
     height: 20,
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Elder;
+export default Elder;
