@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, Button } from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import database, { idososCollection } from '../db';
 
 const ElderEdit = ({ route, navigation }) => {
@@ -13,33 +13,62 @@ const ElderEdit = ({ route, navigation }) => {
 
   useEffect(() => {
     const fetchElder = async () => {
-      const idoso = await idososCollection.find(elderId);
-      setElder({
-        name: idoso._raw.nome,
-        birthdate: new Date(idoso._raw.dataNascimento).toLocaleDateString(),
-        bloodType: idoso._raw.tipoSanguineo,
-        phone: idoso._raw.telefoneResponsavel,
-        description: idoso._raw.descricao,
-        image: require('../../assets/elders/elder_1.png'),
-      });
-      setName(idoso._raw.nome);
-      setBirthdate(new Date(idoso._raw.dataNascimento).toLocaleDateString());
-      setBloodType(idoso._raw.tipoSanguineo);
-      setPhone(idoso._raw.telefoneResponsavel);
-      setDescription(idoso._raw.descricao);
+      try {
+        const idoso = await idososCollection.find(elderId);
+        const data = idoso._raw;
+        setElder({
+          name: data.nome,
+          birthdate: new Date(data.dataNascimento).toLocaleDateString('pt-BR'),
+          bloodType: data.tipoSanguineo,
+          phone: data.telefoneResponsavel,
+          description: data.descricao,
+          image: require('../../assets/elders/elder_1.png'),
+        });
+        setName(data.nome);
+        setBirthdate(new Date(data.dataNascimento).toLocaleDateString('pt-BR'));
+        setBloodType(data.tipoSanguineo);
+        setPhone(data.telefoneResponsavel);
+        setDescription(data.descricao);
+      } catch (error) {
+        console.error("Error fetching elder data: ", error);
+      }
     };
     fetchElder();
   }, [elderId]);
 
+  const parseDate = (dateString) => {
+    const [day, month, year] = dateString.split('/').map(Number);
+    return new Date(year, month - 1, day); // Mês começa em 0 no JavaScript
+  };
+
   const handleSave = async () => {
-    await idososCollection.update(elderId, {
-      nome: name,
-      dataNascimento: new Date(birthdate).toISOString(),
-      tipoSanguineo: bloodType,
-      telefoneResponsavel: phone,
-      descricao: description,
-    });
-    navigation.navigate('ElderList');
+    try {
+      await database.write(async () => {
+        const idoso = await idososCollection.find(elderId);
+        await idoso.update(idoso => {
+          idoso.nome = name;
+          idoso.dataNascimento = parseDate(birthdate).toISOString(); // Ajustar formato da data
+          idoso.tipoSanguineo = bloodType;
+          idoso.telefoneResponsavel = phone;
+          idoso.descricao = description;
+        });
+      });
+      navigation.navigate('ElderList');
+    } catch (error) {
+      console.error("Error saving elder data: ", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await database.write(async () => {
+        const idoso = await idososCollection.find(elderId);
+        await idoso.markAsDeleted(); // Será excluído no próximo sync
+      });
+      navigation.navigate('ElderList');
+    } catch (error) {
+      console.error("Error deleting elder data: ", error);
+    }
   };
 
   if (!elder) {
@@ -104,7 +133,12 @@ const ElderEdit = ({ route, navigation }) => {
         </View>
       </View>
 
-      <Button title="Salvar" onPress={handleSave} />
+      <TouchableOpacity style={styles.buttonSalvar} onPress={handleSave}>
+        <Text style={styles.buttonText}>Salvar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonExcluir} onPress={handleDelete}>
+        <Text style={styles.cancelButtonText}>Excluir</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -156,6 +190,30 @@ const styles = StyleSheet.create({
     width: 18,
     height: 22,
     marginRight: -20,
+  },
+  buttonSalvar: {
+    backgroundColor: '#2CCDB5',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+    alignSelf: 'center',
+    width: '50%',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  buttonExcluir: {
+    padding: 12,
+    alignItems: 'center',
+    marginTop: 12,
+    alignSelf: 'center',
+  },
+  cancelButtonText: {
+    color: 'red',
+    fontSize: 16,
   },
   bloodIcon: {
     width: 29,
