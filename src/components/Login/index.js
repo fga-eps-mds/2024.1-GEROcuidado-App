@@ -3,7 +3,7 @@ import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-nat
 import styles from "./style";
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import database from '../../db'; 
-import User from "../../db/model/user"; 
+import User from "../../model/user"; 
 import { Q } from '@nozbe/watermelondb';
 
 const logo = require('../../../assets/logo_login_gerocuidado.png');

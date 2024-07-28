@@ -3,7 +3,7 @@ import { Database } from '@nozbe/watermelondb';
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 
 import mySchema from './schema'; 
-import User from './model/user';
+import User from '../model/user';
 
 const adapter = new SQLiteAdapter({
   dbName: 'GeroCuidado',
