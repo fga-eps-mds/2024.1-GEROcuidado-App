@@ -4,7 +4,7 @@ import Modal from 'react-native-modal';
 import database, { idososCollection } from '../db';
 
 const ElderEdit = ({ route, navigation }) => {
-  const { elderId } = route.params;
+  const { elderId, user } = route.params; // Recebendo elderId e user como parâmetros de rota
   const [elder, setElder] = useState(null);
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
@@ -75,7 +75,7 @@ const ElderEdit = ({ route, navigation }) => {
           idoso.descricao = description;
         });
       });
-      navigation.navigate('ElderList');
+      navigation.navigate('ElderList', { user }); // Passando o usuário na navegação
     } catch (error) {
       showErrorModal("Erro ao salvar: " + error.message);
     }
@@ -95,7 +95,7 @@ const ElderEdit = ({ route, navigation }) => {
         const idoso = await idososCollection.find(elderId);
         await idoso.markAsDeleted();
       });
-      navigation.navigate('ElderList');
+      navigation.navigate('ElderList', { user }); // Passando o usuário na navegação
     } catch (error) {
       showErrorModal("Erro ao excluir: " + error.message);
     }
@@ -108,7 +108,7 @@ const ElderEdit = ({ route, navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList', { user })}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
 

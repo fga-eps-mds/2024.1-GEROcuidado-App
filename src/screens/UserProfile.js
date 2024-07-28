@@ -84,7 +84,7 @@ const UserProfile = ({ route, navigation }) => {
           description="Visualize e edite idosos"
           smallImage={require('../../assets/IconIdoso.png')}
           rightImage={require('../../assets/Arrow.png')}
-          onPress={() => navigation.navigate('ElderList')}
+          onPress={() => navigation.navigate('ElderList', { user })}
           style={styles.optionSpacing}
         />
       </View>

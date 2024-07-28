@@ -22,9 +22,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Login" component={ScreenLogin} />
         <Stack.Screen name="TelaCadastro" component={Register} />
         <Stack.Screen name="UserProfile" component={UserProfile} />
-        <Stack.Screen name="ElderList">
-          {props => <ElderList {...props} elders={elders} />}
-        </Stack.Screen>
+        <Stack.Screen name="ElderList" component={ElderList}/>
         <Stack.Screen name="ElderRegistration" component={ElderRegistration} />
         <Stack.Screen name="ElderVisualization" component={ElderVisualization} />
         <Stack.Screen name="ElderEdit" component={ElderEdit} />

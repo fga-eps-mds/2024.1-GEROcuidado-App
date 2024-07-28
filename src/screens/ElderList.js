@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import Elder from '../components/Elder';
+import Elder from '../components/Elder'; // Certifique-se de que este caminho está correto
 import database, { idososCollection } from '../db';
 import { useFocusEffect } from '@react-navigation/native';
 
-const ElderList = ({ navigation }) => {
-  const [elders, setElders] = useState([]);
+const ElderList = ({ route, navigation }) => {
+  const { user } = route.params; // Certifique-se de que o `user` está sendo passado corretamente
+  const [elders, setElders] = useState([]); // Inicialização correta do estado
 
   const fetchElders = async () => {
-    const idosoRecords = await idososCollection.query().fetch();
-    const idosoData = idosoRecords.map((idoso) => ({
-      id: idoso._raw.id,
-      name: idoso._raw.nome,
-      birthdate: new Date(idoso._raw.dataNascimento).toLocaleDateString(),
-      bloodType: idoso._raw.tipoSanguineo,
-      phone: idoso._raw.telefoneResponsavel,
-      description: idoso._raw.descricao,
-      image: require('../../assets/elders/elder_1.png'),
-    }));
-    setElders(idosoData);
+    try {
+      const idosoRecords = await idososCollection.query().fetch();
+      const idosoData = idosoRecords.map((idoso) => ({
+        id: idoso._raw.id,
+        name: idoso._raw.nome,
+        birthdate: new Date(idoso._raw.dataNascimento).toLocaleDateString(),
+        bloodType: idoso._raw.tipoSanguineo,
+        phone: idoso._raw.telefoneResponsavel,
+        description: idoso._raw.descricao,
+        image: require('../../assets/elders/elder_1.png'), // Certifique-se de que o caminho da imagem está correto
+      }));
+      setElders(idosoData); // Atualização correta do estado
+    } catch (error) {
+      console.error('Erro ao buscar idosos:', error); // Adicione logs de erro para depuração
+    }
   };
 
   useFocusEffect(
@@ -33,7 +38,7 @@ const ElderList = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfile')}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfile', { user })}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
       <Text style={styles.headerText}>De quem está{"\n"}cuidando?</Text>
@@ -58,7 +63,7 @@ const ElderList = ({ navigation }) => {
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.plusButton} onPress={() => navigation.navigate('ElderRegistration')}>
+        <TouchableOpacity style={styles.plusButton} onPress={() => navigation.navigate('ElderRegistration', { user })}>
             <Image source={require('../../assets/plus_button.png')} style={styles.plusButtonImage} />
         </TouchableOpacity>
       </View>

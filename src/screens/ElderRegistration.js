@@ -45,7 +45,9 @@ const validarTelefone = (telefone) => {
   return regexTelefone.test(telefone);
 };
 
-const ElderRegistration = ({ navigation }) => {
+const ElderRegistration = ({ route, navigation }) => {
+  const { user } = route.params; // Recebendo o user como parâmetro de rota
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: '',
@@ -72,10 +74,11 @@ const ElderRegistration = ({ navigation }) => {
       try {
         await idososCollection.create((idoso) => {
           idoso.nome = data.name;
-          idoso.dataNascimento = parseDate(data.birthdate).toLocaleDateString('pt-BR');
+          idoso.dataNascimento = parseDate(data.birthdate);
           idoso.telefoneResponsavel = data.phone;
           idoso.tipoSanguineo = data.bloodtype || '';
           idoso.observacoes = data.description || '';
+          idoso.user_id = user.id; // Associando o idoso ao usuário
         });
         console.log("Idoso criado com sucesso!");
       } catch (error) {
@@ -113,7 +116,7 @@ const ElderRegistration = ({ navigation }) => {
       showSuccessModal("Cadastro realizado com sucesso!");
       setTimeout(() => {
         setSuccessModalVisible(false);
-        navigation.navigate('ElderList');
+        navigation.navigate('ElderList', { user });
       }, 2000);
     } catch (error) {
       showErrorModal("Erro ao criar idoso: " + error.message);
@@ -122,7 +125,7 @@ const ElderRegistration = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList', { user })}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
 
@@ -244,7 +247,7 @@ const ElderRegistration = ({ navigation }) => {
       <TouchableOpacity style={styles.buttonCadastro} onPress={handleSubmit(onSubmit)}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.navigate('ElderList')}>
+      <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.navigate('ElderList', { user })}>
         <Text style={styles.cancelButtonText}>Cancelar</Text>
       </TouchableOpacity>
 

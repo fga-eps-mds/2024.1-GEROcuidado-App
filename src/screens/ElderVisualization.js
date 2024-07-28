@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity 
 import database, { idososCollection } from '../db';
 
 const ElderVisualization = ({ route, navigation }) => {
-  const { elderId } = route.params;
+  const { elderId, user } = route.params; 
   const [elder, setElder] = useState(null);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const ElderVisualization = ({ route, navigation }) => {
         birthdate: birthdate,
         bloodType: idoso._raw.tipoSanguineo,
         phone: idoso._raw.telefoneResponsavel,
-        description: idoso._raw.descricao,
+        description: idoso._raw.observacoes,
         image: require('../../assets/elders/elder_1.png'),
       });
     };
@@ -29,7 +29,7 @@ const ElderVisualization = ({ route, navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList', { user })}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
 
