@@ -64,14 +64,14 @@ const styles = StyleSheet.create({
         marginTop: -10,
     },
     feedbackText: {
-        fontSize: 14, // Uniform font size for all feedback messages
+        fontSize: 14,
         marginTop: -10,
     },
     mediumPassword: {
-        color: '#DAA520', // Vibrant yellow color
+        color: '#DAA520', 
     },
     passwordStrength: {
-        color: '#004d00', // Darker green color
+        color: '#004d00', 
     },
 });
 

@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import { Database } from '@nozbe/watermelondb';
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 
-import mySchema from './schema'; // Certifique-se de que o caminho está correto
+import mySchema from './schema'; 
 import User from './model/user';
 
 const adapter = new SQLiteAdapter({
