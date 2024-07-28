@@ -64,12 +64,17 @@ const ElderRegistration = ({ navigation }) => {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [successModalMessage, setSuccessModalMessage] = useState('');
 
+  const parseDate = (dateString) => {
+    const [day, month, year] = dateString.split('/').map(Number);
+    return new Date(year, month - 1, day); // Mês começa em 0 no JavaScript
+  };
+  
   const createIdoso = async (data) => {
     await database.write(async () => {
       try {
         await idososCollection.create((idoso) => {
           idoso.nome = data.name;
-          idoso.dataNascimento = new Date(data.birthdate); 
+          idoso.dataNascimento = parseDate(data.birthdate);
           idoso.telefoneResponsavel = data.phone;
           idoso.tipoSanguineo = data.bloodtype || ''; // Lida com campo opcional
           idoso.observacoes = data.description || ''; // Lida com campo opcional
