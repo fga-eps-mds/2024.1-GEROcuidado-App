@@ -4,7 +4,8 @@ import Modal from 'react-native-modal';
 import OptionProfile from '../components/OptionProfile';
 import Footer from '../components/Footer';
 
-const UserProfile = ({ navigation }) => {
+const UserProfile = ({ route, navigation }) => {
+  const { user } = route.params;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handlePress = (message) => {
@@ -28,7 +29,7 @@ const UserProfile = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Image source={require('../../assets/icon_caregiver.png')} style={styles.logo_caregiver} />
-        <Text style={styles.helloMessage}>Olá, nome do usuário</Text>
+        <Text style={styles.helloMessage}>Olá, {user.name}</Text>
 
         <View style={styles.logoutContainer}>
           <TouchableOpacity style={styles.button} onPress={showModal}>
