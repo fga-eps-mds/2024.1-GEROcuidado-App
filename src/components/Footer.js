@@ -43,10 +43,10 @@ const Footer = ({onPress}) => {
 
 const styles = StyleSheet.create({
     footer: {
-      position: 'absolute', // posicao absolute
+      position: 'absolute',
       bottom: 0,
-      width: '100%', // largura
-      height: 56, // altura do footer
+      width: '100%',
+      height: 56,
       backgroundColor: '#2CCDB5',
       flexDirection: 'row',
       justifyContent: 'space-around',
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     footerButton: {
       justifyContent: 'center',
       alignItems: 'center',
-      flexDirection: 'column-reverse', // posiciona de cima pra baixo
+      flexDirection: 'column-reverse',
     },
     RotinaImageFooter: {
       width: 22,

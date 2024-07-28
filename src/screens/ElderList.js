@@ -97,6 +97,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     paddingBottom: 150,
+    paddingLeft: "7%",
+    paddingRight: "7%"
   },
   footer: {
     position: 'absolute',

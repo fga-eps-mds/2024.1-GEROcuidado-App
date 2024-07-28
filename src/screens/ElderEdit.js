@@ -42,7 +42,7 @@ const ElderEdit = ({ route, navigation }) => {
 
   const parseDate = (dateString) => {
     const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day); // Mês começa em 0 no JavaScript
+    return new Date(year, month - 1, day);
   };
 
   const showErrorModal = (message) => {
@@ -54,13 +54,11 @@ const ElderEdit = ({ route, navigation }) => {
     const telefoneResponsavel = phone;
     const [dia, mes, ano] = birthdate.split('/').map(Number);
 
-    // Validar telefone
     if (!validarTelefone(telefoneResponsavel)) {
       showErrorModal("Número de telefone inválido. Deve conter 11 dígitos.");
       return;
     }
 
-    // Validar data
     if (!validarData(dia, mes, ano)) {
       showErrorModal("Data de nascimento inválida.");
       return;
@@ -71,7 +69,7 @@ const ElderEdit = ({ route, navigation }) => {
         const idoso = await idososCollection.find(elderId);
         await idoso.update(idoso => {
           idoso.nome = name;
-          idoso.dataNascimento = parseDate(birthdate).toISOString(); // Ajustar formato da data
+          idoso.dataNascimento = parseDate(birthdate).toISOString();
           idoso.tipoSanguineo = bloodType;
           idoso.telefoneResponsavel = phone;
           idoso.descricao = description;
@@ -95,7 +93,7 @@ const ElderEdit = ({ route, navigation }) => {
     try {
       await database.write(async () => {
         const idoso = await idososCollection.find(elderId);
-        await idoso.markAsDeleted(); // Será excluído no próximo sync
+        await idoso.markAsDeleted();
       });
       navigation.navigate('ElderList');
     } catch (error) {
@@ -208,7 +206,7 @@ const ElderEdit = ({ route, navigation }) => {
 };
 
 const validarTelefone = (telefone) => {
-  const regexTelefone = /^\d{11}$/; // Ajuste o regex se necessário
+  const regexTelefone = /^\d{11}$/;
   return regexTelefone.test(telefone);
 };
 

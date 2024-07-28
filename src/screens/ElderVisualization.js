@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderBottomWidth: 1,
     borderRadius: 8,
-    color: 'black', // Cor da fonte preta
+    color: 'black',
   },
   iconBirthday: {
     width: 18,

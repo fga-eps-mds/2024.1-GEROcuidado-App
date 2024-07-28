@@ -2,8 +2,8 @@ import { Platform } from 'react-native';
 import { Database } from '@nozbe/watermelondb';
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 
-import mySchema from './schema'; // Certifique-se de que o caminho está correto
-import Idoso from '../model/idoso'; // Descomente e ajuste a importação do modelo
+import mySchema from './schema';
+import Idoso from '../model/idoso';
 
 const adapter = new SQLiteAdapter({
   dbName: 'GeroCuidado',

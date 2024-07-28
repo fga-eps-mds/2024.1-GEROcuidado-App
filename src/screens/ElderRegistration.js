@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
 import Modal from 'react-native-modal';
 import database, { idososCollection } from '../db';
 
-// Função para verificar se um ano é bissexto
 const eAnoBissexto = (ano) => {
   return (ano % 4 === 0 && ano % 100 !== 0) || (ano % 400 === 0);
 };
 
-// Função para validar a data de nascimento
 const validarData = (dia, mes, ano) => {
   const diasNoMes = {
     1: 31,
@@ -42,9 +40,8 @@ const validarData = (dia, mes, ano) => {
   return true;
 };
 
-// Função para validar o número de telefone
 const validarTelefone = (telefone) => {
-  const regexTelefone = /^\d{11}$/; // Ajuste o regex se necessário
+  const regexTelefone = /^\d{11}$/;
   return regexTelefone.test(telefone);
 };
 
@@ -67,7 +64,7 @@ const ElderRegistration = ({ navigation }) => {
 
   const parseDate = (dateString) => {
     const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString('pt-BR'); // Mês começa em 0 no JavaScript
+    return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
   };
   
   const createIdoso = async (data) => {
@@ -77,8 +74,8 @@ const ElderRegistration = ({ navigation }) => {
           idoso.nome = data.name;
           idoso.dataNascimento = parseDate(data.birthdate).toLocaleDateString('pt-BR');
           idoso.telefoneResponsavel = data.phone;
-          idoso.tipoSanguineo = data.bloodtype || ''; // Lida com campo opcional
-          idoso.observacoes = data.description || ''; // Lida com campo opcional
+          idoso.tipoSanguineo = data.bloodtype || '';
+          idoso.observacoes = data.description || '';
         });
         console.log("Idoso criado com sucesso!");
       } catch (error) {
@@ -101,18 +98,15 @@ const ElderRegistration = ({ navigation }) => {
     const telefoneResponsavel = data.phone;
     const [dia, mes, ano] = data.birthdate.split('/').map(Number);
 
-    // Validar telefone
     if (!validarTelefone(telefoneResponsavel)) {
       showErrorModal("Número de telefone inválido. Deve conter 11 dígitos.");
       return;
     }
 
-    // Validar data
     if (!validarData(dia, mes, ano)) {
       showErrorModal("Data de nascimento inválida.");
       return;
     }
-
 
     try {
       await createIdoso(data);
@@ -120,7 +114,7 @@ const ElderRegistration = ({ navigation }) => {
       setTimeout(() => {
         setSuccessModalVisible(false);
         navigation.navigate('ElderList');
-      }, 2000); // Aguarda 2 segundos para o usuário ver a mensagem antes de navegar
+      }, 2000);
     } catch (error) {
       showErrorModal("Erro ao criar idoso: " + error.message);
     }
@@ -215,6 +209,7 @@ const ElderRegistration = ({ navigation }) => {
                 <TextInput
                   style={[styles.input, styles.textInputWithPadding]}
                   onBlur={onBlur}
+                  keyboardType="numeric"
                   onChangeText={onChange}
                   value={value}
                   placeholder="Telefone Responsável"

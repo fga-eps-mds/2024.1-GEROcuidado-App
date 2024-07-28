@@ -32,11 +32,11 @@ const styles = StyleSheet.create({
   },
   editButton: {
     position: 'absolute',
-    bottom: 3, // Posiciona o botão 10 unidades do fundo
-    right: 3,  // Posiciona o botão 10 unidades da direita
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    bottom: -7,
+    right: -7,
+    width: 34,
+    height: 34,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#1b8068',
