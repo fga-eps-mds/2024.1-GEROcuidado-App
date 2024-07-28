@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import Modal from 'react-native-modal';
 import database, { idososCollection } from '../db';
 
 const ElderEdit = ({ route, navigation }) => {
@@ -10,6 +11,9 @@ const ElderEdit = ({ route, navigation }) => {
   const [bloodType, setBloodType] = useState('');
   const [phone, setPhone] = useState('');
   const [description, setDescription] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchElder = async () => {
@@ -41,7 +45,27 @@ const ElderEdit = ({ route, navigation }) => {
     return new Date(year, month - 1, day); // Mês começa em 0 no JavaScript
   };
 
+  const showErrorModal = (message) => {
+    setErrorMessage(message);
+    setErrorModalVisible(true);
+  };
+
   const handleSave = async () => {
+    const telefoneResponsavel = phone;
+    const [dia, mes, ano] = birthdate.split('/').map(Number);
+
+    // Validar telefone
+    if (!validarTelefone(telefoneResponsavel)) {
+      showErrorModal("Número de telefone inválido. Deve conter 11 dígitos.");
+      return;
+    }
+
+    // Validar data
+    if (!validarData(dia, mes, ano)) {
+      showErrorModal("Data de nascimento inválida.");
+      return;
+    }
+
     try {
       await database.write(async () => {
         const idoso = await idososCollection.find(elderId);
@@ -55,8 +79,16 @@ const ElderEdit = ({ route, navigation }) => {
       });
       navigation.navigate('ElderList');
     } catch (error) {
-      console.error("Error saving elder data: ", error);
+      showErrorModal("Erro ao salvar: " + error.message);
     }
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
   };
 
   const handleDelete = async () => {
@@ -67,8 +99,9 @@ const ElderEdit = ({ route, navigation }) => {
       });
       navigation.navigate('ElderList');
     } catch (error) {
-      console.error("Error deleting elder data: ", error);
+      showErrorModal("Erro ao excluir: " + error.message);
     }
+    hideModal();
   };
 
   if (!elder) {
@@ -136,11 +169,82 @@ const ElderEdit = ({ route, navigation }) => {
       <TouchableOpacity style={styles.buttonSalvar} onPress={handleSave}>
         <Text style={styles.buttonText}>Salvar</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonExcluir} onPress={handleDelete}>
+      <TouchableOpacity style={styles.buttonExcluir} onPress={showModal}>
         <Text style={styles.cancelButtonText}>Excluir</Text>
       </TouchableOpacity>
+
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={hideModal}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Deseja mesmo excluir este idoso?</Text>
+          <View style={styles.modalButtons}>
+            <TouchableOpacity style={[styles.modalButton, styles.noButton]} onPress={hideModal}>
+              <Text style={[styles.modalButtonText, styles.noButtonText]}>Não</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.modalButton, styles.yesButton]} onPress={handleDelete}>
+              <Text style={[styles.modalButtonText, styles.yesButtonText]}>Sim</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        isVisible={errorModalVisible}
+        onBackdropPress={() => setErrorModalVisible(false)}
+      >
+        <View style={styles.modalContent}>
+          <Text style={styles.modalText}>{errorMessage}</Text>
+          <TouchableOpacity style={styles.modalButton} onPress={() => setErrorModalVisible(false)}>
+            <Text style={styles.modalButtonText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </ScrollView>
   );
+};
+
+const validarTelefone = (telefone) => {
+  const regexTelefone = /^\d{11}$/; // Ajuste o regex se necessário
+  return regexTelefone.test(telefone);
+};
+
+const eAnoBissexto = (ano) => {
+  return (ano % 4 === 0 && ano % 100 !== 0) || (ano % 400 === 0);
+};
+
+const validarData = (dia, mes, ano) => {
+  const diasNoMes = {
+    1: 31,
+    2: eAnoBissexto(ano) ? 29 : 28,
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31,
+  };
+
+  if (ano < 1900 || ano > 2024) {
+    return false;
+  }
+  if (mes < 1 || mes > 12) {
+    return false;
+  }
+  if (dia < 1 || dia > diasNoMes[mes]) {
+    return false;
+  }
+  if (dia.toString().length !== 2 || mes.toString().length !== 2 || ano.toString().length !== 4) {
+    return false;
+  }
+  return true;
 };
 
 const styles = StyleSheet.create({
@@ -148,6 +252,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 16,
     paddingBottom: 32,
+    justifyContent: 'space-between',
   },
   backButton: {
     marginTop: 10,
@@ -184,12 +289,6 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderBottomWidth: 1,
     borderRadius: 8,
-    color: 'black',
-  },
-  iconBirthday: {
-    width: 18,
-    height: 22,
-    marginRight: -20,
   },
   buttonSalvar: {
     backgroundColor: '#2CCDB5',
@@ -215,6 +314,11 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 16,
   },
+  iconBirthday: {
+    width: 18,
+    height: 22,
+    marginRight: -20,
+  },
   bloodIcon: {
     width: 29,
     height: 24,
@@ -235,7 +339,65 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: -20,
   },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  noButton: {
+    borderColor: '#838383',
+  },
+  yesButton: {
+    borderColor: '#2CCDB5',
+    backgroundColor: '#2CCDB5',
+  },
+  modalButtonText: {
+    fontSize: 14,
+  },
+  noButtonText: {
+    color: '#FF0000',
+  },
+  yesButtonText: {
+    color: '#FFFFFF',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'flex-end',
+  },
+  modalButtonText: {
+    color: 'red',
+    fontSize: 16,
+  },
 });
 
 export default ElderEdit;
-

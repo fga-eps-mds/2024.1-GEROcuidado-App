@@ -1,16 +1,244 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, Alert } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { TextInputMask } from 'react-native-masked-text';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import database, { idososCollection } from '../db';
 
-// Função para verificar se um ano é bissexto
+const ElderEdit = ({ route, navigation }) => {
+  const { elderId } = route.params;
+  const [elder, setElder] = useState(null);
+  const [name, setName] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [bloodType, setBloodType] = useState('');
+  const [phone, setPhone] = useState('');
+  const [description, setDescription] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const fetchElder = async () => {
+      try {
+        const idoso = await idososCollection.find(elderId);
+        const data = idoso._raw;
+        setElder({
+          name: data.nome,
+          birthdate: new Date(data.dataNascimento).toLocaleDateString('pt-BR'),
+          bloodType: data.tipoSanguineo,
+          phone: data.telefoneResponsavel,
+          description: data.descricao,
+          image: require('../../assets/elders/elder_1.png'),
+        });
+        setName(data.nome);
+        setBirthdate(new Date(data.dataNascimento).toLocaleDateString('pt-BR'));
+        setBloodType(data.tipoSanguineo);
+        setPhone(data.telefoneResponsavel);
+        setDescription(data.descricao);
+      } catch (error) {
+        console.error("Error fetching elder data: ", error);
+      }
+    };
+    fetchElder();
+  }, [elderId]);
+
+  const parseDate = (dateString) => {
+    const [day, month, year] = dateString.split('/').map(Number);
+    return new Date(year, month - 1, day); // Mês começa em 0 no JavaScript
+  };
+
+  const showErrorModal = (message) => {
+    setErrorMessage(message);
+    setErrorModalVisible(true);
+  };
+
+  const showSuccessModal = () => {
+    setSuccessModalVisible(true);
+  };
+
+  const handleSave = async () => {
+    const telefoneResponsavel = phone;
+    const [dia, mes, ano] = birthdate.split('/').map(Number);
+
+    // Validar telefone
+    if (!validarTelefone(telefoneResponsavel)) {
+      showErrorModal("Número de telefone inválido. Deve conter 11 dígitos.");
+      return;
+    }
+
+    // Validar data
+    if (!validarData(dia, mes, ano)) {
+      showErrorModal("Data de nascimento inválida.");
+      return;
+    }
+
+    try {
+      await database.write(async () => {
+        const idoso = await idososCollection.find(elderId);
+        await idoso.update(idoso => {
+          idoso.nome = name;
+          idoso.dataNascimento = parseDate(birthdate).toISOString(); // Ajustar formato da data
+          idoso.tipoSanguineo = bloodType;
+          idoso.telefoneResponsavel = phone;
+          idoso.descricao = description;
+        });
+      });
+      showSuccessModal();
+    } catch (error) {
+      showErrorModal("Erro ao salvar: " + error.message);
+    }
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await database.write(async () => {
+        const idoso = await idososCollection.find(elderId);
+        await idoso.markAsDeleted(); // Será excluído no próximo sync
+      });
+      navigation.navigate('ElderList');
+    } catch (error) {
+      showErrorModal("Erro ao excluir: " + error.message);
+    }
+    hideModal();
+  };
+
+  if (!elder) {
+    return <Text>Carregando...</Text>;
+  }
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
+        <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
+      </TouchableOpacity>
+
+      <View style={styles.imageContainer}>
+        <Image source={elder.image} style={styles.elderImage} />
+      </View>
+
+      <View style={styles.formContainer}>
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/user.png')} style={styles.iconUser} />
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+          />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/birthday.png')} style={styles.iconBirthday} />
+          <TextInput
+            style={styles.input}
+            value={birthdate}
+            onChangeText={setBirthdate}
+          />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/tipo_sanguineo.png')} style={styles.bloodIcon} />
+          <TextInput
+            style={styles.input}
+            value={bloodType}
+            onChangeText={setBloodType}
+          />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/phone.png')} style={styles.iconPhone} />
+          <TextInput
+            style={styles.input}
+            value={phone}
+            onChangeText={setPhone}
+          />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/nota.png')} style={styles.iconNota} />
+          <TextInput
+            style={[styles.input, { height: 60 }]}
+            value={description}
+            onChangeText={setDescription}
+            multiline
+          />
+        </View>
+      </View>
+
+      <TouchableOpacity style={styles.buttonSalvar} onPress={handleSave}>
+        <Text style={styles.buttonText}>Salvar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonExcluir} onPress={showModal}>
+        <Text style={styles.cancelButtonText}>Excluir</Text>
+      </TouchableOpacity>
+
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={hideModal}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Deseja mesmo excluir este idoso?</Text>
+          <View style={styles.modalButtons}>
+            <TouchableOpacity style={[styles.modalButton, styles.noButton]} onPress={hideModal}>
+              <Text style={[styles.modalButtonText, styles.noButtonText]}>Não</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.modalButton, styles.yesButton]} onPress={handleDelete}>
+              <Text style={[styles.modalButtonText, styles.yesButtonText]}>Sim</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        isVisible={errorModalVisible}
+        onBackdropPress={() => setErrorModalVisible(false)}
+      >
+        <View style={styles.modalContent}>
+          <Text style={styles.modalText}>{errorMessage}</Text>
+          <TouchableOpacity style={styles.modalButton} onPress={() => setErrorModalVisible(false)}>
+            <Text style={styles.modalButtonText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+
+      <Modal
+        isVisible={successModalVisible}
+        onBackdropPress={() => {
+          setSuccessModalVisible(false);
+          navigation.navigate('ElderList');
+        }}
+      >
+        <View style={styles.modalContent}>
+          <Text style={styles.modalText}>Cadastro atualizado com sucesso!</Text>
+          <TouchableOpacity style={styles.modalButton} onPress={() => {
+            setSuccessModalVisible(false);
+            navigation.navigate('ElderList');
+          }}>
+            <Text style={styles.modalButtonText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </ScrollView>
+  );
+};
+
+const validarTelefone = (telefone) => {
+  const regexTelefone = /^\d{11}$/; // Ajuste o regex se necessário
+  return regexTelefone.test(telefone);
+};
+
 const eAnoBissexto = (ano) => {
   return (ano % 4 === 0 && ano % 100 !== 0) || (ano % 400 === 0);
 };
 
-// Função para validar a data de nascimento
 const validarData = (dia, mes, ano) => {
   const diasNoMes = {
     1: 31,
@@ -27,255 +255,17 @@ const validarData = (dia, mes, ano) => {
     12: 31,
   };
 
-  if (ano < 1900 || ano > 2024) {
+  if (ano < 1900 || ano > new Date().getFullYear()) {
     return false;
   }
-  if (mes < 1 || mes > 12) {
-    return false;
-  }
-  if (dia < 1 || dia > diasNoMes[mes]) {
-    return false;
-  }
-  if (dia.toString().length !== 2 || mes.toString().length !== 2 || ano.toString().length !== 4) {
-    return false;
-  }
-  return true;
-};
 
-// Função para validar o número de telefone
-const validarTelefone = (telefone) => {
-  const regexTelefone = /^\d{11}$/; // Ajuste o regex se necessário
-  return regexTelefone.test(telefone);
-};
-
-const ElderRegistration = ({ navigation }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      name: '',
-      birthdate: '',
-      bloodtype: '',
-      phone: '',
-      description: '',
-    }
-  });
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
-  const [successModalMessage, setSuccessModalMessage] = useState('');
-
-  const parseDate = (dateString) => {
-    const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString('pt-BR'); // Mês começa em 0 no JavaScript
-  };
-  
-  const createIdoso = async (data) => {
-    await database.write(async () => {
-      try {
-        await idososCollection.create((idoso) => {
-          idoso.nome = data.name;
-          idoso.dataNascimento = parseDate(data.birthdate).toLocaleDateString('pt-BR');
-          idoso.telefoneResponsavel = data.phone;
-          idoso.tipoSanguineo = data.bloodtype || ''; // Lida com campo opcional
-          idoso.observacoes = data.description || ''; // Lida com campo opcional
-        });
-        console.log("Idoso criado com sucesso!");
-      } catch (error) {
-        console.error("Erro ao criar idoso:", error);
-      }
-    });
-  };
-
-  const showErrorModal = (message) => {
-    setModalMessage(message);
-    setModalVisible(true);
-  };
-
-  const showSuccessModal = (message) => {
-    setSuccessModalMessage(message);
-    setSuccessModalVisible(true);
-  };
-
-  const onSubmit = async (data) => {
-    const telefoneResponsavel = data.phone;
-    const [dia, mes, ano] = data.birthdate.split('/').map(Number);
-
-    // Validar telefone
-    if (!validarTelefone(telefoneResponsavel)) {
-      showErrorModal("Número de telefone inválido. Deve conter 11 dígitos.");
-      return;
-    }
-
-    // Validar data
-    if (!validarData(dia, mes, ano)) {
-      showErrorModal("Data de nascimento inválida.");
-      return;
-    }
-
-
-    try {
-      await createIdoso(data);
-      showSuccessModal("Cadastro realizado com sucesso!");
-      setTimeout(() => {
-        setSuccessModalVisible(false);
-        navigation.navigate('ElderList');
-      }, 2000); // Aguarda 2 segundos para o usuário ver a mensagem antes de navegar
-    } catch (error) {
-      showErrorModal("Erro ao criar idoso: " + error.message);
-    }
-  };
-
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList')}>
-        <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
-      </TouchableOpacity>
-
-      <View style={styles.imageContainer}>
-        <Image source={require('../../assets/elders/elder_1.png')} style={styles.elderImage} />
-      </View>
-
-      <View style={styles.formContainer}>
-
-        <View style={styles.inputWrapper}>
-          <Image source={require('../../assets/registerElder/user.png')} style={styles.iconUser} />
-          <View style={styles.inputContainer}>
-            {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
-            <Controller
-              control={control}
-              rules={{ required: 'O nome é obrigatório' }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[styles.input, styles.textInputWithPadding]}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Nome"
-                />
-              )}
-              name="name"
-            />
-          </View>
-        </View>
-
-        <View style={styles.inputWrapper}>
-          <Image source={require('../../assets/registerElder/birthday.png')} style={styles.iconBirthday} />
-          <View style={styles.inputContainer}>
-            {errors.birthdate && <Text style={styles.errorText}>{errors.birthdate.message}</Text>}
-            <Controller
-              control={control}
-              rules={{ required: 'A data de nascimento é obrigatória' }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInputMask
-                  type={'datetime'}
-                  options={{
-                    format: 'DD/MM/YYYY'
-                  }}
-                  style={[styles.input, styles.textInputWithPadding]}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Data de nascimento"
-                />
-              )}
-              name="birthdate"
-            />
-          </View>
-        </View>
-
-        <View style={styles.inputWrapper}>
-          <Image source={require('../../assets/registerElder/tipo_sanguineo.png')} style={styles.bloodIcon} />
-          <View style={styles.inputContainer}>
-            {errors.bloodtype && <Text style={styles.errorText}>{errors.bloodtype.message}</Text>}
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[styles.input, styles.textInputWithPadding]}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Tipo sanguíneo"
-                />
-              )}
-              name="bloodtype"
-            />
-          </View>
-        </View>
-
-        <View style={styles.inputWrapper}>
-          <Image source={require('../../assets/registerElder/phone.png')} style={styles.iconPhone} />
-          <View style={styles.inputContainer}>
-            {errors.phone && <Text style={styles.errorText}>{errors.phone.message}</Text>}
-            <Controller
-              control={control}
-              rules={{ required: 'O telefone é obrigatório' }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[styles.input, styles.textInputWithPadding]}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Telefone Responsável"
-                />
-              )}
-              name="phone"
-            />
-          </View>
-        </View>
-
-        <View style={styles.inputWrapper}>
-          <Image source={require('../../assets/registerElder/nota.png')} style={styles.iconNota} />
-          <View style={styles.inputContainer}>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[styles.input, styles.textInputWithPadding, { height: 60 }]}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Observações"
-                  multiline
-                />
-              )}
-              name="description"
-            />
-          </View>
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.buttonCadastro} onPress={handleSubmit(onSubmit)}>
-        <Text style={styles.buttonText}>Cadastrar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.navigate('ElderList')}>
-        <Text style={styles.cancelButtonText}>Cancelar</Text>
-      </TouchableOpacity>
-
-      <Modal isVisible={modalVisible} onBackdropPress={() => setModalVisible(false)}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalText}>{modalMessage}</Text>
-          <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
-            <Text style={styles.modalButtonText}>OK</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-      <Modal isVisible={successModalVisible} onBackdropPress={() => setSuccessModalVisible(false)}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalText}>{successModalMessage}</Text>
-          <TouchableOpacity style={styles.modalButton} onPress={() => setSuccessModalVisible(false)}>
-          <Text style={styles.modalButtonText}></Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-    </ScrollView>
-  );
+  return dia > 0 && dia <= diasNoMes[mes];
 };
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    backgroundColor: 'white',
     padding: 16,
     paddingBottom: 32,
     justifyContent: 'space-between',
@@ -307,10 +297,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
-  inputContainer: {
+  input: {
     flex: 1,
-  },
-  textInputWithPadding: {
     paddingLeft: 40,
     paddingRight: 16,
     height: 40,
@@ -318,11 +306,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderRadius: 8,
   },
-  errorText: {
-    color: 'red',
-    marginTop: 4,
-  },
-  buttonCadastro: {
+  buttonSalvar: {
     backgroundColor: '#2CCDB5',
     padding: 12,
     borderRadius: 8,
@@ -336,7 +320,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  cancelButton: {
+  buttonExcluir: {
     padding: 12,
     alignItems: 'center',
     marginTop: 12,
@@ -371,6 +355,45 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: -20,
   },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  noButton: {
+    borderColor: '#838383',
+  },
+  yesButton: {
+    borderColor: '#2CCDB5',
+    backgroundColor: '#2CCDB5',
+  },
+  modalButtonText: {
+    fontSize: 14,
+  },
+  noButtonText: {
+    color: '#FF0000',
+  },
+  yesButtonText: {
+    color: '#FFFFFF',
+  },
   modalContent: {
     backgroundColor: 'white',
     padding: 20,
@@ -381,18 +404,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
   },
-
   modalButton: {
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 5,
     alignSelf: 'flex-end',
-    
   },
   modalButtonText: {
     color: 'red',
-    fontSize: 16,
-  },
+    fontSize: 16,
+  },
 });
 
-export default ElderRegistration;
+export default ElderEdit;
