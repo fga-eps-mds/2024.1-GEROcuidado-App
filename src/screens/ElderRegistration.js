@@ -5,8 +5,6 @@ import { TextInputMask } from 'react-native-masked-text';
 import Modal from 'react-native-modal';
 import database, { idososCollection } from '../db';
 
-
-
 // Função para verificar se um ano é bissexto
 const eAnoBissexto = (ano) => {
   return (ano % 4 === 0 && ano % 100 !== 0) || (ano % 400 === 0);
@@ -38,6 +36,9 @@ const validarData = (dia, mes, ano) => {
   if (dia < 1 || dia > diasNoMes[mes]) {
     return false;
   }
+  if (dia.toString().length !== 2 || mes.toString().length !== 2 || ano.toString().length !== 4) {
+    return false;
+  }
   return true;
 };
 
@@ -66,7 +67,7 @@ const ElderRegistration = ({ navigation }) => {
 
   const parseDate = (dateString) => {
     const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day); // Mês começa em 0 no JavaScript
+    return new Date(year, month - 1, day).toLocaleDateString('pt-BR'); // Mês começa em 0 no JavaScript
   };
   
   const createIdoso = async (data) => {
@@ -74,7 +75,7 @@ const ElderRegistration = ({ navigation }) => {
       try {
         await idososCollection.create((idoso) => {
           idoso.nome = data.name;
-          idoso.dataNascimento = parseDate(data.birthdate);
+          idoso.dataNascimento = parseDate(data.birthdate).toLocaleDateString('pt-BR');
           idoso.telefoneResponsavel = data.phone;
           idoso.tipoSanguineo = data.bloodtype || ''; // Lida com campo opcional
           idoso.observacoes = data.description || ''; // Lida com campo opcional
