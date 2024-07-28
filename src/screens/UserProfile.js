@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Modal from 'react-native-modal';
 import OptionProfile from '../components/OptionProfile';
 import Footer from '../components/Footer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
@@ -20,9 +22,16 @@ const UserProfile = ({ route, navigation }) => {
     setIsModalVisible(false);
   };
 
-  const handleLogout = () => {
-    console.log('Sim Pressionado');
-    hideModal();
+  const handleLogout = async () => {
+    try { 
+      await AsyncStorage.removeItem('user'); 
+  
+      hideModal();
+  
+      navigation.navigate('TelaInicial');
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
   };
 
   return (
@@ -83,7 +92,6 @@ const UserProfile = ({ route, navigation }) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
