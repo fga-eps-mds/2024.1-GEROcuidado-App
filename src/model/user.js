@@ -1,5 +1,5 @@
 import { Model } from '@nozbe/watermelondb';
-import { field, date } from '@nozbe/watermelondb/decorators';
+import { field, date, children } from '@nozbe/watermelondb/decorators';
 
 export default class User extends Model {
   static table = 'users';
@@ -9,4 +9,5 @@ export default class User extends Model {
   @field('password') password;
   @date('created_at') createdAt;
   @date('updated_at') updatedAt;
+  @children('idoso') idoso;
 }

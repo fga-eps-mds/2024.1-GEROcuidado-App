@@ -19,17 +19,17 @@ export default function Login({ navigation }) {
         }
 
         try {
-            
             const userCollection = database.collections.get('users');
-            
-            
             const users = await userCollection.query(Q.where('email', email)).fetch();
 
             if (users.length > 0) {
                 const user = users[0];
-                if (user.password === senha) {
+                // Assumindo que a senha esteja em texto simples, o que não é recomendado
+                const isPasswordValid = user.password === senha;
+
+                if (isPasswordValid) {
                     Alert.alert("Sucesso", "Login realizado com sucesso.");
-                    navigation.navigate('TelaInicial');
+                    navigation.navigate('UserProfile', { user });
                 } else {
                     Alert.alert("Erro", "Senha incorreta.");
                 }

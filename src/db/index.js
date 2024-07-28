@@ -2,11 +2,12 @@ import { Platform } from 'react-native';
 import { Database } from '@nozbe/watermelondb';
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 
-import mySchema from './schema'; 
+import mySchema from './schema';
+import Idoso from '../model/idoso';
 import User from '../model/user';
 
 const adapter = new SQLiteAdapter({
-  dbName: 'GeroCuidado',
+  dbName: 'GeroCuidadoDB',
   schema: mySchema,
   // migrations, // Descomente se necessário
   // dbName: 'myapp', // Opcional
@@ -19,9 +20,10 @@ const adapter = new SQLiteAdapter({
 
 const database = new Database({
   adapter,
-  modelClasses: [User],
+  modelClasses: [User, Idoso]
 });
 
 export default database;
 
+export const idososCollection = database.get(`idoso`)
 export const usersCollection = database.get(`users`)
