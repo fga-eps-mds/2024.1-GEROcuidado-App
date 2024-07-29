@@ -1,0 +1,40 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - release-sonar
+      - origin/test/add_us01_us04
+      - master
+    tags:
+      - 'v*'
+jobs:
+  test-unit:
+    name: Test Unit & Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Runt Lint
+        run: npm run lint
+
+      - name: Run Jest tests with coverage
+        run: npm run test:cov
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
