@@ -1,0 +1,58 @@
+name: Export de métricas
+
+on:
+  push:
+    branches: [main, develop, origin/test/add_us01_us04]
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Criar diretório
+        run: mkdir analytics-raw-data
+
+      - name: Coletar métricas no SonarCloud
+        run: python parser.py fga-eps-mds-1_2024-1-gerocuidado-app ${{ github.ref_name }} ${{ github.event.repository.name }}
+
+      - name: Envia métricas para repo de Doc
+        run: |
+          git config --global user.email "${{secrets.USER_EMAIL}}"
+          git config --global user.name "${{secrets.USER_NAME}}"
+          git clone --single-branch --branch main "https://x-access-token:${{secrets.API_TOKEN_DOC}}@github.com/fga-eps-mds/2024-1-GEROcuidado-Doc" docs
+          mkdir -p docs/analytics-raw-data
+          cp -R analytics-raw-data/*.json docs/analytics-raw-data
+          cd docs/
+          git add .
+          git commit -m "Adicionando métricas do repositório ${{ github.event.repository.name }} ${{ github.ref_name }}"
+          git push
+
+      - name: Debugging Information
+        run: |
+          echo "GITHUB REF: ${{ github.ref }}"
+          echo "GITHUB REF_NAME: ${{ github.ref_name }}"
+          echo "GITHUB EVENT_NAME: ${{ github.event_name }}"
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags')
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+
+      - name: Envia métricas como assets da release
+        if: startsWith(github.ref, 'refs/tags')
+        uses: AButler/upload-release-assets@v3.0
+        with:
+          files: 'analytics-raw-data/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ github.ref_name }}
