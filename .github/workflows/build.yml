@@ -28,10 +28,10 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Runt Lint
-        run: npx eslint .
+        run: npm run lint
 
       - name: Run Jest tests with coverage
-        run: npx jest --runInBand --coverage --colors
+        run: npm run test:cov
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

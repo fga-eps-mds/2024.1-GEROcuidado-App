@@ -6,5 +6,5 @@ module.exports = {
     transformIgnorePatterns: [
       'node_modules/(?!(@react-native|react-native|expo-modules-core|expo-asset|@expo|expo|expo-constants)/)',
     ],
+    testResultsProcessor: "jest-sonar-reporter"
   };
-  
