@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Elder from '../components/Elder'; // Certifique-se de que este caminho está correto
-import database, { idososCollection } from '../db';
+import { idososCollection } from '../db'; // Certifique-se de que a importação está correta
 import { useFocusEffect } from '@react-navigation/native';
 
 const ElderList = ({ route, navigation }) => {
@@ -38,8 +38,7 @@ const ElderList = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TabBarRoutes')}>
-      //, { user }
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TabBarRoutes', { user })}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
       <Text style={styles.headerText}>De quem está{"\n"}cuidando?</Text>
@@ -65,7 +64,7 @@ const ElderList = ({ route, navigation }) => {
 
       <View style={styles.footer}>
         <TouchableOpacity style={styles.plusButton} onPress={() => navigation.navigate('ElderRegistration', { user })}>
-            <Image source={require('../../assets/plus_button.png')} style={styles.plusButtonImage} />
+          <Image source={require('../../assets/plus_button.png')} style={styles.plusButtonImage} />
         </TouchableOpacity>
       </View>
       <Text style={styles.plusText}>Cadastrar{'\n'}um idoso</Text>
