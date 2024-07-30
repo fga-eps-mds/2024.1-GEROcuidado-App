@@ -38,7 +38,8 @@ const ElderList = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfile', { user })}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TabBarRoutes')}>
+      //, { user }
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
       <Text style={styles.headerText}>De quem está{"\n"}cuidando?</Text>

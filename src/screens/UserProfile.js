@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Modal from 'react-native-modal';
 import OptionProfile from '../components/OptionProfile';
-import Footer from '../components/Footer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -88,7 +87,7 @@ const UserProfile = ({ route, navigation }) => {
           style={styles.optionSpacing}
         />
       </View>
-      <Footer />
+
     </View>
   );
 };

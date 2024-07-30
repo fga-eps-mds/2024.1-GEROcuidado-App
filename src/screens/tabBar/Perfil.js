@@ -1,75 +1,92 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image , Alert} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import Modal from 'react-native-modal';
 import OptionProfile from '../../components/OptionProfile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Perfil = ({ navigation }) => {
+
+const Perfil = ({ route, navigation }) => {
+  const { user } = route.params;
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handlePress = (message) => {
     console.log(message);
   };
 
-  // Function para o botão de alerta ao clicar no logout
-  const alertButton = () => {
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
-    Alert.alert(
-      
-      // title
-      'Tem certeza que deseja sair?',
-      'Esta ação não poderá ser desfeita!',
-      [
-        // Botão de não
-        { text: 'Não', onPress: () => { console.log('Não Pressionado'); } },
-        // Botão de sim
-        { text: 'Sim', onPress: () => navigation.navigate('Login') }
-      ]
-    )
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('user');
+
+      hideModal();
+
+      navigation.navigate('TelaInicial');
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
   };
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Image source={require('../../../assets/icon_caregiver.png')} style={styles.logo_caregiver} />
+        <Text style={styles.helloMessage}>Olá, {user.name}</Text>
 
-        <View style={styles.header}>
-            <Image
-            source={require('../../../assets/User.png')}
-            style={styles.logo_caregiver}
-            />
-            <Text style={styles.helloMessage}>Olá, nome do usuário</Text>
-
-            {/* Adição do logout button */}
-            <View style={styles.logoutContainer}>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={alertButton}
-            >
-                <Image
-                source={require('../../../assets/logout.png')}
-                style={styles.LogoutImage}
-                />
-            </TouchableOpacity> 
-            </View>
+        <View style={styles.logoutContainer}>
+          <TouchableOpacity style={styles.button} onPress={showModal}>
+            <Image source={require('../../../assets/logout.png')} style={styles.LogoutImage} />
+          </TouchableOpacity>
         </View>
+      </View>
 
-        <View style={styles.optionWrapper}>
-            <OptionProfile
-            name="Perfil de Usuário"
-            description="Edite sua conta"
-            smallImage={require('../../../assets/engrenagem.png')} // Imagem do icone da engrenagem
-            rightImage={require('../../../assets/Arrow.png')} // Imagem do arrow
-            onPress={() => handlePress('Perfil')}
-            style={styles.optionSpacing} // Adiciona espaçamento ao primeiro botão
-            />
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={hideModal}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Deseja mesmo sair do aplicativo?</Text>
+          <Text style={styles.modalBody}></Text>
+          <View style={styles.modalButtons}>
+            <TouchableOpacity style={[styles.modalButton, styles.noButton]} onPress={hideModal}>
+              <Text style={[styles.modalButtonText, styles.noButtonText]}>Não</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.modalButton, styles.yesButton]} onPress={handleLogout}>
+              <Text style={[styles.modalButtonText, styles.yesButtonText]}>Sim</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+      </Modal>
 
-        <View style={styles.optionWrapper}>
-            <OptionProfile
-            name="Gerenciar idosos"
-            description="Visualize e edite seus idosos"
-            smallImage={require('../../../assets/IconIdoso.png')} // Imagem do icone Idoso
-            rightImage={require('../../../assets/Arrow.png')} // Imagem do arrow
-            onPress={ () => navigation.navigate('ElderList')}
-            style={styles.optionSpacing} // Adiciona espaçamento ao segundo botão
-            />
-        </View>
+      <View style={styles.optionWrapper}>
+        <OptionProfile
+          name="Perfil de usuário"
+          description="Edite sua conta"
+          smallImage={require('../../../assets/engrenagem.png')}
+          rightImage={require('../../../assets/Arrow.png')}
+          onPress={() => handlePress('Perfil')}
+          style={styles.optionSpacing}
+        />
+      </View>
+
+      <View style={styles.optionWrapper}>
+        <OptionProfile
+          name="Gerenciar idosos"
+          description="Visualize e edite idosos"
+          smallImage={require('../../../assets/IconIdoso.png')}
+          rightImage={require('../../../assets/Arrow.png')}
+          onPress={() => navigation.navigate('ElderList', { user })}
+          style={styles.optionSpacing}
+        />
+      </View>
 
     </View>
   );
@@ -78,6 +95,7 @@ const Perfil = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
   },
   header: {
     height: '20%',
@@ -104,19 +122,65 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
-  optionSpacing: {
-    marginTop: 40, // add espaçamento do primeiro botão
-    marginBottom: -10, // Adiciona espaçamento ao segundo botão
+  LogoutImage: {
+    width: 35,
+    height: 35,
   },
   optionWrapper: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: -20, // Espaço entre os botões
-    marginTop: 20, // Espaço do topo
+    marginBottom: -20,
+    marginTop: 20,
   },
-  LogoutImage: {
-    width: 35,
-    height: 35,
+  optionSpacing: {
+    marginTop: 40,
+    marginBottom: -10,
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 5,
+  },
+  modalBody: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  noButton: {
+    borderColor: '#838383',
+  },
+  yesButton: {
+    borderColor: '#2CCDB5',
+    backgroundColor: '#2CCDB5',
+  },
+  modalButtonText: {
+    fontSize: 14,
+  },
+  noButtonText: {
+    color: '#FF0000',
+  },
+  yesButtonText: {
+    color: '#FFFFFF',
   },
 });
 

@@ -8,6 +8,7 @@ import Portal from '../screens/tabBar/Portal';
 import Registro from '../screens/tabBar/Registro';
 import Rotina from '../screens/tabBar/Rotina';
 
+
 const Tab = createBottomTabNavigator();
 
 function TabBarRoutes() {
