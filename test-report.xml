@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
   <file path="/home/ugor/Documentos/EPS/2024.1-GEROcuidado-App/src/__tests__/TelaInicial.test.js">
-    <testCase name="TelaInicial renders correctly" duration="236"/>
-    <testCase name="TelaInicial navigates to Login on button press" duration="9"/>
-    <testCase name="TelaInicial navigates to TelaCadastro on button press" duration="4"/>
+    <testCase name="TelaInicial renders correctly" duration="367"/>
+    <testCase name="TelaInicial navigates to Login on button press" duration="5"/>
+    <testCase name="TelaInicial navigates to TelaCadastro on button press" duration="3"/>
   </file>
   <file path="/home/ugor/Documentos/EPS/2024.1-GEROcuidado-App/src/__tests__/TelaCadastro.test.js">
-    <testCase name="TelaCadastro Component renders without crashing" duration="40"/>
+    <testCase name="TelaCadastro Component renders without crashing" duration="263"/>
+    <testCase name="TelaCadastro Component validates form inputs and shows errors" duration="19"/>
+    <testCase name="TelaCadastro Component calls createUser on successful validation and navigates to Login" duration="67"/>
   </file>
 </testExecutions>
