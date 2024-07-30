@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import Elder from '../components/Elder'; // Certifique-se de que este caminho está correto
-import { idososCollection } from '../db'; // Certifique-se de que a importação está correta
+import Elder from '../components/Elder';
+import { idososCollection } from '../db';
 import { useFocusEffect } from '@react-navigation/native';
 
 const ElderList = ({ route, navigation }) => {
-  const { user } = route.params; // Certifique-se de que o `user` está sendo passado corretamente
-  const [elders, setElders] = useState([]); // Inicialização correta do estado
+  const { user } = route.params;
+  const [elders, setElders] = useState([]);
 
   const fetchElders = async () => {
     try {
@@ -18,11 +18,11 @@ const ElderList = ({ route, navigation }) => {
         bloodType: idoso._raw.tipoSanguineo,
         phone: idoso._raw.telefoneResponsavel,
         description: idoso._raw.descricao,
-        image: require('../../assets/elders/elder_1.png'), // Certifique-se de que o caminho da imagem está correto
+        image: require('../../assets/elders/elder_1.png'),
       }));
-      setElders(idosoData); // Atualização correta do estado
+      setElders(idosoData);
     } catch (error) {
-      console.error('Erro ao buscar idosos:', error); // Adicione logs de erro para depuração
+      console.error('Erro ao buscar idosos:', error);
     }
   };
 
