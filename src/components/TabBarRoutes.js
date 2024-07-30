@@ -11,7 +11,8 @@ import Rotina from '../screens/tabBar/Rotina';
 
 const Tab = createBottomTabNavigator();
 
-function TabBarRoutes() {
+function TabBarRoutes({route}) {
+    const {user} = route.params;
     return (
         <Tab.Navigator
             screenOptions={{
@@ -74,6 +75,7 @@ function TabBarRoutes() {
             <Tab.Screen
                 name="Perfil"
                 component={Perfil}
+                initialParams = {{user}}
                 options={{
                     headerShown: false,
                     tabBarIcon: ({color, size, focused}) => {
