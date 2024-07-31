@@ -33,7 +33,7 @@ const ElderList = ({ route, navigation }) => {
   );
 
   const handleEdit = (elderId) => {
-    navigation.navigate('ElderEdit', { elderId });
+    navigation.navigate('ElderEdit', { elderId, user });
   };
 
   return (
@@ -56,7 +56,7 @@ const ElderList = ({ route, navigation }) => {
             phone={elder.phone}
             description={elder.description}
             image={elder.image}
-            onPress={() => navigation.navigate('ElderVisualization', { elderId: elder.id })}
+            onPress={() => navigation.navigate('ElderVisualization', { elderId: elder.id, user})}
             onEdit={() => handleEdit(elder.id)}
           />
         ))}
