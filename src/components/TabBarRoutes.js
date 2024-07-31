@@ -8,7 +8,6 @@ import Portal from '../screens/tabBar/Portal';
 import Registro from '../screens/tabBar/Registro';
 import Rotina from '../screens/tabBar/Rotina';
 
-
 const Tab = createBottomTabNavigator();
 
 function TabBarRoutes({ route }) {
@@ -34,7 +33,8 @@ function TabBarRoutes({ route }) {
             <Tab.Screen
                 name="Rotinas"
                 component={Rotina}
-                initialParams = {{user}}
+                initialParams = {{ user }}
+                // : { id: user.id, name: user.name }
                 options={{
                     headerShown: false,
                     tabBarIcon: ({color, size, focused}) => {
@@ -76,7 +76,8 @@ function TabBarRoutes({ route }) {
             <Tab.Screen
                 name="Perfil"
                 component={Perfil}
-                initialParams = {{user}}
+                initialParams = {{ user }}
+                // : { id: user.id, name: user.name }
                 options={{
                     headerShown: false,
                     tabBarIcon: ({color, size, focused}) => {
