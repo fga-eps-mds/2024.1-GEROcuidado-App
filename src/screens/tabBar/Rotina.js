@@ -1,8 +1,14 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity  } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions  } from 'react-native';
+import Modal from 'react-native-modal';
 
 const Rotina = ({ navigation, route}) => {
   const { user } = route.params;
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -11,12 +17,28 @@ const Rotina = ({ navigation, route}) => {
           <Text style={styles.helloMessage}>Cuidando de nome do idoso</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.newRoutineButton} onPress={() => navigation.navigate('NewRoutine', { user })}>
+      <TouchableOpacity style={styles.newRoutineButton} onPress={toggleModal}>
         <Text style={styles.newRoutineText}>     + Nova rotina     </Text>
       </TouchableOpacity>
+
+      <Modal isVisible={isModalVisible} onBackdropPress={toggleModal} style={styles.modal}>
+        <View style={styles.modalContent}>
+          {/* Aqui você pode adicionar os campos e lógica da tela de NewRoutine */}
+          <View style={styles.header2}>
+                <TouchableOpacity style={styles.backButton} onPress={toggleModal}>
+                    <Image source={require('../../../assets/back_button_white.png')} style={styles.backButtonImage} />
+                </TouchableOpacity>
+                <Text style={styles.helloMessage2}>Nova Rotina</Text>
+            </View>
+        </View>
+      </Modal>
+
     </View>
   );
 };
+
+const { height } = Dimensions.get('window');
+const modalHeight = height * 0.9; // Ajuste o valor conforme necessário
 
 const styles = StyleSheet.create({
   container: {
@@ -66,6 +88,58 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
+  modal: {
+    justifyContent: 'flex',
+    margin: 1,
+    marginTop: 7,
+    margin: 7,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    height: modalHeight,
+    padding: 20,
+    borderTopLeftRadius: 10, // Adiciona borda arredondada na parte superior esquerda
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10, // Adiciona borda arredondada na parte inferior esquerda
+    borderBottomRightRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#B4026D',
+    borderRadius: 8,
+  },
+  header2 : {
+    height: 80,
+    width: '113%',
+    alignItems: 'center',
+    paddingLeft: 20,
+    backgroundColor: "#2CCDB5",
+    flexDirection: 'row',
+    borderRadius: 10,
+    marginTop: -20,
+  },
+  backButtonImage: {
+    width: 27,
+    height: 27,
+  },
+  backButton: {
+    marginRight: 10,
+    marginTop: -10,
+    marginLeft: -5,
+  },
+  helloMessage2: {
+    fontSize: 18,
+    color: 'white',
+    marginTop: -10,
+    fontWeight: 'bold',
+  },
+  
 });
 
 export default Rotina;
