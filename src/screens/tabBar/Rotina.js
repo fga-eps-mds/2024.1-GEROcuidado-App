@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity  } from 'react-native';
 
-const Rotina = ({ navigation }) => {
+const Rotina = ({ navigation, route}) => {
+  const { user } = route.params;
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -10,6 +11,9 @@ const Rotina = ({ navigation }) => {
           <Text style={styles.helloMessage}>Cuidando de nome do idoso</Text>
         </View>
       </View>
+      <TouchableOpacity style={styles.newRoutineButton} onPress={() => navigation.navigate('NewRoutine', { user })}>
+        <Text style={styles.newRoutineText}>     + Nova rotina     </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -45,6 +49,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     marginTop: 8,
+    fontWeight: 'bold',
+  },
+  newRoutineButton: {
+    position: 'absolute',
+    top: '20%',  // Coloca o botão logo abaixo do header
+    right: 15,
+    padding: 10,
+    backgroundColor: '#B4026D',
+    borderRadius: 14,
+    height: 35,
+    elevation: 15,
+  },
+  newRoutineText: {
+    color: 'white',
+    fontSize: 12,
     fontWeight: 'bold',
   },
 });

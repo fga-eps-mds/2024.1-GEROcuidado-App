@@ -11,8 +11,8 @@ import Rotina from '../screens/tabBar/Rotina';
 
 const Tab = createBottomTabNavigator();
 
-function TabBarRoutes({route}) {
-    const {user} = route.params;
+function TabBarRoutes({ route }) {
+    const { user } = route.params;
     return (
         <Tab.Navigator
             screenOptions={{
@@ -34,6 +34,7 @@ function TabBarRoutes({route}) {
             <Tab.Screen
                 name="Rotinas"
                 component={Rotina}
+                initialParams = {{user}}
                 options={{
                     headerShown: false,
                     tabBarIcon: ({color, size, focused}) => {

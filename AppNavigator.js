@@ -9,6 +9,7 @@ import ElderEdit from './src/screens/ElderEdit';
 import Home from './src/screens/Home';
 import ScreenLogin from './src/screens/ScreenLogin';
 import Register from './src/screens/Register';
+import NewRoutine from './src/screens/NewRoutine';
 
 
 const Stack = createNativeStackNavigator();
@@ -23,6 +24,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Login" component={ScreenLogin} />
         <Stack.Screen name="TelaCadastro" component={Register} />
         <Stack.Screen name="TabBarRoutes" component={TabBarRoutes} />
+        <Stack.Screen name="NewRoutine" component={NewRoutine} />
         <Stack.Screen name="ElderList" component={ElderList}/>
         <Stack.Screen name="ElderRegistration" component={ElderRegistration} />
         <Stack.Screen name="ElderVisualization" component={ElderVisualization} />
