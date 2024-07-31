@@ -25,6 +25,10 @@ const validarData = (dia, mes, ano) => {
     12: 31,
   };
 
+  dia = parseInt(dia, 10);
+  mes = parseInt(mes, 10);
+  ano = parseInt(ano, 10);
+
   if (ano < 1900 || ano > 2024) {
     return false;
   }
@@ -32,9 +36,6 @@ const validarData = (dia, mes, ano) => {
     return false;
   }
   if (dia < 1 || dia > diasNoMes[mes]) {
-    return false;
-  }
-  if (dia.toString().length !== 2 || mes.toString().length !== 2 || ano.toString().length !== 4) {
     return false;
   }
   return true;
@@ -66,7 +67,7 @@ const ElderRegistration = ({ route, navigation }) => {
 
   const parseDate = (dateString) => {
     const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
+    return new Date(year, month - 1, day).toISOString();
   };
   
   const createIdoso = async (data) => {

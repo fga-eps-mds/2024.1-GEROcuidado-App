@@ -9,8 +9,12 @@ const ElderVisualization = ({ route, navigation }) => {
   useEffect(() => {
     const fetchElder = async () => {
       const idoso = await idososCollection.find(elderId);
-      const birthdate = new Date(idoso._raw.dataNascimento).toLocaleDateString('pt-BR');
-      
+      const birthdate = new Date(idoso._raw.dataNascimento).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+
       setElder({
         name: idoso._raw.nome,
         birthdate: birthdate,
