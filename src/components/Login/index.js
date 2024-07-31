@@ -1,46 +1,47 @@
-import React, { useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
-import styles from "./style";
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
-import database from '../../db'; 
-import User from "../../model/user"; 
+import React, { useState } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import styles from './style';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import database from '../../db';
 import { Q } from '@nozbe/watermelondb';
 
+// Import do logo
 const logo = require('../../../assets/logo_login_gerocuidado.png');
 
+// Função auxiliar para realizar o login
+export const performLogin = async (email, senha, navigation) => {
+    if (!email || !senha) {
+        Alert.alert("Erro", "Todos os campos são obrigatórios.");
+        return;
+    }
+
+    try {
+        const userCollection = database.collections.get('users');
+        const users = await userCollection.query(Q.where('email', email)).fetch();
+
+        if (users.length > 0) {
+            const user = users[0];
+            const isPasswordValid = user.password === senha;
+
+            if (isPasswordValid) {
+                Alert.alert("Sucesso", "Login realizado com sucesso.");
+                navigation.navigate('UserProfile', { user });
+            } else {
+                Alert.alert("Erro", "Senha incorreta.");
+            }
+        } else {
+            Alert.alert("Erro", "Usuário não encontrado.");
+        }
+    } catch (error) {
+        console.error("Erro ao tentar logar:", error);
+        Alert.alert("Erro", "Houve um erro ao tentar logar.");
+    }
+};
+
+// Componente Login
 export default function Login({ navigation }) {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-
-    const handleLogin = async () => {
-        if (!email || !senha) {
-            Alert.alert("Erro", "Todos os campos são obrigatórios.");
-            return;
-        }
-
-        try {
-            const userCollection = database.collections.get('users');
-            const users = await userCollection.query(Q.where('email', email)).fetch();
-
-            if (users.length > 0) {
-                const user = users[0];
-                // Assumindo que a senha esteja em texto simples, o que não é recomendado
-                const isPasswordValid = user.password === senha;
-
-                if (isPasswordValid) {
-                    Alert.alert("Sucesso", "Login realizado com sucesso.");
-                    navigation.navigate('UserProfile', { user });
-                } else {
-                    Alert.alert("Erro", "Senha incorreta.");
-                }
-            } else {
-                Alert.alert("Erro", "Usuário não encontrado.");
-            }
-        } catch (error) {
-            console.error("Erro ao tentar logar:", error);
-            Alert.alert("Erro", "Houve um erro ao tentar logar.");
-        }
-    };
 
     return (
         <View style={styles.container}>
@@ -48,10 +49,7 @@ export default function Login({ navigation }) {
                 <Image source={require('../../../assets/back_button.png')} style={styles.backButtonImage} />
             </TouchableOpacity>
             <View style={styles.imageContainer}>
-                <Image
-                    source={logo}
-                    style={styles.image}
-                />
+                <Image source={logo} style={styles.image} />
             </View>
             <Text style={styles.welcomeText}>Bem Vindo de volta!</Text>
             
@@ -79,7 +77,7 @@ export default function Login({ navigation }) {
   
             <TouchableOpacity
                 style={styles.button}
-                onPress={handleLogin}
+                onPress={() => performLogin(email, senha, navigation)}
             >
                 <Text style={styles.buttonText}>Entrar</Text>
             </TouchableOpacity>
