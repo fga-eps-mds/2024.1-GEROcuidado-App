@@ -28,7 +28,7 @@ export default function Login({ navigation }) {
                 const isPasswordValid = user.password === senha;
 
                 if (isPasswordValid) {
-                    Alert.alert("Sucesso", "Login realizado com sucesso.");
+                    // Alert.alert("Sucesso", "Login realizado com sucesso.");
                     navigation.navigate('TabBarRoutes',{user});
 
                 } else {
