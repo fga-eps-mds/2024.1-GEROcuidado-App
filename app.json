@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "2024.1-GEROcuidado-App",
-    "slug": "2024.1-GEROcuidado-App",
+    "name": "GEROcuidado",
+    "slug": "GEROcuidado-App",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
