@@ -67,6 +67,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+
+    recover:{
+        alignItems: 'flex-start',
+        display: 'flex', 
+        width: '100%',
+        flexDirection: 'column'
+    },
+
+    recoverText:{
+        alignItems: 'flex-start',
+        textDecorationLine: 'underline',
+        textAlign: 'left',
+    },
+
 });
 
 export default styles;
