@@ -26,7 +26,7 @@ export default function RedefinirSenha({ navigation }) {
             return;
         }
 
-        // Aqui você pode adicionar a lógica para salvar a nova senha no banco de dados
+        // Colocar lógica para salvar a nova senha no banco de dados!!!
 
         Alert.alert("Senha alterada com sucesso!");
         navigation.navigate('Login');
@@ -73,14 +73,14 @@ export default function RedefinirSenha({ navigation }) {
             <Text style={styles.welcomeText}>Redefinir Senha</Text>
             <View style={styles.instructionsContainer}>
                 <Image source={require('../../../assets/Help_icon.png')} style={styles.instructionsIcon} />
-                <Text style={styles.instructionsText}>Crie uma senha forte, por questão de segurança ela deve ter pelo menos 8 caracteres.</Text>
+                <Text style={styles.instructionsText}>Crie uma senha forte, por questão de segurança, ela deve ter pelo menos 8 caracteres.</Text>
             </View>
             
             <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
-                    placeholder="Senha"
+                    placeholder="Nova senha"
                     secureTextEntry={true}
                     value={senha}
                     onChangeText={(text) => {
@@ -96,7 +96,7 @@ export default function RedefinirSenha({ navigation }) {
                 <Icon name="lock" size={20} color="#333333" style={styles.icon} />
                 <TextInput
                     style={styles.input}
-                    placeholder="Confirme sua senha"
+                    placeholder="Confirme sua nova senha"
                     secureTextEntry={true}
                     value={confirmSenha}
                     onChangeText={(text) => {
