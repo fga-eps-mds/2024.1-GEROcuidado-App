@@ -30,7 +30,7 @@ export default function RecuperarSenha({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TelaInicial')}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Login')}>
                 <Image source={require('../../../assets/back_button.png')} style={styles.backButtonImage} />
             </TouchableOpacity>
             <Text style={styles.welcomeText}>Insira seu e-mail</Text>
