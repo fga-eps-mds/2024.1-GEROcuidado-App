@@ -54,6 +54,7 @@ const ElderRegistration = ({ route, navigation }) => {
       name: '',
       birthdate: '',
       bloodtype: '',
+      medication: '',
       phone: '',
       description: '',
     }
@@ -64,6 +65,8 @@ const ElderRegistration = ({ route, navigation }) => {
 
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [successModalMessage, setSuccessModalMessage] = useState('');
+  const [medicationHeight, setMedicationHeight] = useState(45);
+
 
   const parseDate = (dateString) => {
     const [day, month, year] = dateString.split('/').map(Number);
@@ -78,6 +81,7 @@ const ElderRegistration = ({ route, navigation }) => {
           idoso.dataNascimento = parseDate(data.birthdate);
           idoso.telefoneResponsavel = data.phone;
           idoso.tipoSanguineo = data.bloodtype || '';
+          idoso.medicacoes = data.medication || '';
           idoso.observacoes = data.description || '';
           idoso.user_id = user.id; // Associando o idoso ao usuário
         });
@@ -201,6 +205,29 @@ const ElderRegistration = ({ route, navigation }) => {
             />
           </View>
         </View>
+
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/medication.png')} style={styles.iconMedication} />
+          <View style={styles.inputContainer}>
+            {errors.medication && <Text style={styles.errorText}>{errors.medication.message}</Text>}
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={[styles.input, styles.textInputWithPadding, styles.medicationInput]}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Medicações"
+                  multiline
+                  textAlignVertical="top"
+                />
+              )}
+              name="medication"
+            />
+          </View>
+        </View>
+
 
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/phone.png')} style={styles.iconPhone} />
@@ -360,11 +387,23 @@ const styles = StyleSheet.create({
     height: 18,
     marginRight: -20,
   },
+
+  iconMedication: {
+    width: 14,
+    height: 26,
+    marginRight: -15,
+  },
+
+  medicationInput: {
+     paddingTop: 10,
+  },
+
   iconNota: {
     width: 22,
     height: 22,
     marginRight: -20,
   },
+
   iconUser: {
     width: 20,
     height: 20,

@@ -53,6 +53,7 @@ const ElderList = ({ route, navigation }) => {
             name={elder.name}
             birthdate={elder.birthdate}
             bloodType={elder.bloodType}
+            medication={elder.medication}
             phone={elder.phone}
             description={elder.description}
             image={elder.image}

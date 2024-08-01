@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-const Elder = ({ name, birthdate, bloodType, phone, description, image, onPress, onEdit }) => {
+const Elder = ({ name, birthdate, bloodType, phone, medication, description, image, onPress, onEdit }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress} style={styles.imageContainer}>

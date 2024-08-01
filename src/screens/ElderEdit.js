@@ -9,6 +9,7 @@ const ElderEdit = ({ route, navigation }) => {
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [bloodType, setBloodType] = useState('');
+  const [medication, setMedication] = useState('');
   const [phone, setPhone] = useState('');
   const [description, setDescription] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -24,6 +25,7 @@ const ElderEdit = ({ route, navigation }) => {
           name: data.nome,
           birthdate: new Date(data.dataNascimento).toLocaleDateString('pt-BR'),
           bloodType: data.tipoSanguineo,
+          medication: data.medicacoes,
           phone: data.telefoneResponsavel,
           description: data.descricao,
           image: require('../../assets/elders/elder_1.png'),
@@ -31,6 +33,7 @@ const ElderEdit = ({ route, navigation }) => {
         setName(data.nome);
         setBirthdate(new Date(data.dataNascimento).toLocaleDateString('pt-BR'));
         setBloodType(data.tipoSanguineo);
+        setMedication(data.medicacoes);
         setPhone(data.telefoneResponsavel);
         setDescription(data.descricao);
       } catch (error) {
@@ -71,6 +74,7 @@ const ElderEdit = ({ route, navigation }) => {
           idoso.nome = name;
           idoso.dataNascimento = parseDate(birthdate).toISOString();
           idoso.tipoSanguineo = bloodType;
+          idoso.medicacoes = medication;
           idoso.telefoneResponsavel = phone;
           idoso.descricao = description;
         });
@@ -141,6 +145,16 @@ const ElderEdit = ({ route, navigation }) => {
             style={styles.input}
             value={bloodType}
             onChangeText={setBloodType}
+          />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/medication.png')} style={styles.iconMedication} />
+          <TextInput
+            style={styles.input}
+            value={medication}
+            onChangeText={setMedication}
+            multiline
           />
         </View>
 
@@ -322,6 +336,17 @@ const styles = StyleSheet.create({
     height: 24,
     marginRight: -30,
   },
+
+  iconMedication: {
+    width: 14,
+    height: 26,
+    marginRight: -15,
+  },
+
+  medicationInput: {
+       paddingTop: 10,
+  },
+
   iconPhone: {
     width: 18,
     height: 18,

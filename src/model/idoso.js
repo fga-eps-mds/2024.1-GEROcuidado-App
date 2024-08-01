@@ -7,6 +7,7 @@ export default class Idoso extends Model {
   @text('nome') nome
   @date('dataNascimento') dataNascimento
   @field('tipoSanguineo') tipoSanguineo
+  @field('medicacoes') medicacoes;
   @text('telefoneResponsavel') telefoneResponsavel
   @text('descricao') descricao
   @relation('users', 'user_id') users
