@@ -4,9 +4,9 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 const Elder = ({ name, birthdate, bloodType, phone, description, image, onPress, onEdit }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress} style={styles.imageContainer}>
-        <Image source={image} style={styles.image} />
-        <TouchableOpacity onPress={onEdit} style={styles.editButton}>
+      <TouchableOpacity onPress={onPress} style={styles.imageContainer} testID="elder-image-container">
+        <Image source={image} style={styles.image} testID="elder-image" />
+        <TouchableOpacity onPress={onEdit} style={styles.editButton} testID="edit-button">
           <Image source={require('../../assets/edit_button.png')} style={styles.editButtonImage} />
         </TouchableOpacity>
       </TouchableOpacity>
