@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, FlatList } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
 import Modal from 'react-native-modal';
@@ -67,6 +67,9 @@ const ElderRegistration = ({ route, navigation }) => {
   const [successModalMessage, setSuccessModalMessage] = useState('');
   const [medicationHeight, setMedicationHeight] = useState(45);
 
+  const [bloodTypeDropdownVisible, setBloodTypeDropdownVisible] = useState(false);
+  const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
 
   const parseDate = (dateString) => {
     const [day, month, year] = dateString.split('/').map(Number);
@@ -126,6 +129,15 @@ const ElderRegistration = ({ route, navigation }) => {
     } catch (error) {
       showErrorModal("Erro ao criar idoso: " + error.message);
     }
+  };
+
+  const toggleBloodTypeDropdown = () => {
+    setBloodTypeDropdownVisible(!bloodTypeDropdownVisible);
+  };
+
+  const selectBloodType = (type, onChange) => {
+    onChange(type);
+    setBloodTypeDropdownVisible(false);
   };
 
   return (
@@ -193,13 +205,30 @@ const ElderRegistration = ({ route, navigation }) => {
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[styles.input, styles.textInputWithPadding]}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Tipo sanguíneo"
-                />
+                <View>
+                  <TextInput
+                    style={[styles.input, styles.textInputWithPadding]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Tipo sanguíneo"
+                  />
+                  <TouchableOpacity onPress={toggleBloodTypeDropdown} style={styles.dropdownButton}>
+                    <Image source={require('../../assets/registerElder/Down-arrow.png')} style={styles.dropdownIcon} />
+                  </TouchableOpacity>
+                  {bloodTypeDropdownVisible && (
+                    <FlatList
+                      data={bloodTypes}
+                      keyExtractor={(item) => item}
+                      renderItem={({ item }) => (
+                        <TouchableOpacity onPress={() => selectBloodType(item, onChange)} style={styles.dropdownItem}>
+                          <Text>{item}</Text>
+                        </TouchableOpacity>
+                      )}
+                      style={styles.dropdownList}
+                    />
+                  )}
+                </View>
               )}
               name="bloodtype"
             />
@@ -430,6 +459,42 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: 'red',
     fontSize: 16,
+  },
+
+  successModalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  successModalText: {
+    fontSize: 16,
+    marginBottom: 15,
+  },
+  dropdownButton: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+  },
+  dropdownIcon: {
+    width: 20,
+    height: 13,
+    resizeMode: 'contain',
+  },
+  dropdownList: {
+    backgroundColor: '#fff',
+    position: 'absolute',
+    top: 45,
+    width: '100%',
+    zIndex: 100,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
+  dropdownItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
 
