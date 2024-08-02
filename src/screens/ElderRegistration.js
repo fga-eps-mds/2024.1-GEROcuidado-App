@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput} from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
 import Modal from 'react-native-modal';
@@ -209,7 +209,6 @@ const ElderRegistration = ({ route, navigation }) => {
                   <TextInput
                     style={[styles.input, styles.textInputWithPadding]}
                     onBlur={onBlur}
-                    onChangeText={onChange}
                     value={value}
                     placeholder="Tipo sanguíneo"
                   />
@@ -217,16 +216,22 @@ const ElderRegistration = ({ route, navigation }) => {
                     <Image source={require('../../assets/registerElder/Down-arrow.png')} style={styles.dropdownIcon} />
                   </TouchableOpacity>
                   {bloodTypeDropdownVisible && (
-                    <FlatList
-                      data={bloodTypes}
-                      keyExtractor={(item) => item}
-                      renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => selectBloodType(item, onChange)} style={styles.dropdownItem}>
-                          <Text>{item}</Text>
-                        </TouchableOpacity>
-                      )}
-                      style={styles.dropdownList}
-                    />
+                    <View style={styles.dropdownContainer}>
+                      <ScrollView
+                        style={styles.dropdownList}
+                        contentContainerStyle={styles.dropdownContentContainer}
+                      >
+                        {bloodTypes.map((item) => (
+                          <TouchableOpacity
+                            key={item}
+                            onPress={() => selectBloodType(item, onChange)}
+                            style={styles.dropdownItem}
+                          >
+                            <Text>{item}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
                   )}
                 </View>
               )}
@@ -491,6 +496,12 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
   },
+
+   dropdownContainer: {
+      top: -45,
+      zIndex: 1000,
+   },
+
   dropdownItem: {
     padding: 10,
     borderBottomWidth: 1,
