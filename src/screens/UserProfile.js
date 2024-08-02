@@ -5,7 +5,6 @@ import OptionProfile from '../components/OptionProfile';
 import Footer from '../components/Footer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 const UserProfile = ({ route, navigation }) => {
   const { user } = route.params;
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -25,9 +24,7 @@ const UserProfile = ({ route, navigation }) => {
   const handleLogout = async () => {
     try { 
       await AsyncStorage.removeItem('user'); 
-  
       hideModal();
-  
       navigation.navigate('TelaInicial');
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
@@ -37,8 +34,13 @@ const UserProfile = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image source={require('../../assets/icon_caregiver.png')} style={styles.logo_caregiver} />
-        <Text style={styles.helloMessage}>Olá, {user.name}</Text>
+        
+        {user.foto ? (
+          <Image source={{ uri: user.foto }} style={styles.logo_caregiver} />
+        ) : (
+          <Image source={require('../../assets/icon_caregiver.png')} style={styles.logo_caregiver} />
+        )}
+        <Text style={styles.helloMessage}>Olá, {user.nome}</Text>
 
         <View style={styles.logoutContainer}>
           <TouchableOpacity style={styles.button} onPress={showModal}>
@@ -116,6 +118,7 @@ const styles = StyleSheet.create({
   logo_caregiver: {
     width: 65,
     height: 65,
+    borderRadius: 32.5, 
     marginRight: 10,
     marginTop: 10,
   },
