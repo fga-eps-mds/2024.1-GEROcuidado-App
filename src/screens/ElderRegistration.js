@@ -54,7 +54,7 @@ const ElderRegistration = ({ route, navigation }) => {
       name: '',
       birthdate: '',
       bloodtype: '',
-      alimento: '',      
+      food: '',      
       medication: '',
       phone: '',
       description: '',
@@ -84,7 +84,7 @@ const ElderRegistration = ({ route, navigation }) => {
           idoso.nome = data.name;
           idoso.dataNascimento = parseDate(data.birthdate);
           idoso.telefoneResponsavel = data.phone;
-          idoso.alimento = data.alimento|| '';
+          idoso.alimentacao = data.food|| '';
           idoso.tipoSanguineo = data.bloodtype || '';
           idoso.medicacoes = data.medication || '';
           idoso.observacoes = data.description || '';
@@ -246,7 +246,7 @@ const ElderRegistration = ({ route, navigation }) => {
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/alimento.png')} style={styles.iconAlimento} />
           <View style={styles.inputContainer}>
-            {errors.alimento && <Text style={styles.errorText}>{errors.alimento.message}</Text>}
+            {errors.food && <Text style={styles.errorText}>{errors.food.message}</Text>}
             <Controller
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
@@ -260,7 +260,7 @@ const ElderRegistration = ({ route, navigation }) => {
                   textAlignVertical="top"
                 />
               )}
-              name="alimento"
+              name="food"
             />
           </View>
         </View>
