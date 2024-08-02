@@ -28,7 +28,7 @@ export default function RedefinirSenha({ navigation }) {
 
         // Colocar lógica para salvar a nova senha no banco de dados!!!
 
-        Alert.alert("Senha alterada com sucesso!");
+        Alert.alert("Senha redefinida com sucesso!");
         navigation.navigate('Login');
     };
 

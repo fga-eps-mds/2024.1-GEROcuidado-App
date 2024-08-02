@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
 import styles from "./style";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import database from '../../db'; // Importe o banco de dados
+import database from '../../db';
 import { Q } from '@nozbe/watermelondb';
 
 export default function RecuperarSenha({ navigation }) {
@@ -20,7 +20,6 @@ export default function RecuperarSenha({ navigation }) {
             return;
         }
 
-        // Verificação de formato de e-mail
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
             Alert.alert("Erro", "Por favor, insira um e-mail válido.");
@@ -32,7 +31,9 @@ export default function RecuperarSenha({ navigation }) {
             const users = await userCollection.query(Q.where('email', email)).fetch();
 
             if (users.length > 0) {
-                // Aqui você pode adicionar a lógica para enviar o e-mail de redefinição de senha
+
+                // Lógica para enviar o e-mail de redefinição de senha
+                
                 Alert.alert("E-mail enviado!", "Verifique sua caixa de entrada.");
             } else {
                 Alert.alert("Erro", "E-mail não cadastrado.");
