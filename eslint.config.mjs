@@ -14,11 +14,6 @@ export default [
   { languageOptions: { globals: globals.node } },
   pluginReact.configs.flat.recommended,
   {
-    rules: {
-      "react/prop-types": "off"
-    }
-  },
-  {
     ignores: ["**/model/*.js", "coverage/*.js"]
   }
 ];
