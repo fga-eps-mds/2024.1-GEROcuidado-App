@@ -3,7 +3,7 @@ import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-nat
 import styles from "./style";
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
-export default function RedefinirSenha({ navigation }) {
+export default function PasswordRecovery({ navigation }) {
     const [senha, setSenha] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
     const [senhaFeedback, setSenhaFeedback] = useState('');

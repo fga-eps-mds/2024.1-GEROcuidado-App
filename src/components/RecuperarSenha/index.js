@@ -26,22 +26,7 @@ export default function RecuperarSenha({ navigation }) {
             return;
         }
 
-        try {
-            const userCollection = database.collections.get('users');
-            const users = await userCollection.query(Q.where('email', email)).fetch();
-
-            if (users.length > 0) {
-
-                // Lógica para enviar o e-mail de redefinição de senha
-                
-                Alert.alert("E-mail enviado!", "Verifique sua caixa de entrada.");
-            } else {
-                Alert.alert("Erro", "E-mail não cadastrado.");
-            }
-        } catch (error) {
-            console.error("Erro ao tentar enviar e-mail de recuperação:", error);
-            Alert.alert("Erro", "Houve um erro ao tentar enviar o e-mail de recuperação.");
-        }
+        Alert.alert("E-mail enviado! Verifique sua caixa de entrada");
     };
 
     return (
