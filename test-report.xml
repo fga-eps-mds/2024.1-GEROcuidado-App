@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
   <file path="/home/ugor/Documentos/EPS/2024.1-GEROcuidado-App/src/__tests__/TelaInicial.test.js">
-    <testCase name="TelaInicial renders correctly" duration="358"/>
-    <testCase name="TelaInicial navigates to Login on button press" duration="4"/>
-    <testCase name="TelaInicial navigates to TelaCadastro on button press" duration="3"/>
+    <testCase name="TelaInicial renders correctly" duration="384"/>
+    <testCase name="TelaInicial navigates to Login on button press" duration="7"/>
+    <testCase name="TelaInicial navigates to TelaCadastro on button press" duration="5"/>
+  </file>
+  <file path="/home/ugor/Documentos/EPS/2024.1-GEROcuidado-App/src/__tests__/Elder.test.js">
+    <testCase name="Elder Component renders correctly with given props" duration="467"/>
+    <testCase name="Elder Component calls onPress when image is pressed" duration="5"/>
+    <testCase name="Elder Component calls onEdit when edit button is pressed" duration="5"/>
   </file>
   <file path="/home/ugor/Documentos/EPS/2024.1-GEROcuidado-App/src/__tests__/TelaCadastro.test.js">
-    <testCase name="TelaCadastro Component renders without crashing" duration="362"/>
-    <testCase name="TelaCadastro Component validates form inputs and shows errors" duration="33"/>
-    <testCase name="TelaCadastro Component calls createUser on successful validation and navigates to Login" duration="77"/>
+    <testCase name="TelaCadastro Component renders without crashing" duration="434"/>
+    <testCase name="TelaCadastro Component validates form inputs and shows errors" duration="40"/>
+    <testCase name="TelaCadastro Component calls createUser on successful validation and navigates to Login" duration="75"/>
   </file>
   <file path="/home/ugor/Documentos/EPS/2024.1-GEROcuidado-App/src/__tests__/Login.test.js">
-    <testCase name="Login Component renders without crashing" duration="333"/>
+    <testCase name="Login Component renders without crashing" duration="407"/>
     <testCase name="Login Component shows alert if email or password is empty" duration="7"/>
-    <testCase name="Login Component shows alert if user is not found" duration="62"/>
+    <testCase name="Login Component shows alert if user is not found" duration="59"/>
     <testCase name="Login Component navigates to UserProfile on successful login" duration="57"/>
   </file>
-  <file path="/home/ugor/Documentos/EPS/2024.1-GEROcuidado-App/src/__tests__/Elder.test.login.js">
-    <testCase name="Elder Component renders correctly with given props" duration="295"/>
-    <testCase name="Elder Component calls onPress when image is pressed" duration="3"/>
-    <testCase name="Elder Component calls onEdit when edit button is pressed" duration="2"/>
+  <file path="/home/ugor/Documentos/EPS/2024.1-GEROcuidado-App/src/__tests__/Footer.test.js">
+    <testCase name="Footer Component renders correctly with given props" duration="277"/>
+    <testCase name="Footer Component calls onPress when Rotinas button is pressed" duration="5"/>
+    <testCase name="Footer Component calls onPress when Registros button is pressed" duration="5"/>
+    <testCase name="Footer Component calls onPress when Portal button is pressed" duration="4"/>
+    <testCase name="Footer Component calls onPress when Perfil button is pressed" duration="3"/>
   </file>
 </testExecutions>
