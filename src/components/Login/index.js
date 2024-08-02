@@ -23,8 +23,8 @@ export default function Login({ navigation }) {
 
             if (users.length > 0) {
                 const user = users[0];
-                // Assumindo que a senha esteja em texto simples, o que não é recomendado
-                const isPasswordValid = user.password === senha;
+
+                const isPasswordValid = user.senha === senha;
 
                 if (isPasswordValid) {
                     Alert.alert("Sucesso", "Login realizado com sucesso.");
