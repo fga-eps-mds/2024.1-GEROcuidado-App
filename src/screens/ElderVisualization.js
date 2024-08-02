@@ -20,6 +20,7 @@ const ElderVisualization = ({ route, navigation }) => {
         name: idoso._raw.nome,
         birthdate: birthdate,
         bloodType: idoso._raw.tipoSanguineo,
+        food: idoso._raw.alimentacao,
         medication: idoso._raw.medicacoes,
         phone: idoso._raw.telefoneResponsavel,
         description: idoso._raw.observacoes,
@@ -68,6 +69,16 @@ const ElderVisualization = ({ route, navigation }) => {
             style={styles.input}
             value={elder.bloodType}
             editable={false}
+          />
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/alimento.png')} style={styles.iconAlimento} />
+          <TextInput
+            style={styles.input}
+            value={elder.food}
+            editable={false}
+            multiline
           />
         </View>
 
@@ -158,6 +169,12 @@ const styles = StyleSheet.create({
     left: -5,
     marginRight: -30,
   },
+
+  iconAlimento: {
+    width: 18,
+    height: 22,
+    marginRight: -15,
+  },  
 
   iconMedication: {
     width: 14,
