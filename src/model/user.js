@@ -4,10 +4,10 @@ import { field, date, children } from '@nozbe/watermelondb/decorators';
 export default class User extends Model {
   static table = 'users';
 
-  @field('name') name;
+  @field('nome') nome;
   @field('email') email;
-  @field('password') password;
-  @date('created_at') createdAt;
-  @date('updated_at') updatedAt;
+  @field('senha') senha;
+  @field('admin') admin;
+  @field('foto') foto;
   @children('idoso') idoso;
 }
