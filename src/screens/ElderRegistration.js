@@ -479,8 +479,8 @@ const styles = StyleSheet.create({
   },
   dropdownButton: {
     position: 'absolute',
-    right: 10,
-    top: 10,
+    right: 20,
+    top: 16,
   },
   dropdownIcon: {
     width: 20,
