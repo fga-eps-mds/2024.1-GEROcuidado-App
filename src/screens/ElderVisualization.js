@@ -23,7 +23,7 @@ const ElderVisualization = ({ route, navigation }) => {
         food: idoso._raw.alimentacao,
         medication: idoso._raw.medicacoes,
         phone: idoso._raw.telefoneResponsavel,
-        description: idoso._raw.observacoes,
+        description: idoso._raw.descricao,
         image: require('../../assets/elders/elder_1.png'),
       });
     };
