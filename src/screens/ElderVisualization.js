@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
   bloodIcon: {
     width: 29,
     height: 24,
+    left: -5,
     marginRight: -30,
   },
 
