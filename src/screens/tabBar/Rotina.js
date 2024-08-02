@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, FlatList, Switch } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, FlatList, Switch, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
+import moment from 'moment';
 
 const Rotina = ({ navigation, route }) => {
   const { user } = route.params;
@@ -40,8 +41,17 @@ const Rotina = ({ navigation, route }) => {
 
   const categories = ['Tomar remédio', 'Hora da caminhada', 'Alimentar'];
 
-  const [switchValue, setswitchValue] = useState(false);
+  const validateDate = (dataRotina) => {
+    const date = moment(dataRotina, 'DD/MM/YYYY', true);
+    return date.isValid() && date.isSameOrAfter(moment(), 'day');
+  };
 
+  const onSubmit = (date) => {
+    if(!validateDate(date.dataRotina)){
+        Alert.alert("Data inválida", "Por favor, insira uma data válida!");
+    }
+  }
+  // console.log(data);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -162,7 +172,9 @@ const Rotina = ({ navigation, route }) => {
               />
               <Text style={styles.switchText}>Ativar notificação</Text>
             </View>
-
+            <TouchableOpacity style={styles.saveButton} onPress={handleSubmit(onSubmit)}>
+              <Text style={styles.saveButtonText}>Criar</Text>
+            </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -362,6 +374,20 @@ const styles = StyleSheet.create({
   switchText: {
     fontSize: 16,
     color: 'black',
+  },
+  saveButton: {
+    backgroundColor: '#2CCDB5',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+    alignSelf: 'center',
+    width: '50%',
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
