@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions  } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput  } from 'react-native';
 import Modal from 'react-native-modal';
+import { useForm, Controller } from 'react-hook-form';
+import { TextInputMask } from 'react-native-masked-text';
 
 const Rotina = ({ navigation, route}) => {
   const { user } = route.params;
@@ -9,6 +11,15 @@ const Rotina = ({ navigation, route}) => {
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  const { control, handleSubmit, setValue, getValues } = useForm({
+    defaultValues: {
+      titulo: '',
+      dataRotina: '',
+      horaInicio: '',
+      categoria: ''
+    }
+  });
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,11 +36,104 @@ const Rotina = ({ navigation, route}) => {
         <View style={styles.modalContent}>
           {/* Aqui você pode adicionar os campos e lógica da tela de NewRoutine */}
           <View style={styles.header2}>
-                <TouchableOpacity style={styles.backButton} onPress={toggleModal}>
-                    <Image source={require('../../../assets/back_button_white.png')} style={styles.backButtonImage} />
-                </TouchableOpacity>
-                <Text style={styles.helloMessage2}>Nova Rotina</Text>
+              <TouchableOpacity style={styles.backButton} onPress={toggleModal}>
+                  <Image source={require('../../../assets/back_button_white.png')} style={styles.backButtonImage} />
+              </TouchableOpacity>
+              <Text style={styles.helloMessage2}>Nova Rotina</Text>
+          </View>
+
+          <View style={styles.formContainer}>
+
+            {/* Input de título */}
+            <View style={styles.inputWrapperTitle}>
+              <View style={styles.inputContainer2}>
+                <Controller
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={[styles.input, styles.textInputWithPadding2]}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Adicionar Título"
+                    />
+                  )}
+                  name="titulo"
+                />
+              </View>
             </View>
+            
+            {/* Input data da rotina */}
+            <View style={styles.inputWrapper}>
+              <Image source={require('../../../assets/newRoutine/calendar.png')} style={styles.iconCalendar} />
+              <View style={styles.inputContainer}>
+                {/* {errors.dataNascimento && <Text style={styles.errorText}>A data de nascimento é obrigatória.</Text>} */}
+                <Controller
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInputMask
+                      type={'datetime'}
+                      options={{
+                        format: 'DD/MM/YYYY'
+                      }}
+                      style={[styles.input, styles.textInputWithPadding]}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Data da rotina"
+                    />
+                  )}
+                  name="dataRotina"
+                />
+              </View>
+            </View>
+
+            {/* Input hora */}
+            <View style={styles.inputWrapper}>
+              <Image source={require('../../../assets/newRoutine/clock.png')} style={styles.iconClock} />
+              <View style={styles.inputContainer}>
+                {/* {errors.nome && <Text style={styles.errorText}>Este campo é obrigatório.</Text>} */}
+                <Controller
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={[styles.input, styles.textInputWithPadding]}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Horário de Início"
+                    />
+                  )}
+                  name="horaInicio"
+                />
+              </View>
+            </View>
+              
+            {/* Input categoria */}
+            <View style={styles.inputWrapper}>
+              <Image source={require('../../../assets/newRoutine/grid.png')} style={styles.categoryIcon} />
+              <View style={styles.inputContainer}>
+                {/* {errors.tipoSanguineo && <Text style={styles.errorText}>O tipo Sanguíneo é obrigatório.</Text>} */}
+                <Controller
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      style={[styles.input, styles.textInputWithPadding]}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Categoria"
+                    />
+                  )}
+                  name="categoria"
+                />
+              </View>
+            </View>
+          </View>
         </View>
       </Modal>
 
@@ -138,6 +242,62 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: -10,
     fontWeight: 'bold',
+  },
+  formContainer: {
+    // marginBottom: 10,
+    marginTop: 95,
+  },
+ inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 50,
+    marginLeft: 80,
+    width: 320,
+    marginBottom: -40,
+  },
+  inputWrapperTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: -85,
+    marginLeft: 160,
+    width: 320,
+    marginBottom: -30,
+  },
+ inputContainer: {
+    flex: 1,
+  },
+  iconCalendar: {
+    width: 20,
+    height: 20,
+    marginRight: -20,
+  },
+ iconClock: {
+    width: 23.918,
+    height: 24,
+    marginRight: -27,
+  },
+  categoryIcon: {
+    width: 29,
+    height: 24,
+    marginRight: -30,
+  },
+  textInputWithPadding: {
+    paddingLeft: 43,
+    // paddingRight: 16,
+    height: 55,
+    borderColor: 'gray',
+    borderBottomWidth: 1,
+    borderRadius: 4,
+  },
+  textInputWithPadding2: {
+    paddingLeft: 35,
+    // paddingRight: 56,
+    width: 170,
+    height: 55,
+    borderColor: 'gray',
+    borderBottomWidth: 1,
+    borderRadius: 4,
+    // alignItems: 'baseline',
   },
   
 });
