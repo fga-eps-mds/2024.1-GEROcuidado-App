@@ -4,11 +4,11 @@ on:
     branches:
       - main
       - develop
-      - release-sonar
-      - origin/test/add_us01_us04
+      - chore/fixes-sonar-cloud-pipe-line
       - master
-    tags:
-      - 'v*'
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
 jobs:
   test-unit:
     name: Test Unit & Scan
@@ -27,10 +27,10 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Runt Lint
-        run: npm run lint
+      - name: Run linter reporting results
+        run: npm run lint:report
 
-      - name: Run Jest tests with coverage
+      - name: Run Jest tests reporting results and coverage
         run: npm run test:cov
 
       - name: SonarCloud Scan
