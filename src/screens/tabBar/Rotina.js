@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput  } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, FlatList, Switch } from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
 
-const Rotina = ({ navigation, route}) => {
+const Rotina = ({ navigation, route }) => {
   const { user } = route.params;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+    setValue('categoria', category);  // Atualiza o valor do campo de categoria no formulário
+    setIsDropdownVisible(false);
+  };
+
+  const toggleNotificationSwitch = () => {
+    setIsNotificationEnabled(previousState => !previousState);
   };
 
   const { control, handleSubmit, setValue, getValues } = useForm({
@@ -20,6 +37,11 @@ const Rotina = ({ navigation, route}) => {
       categoria: ''
     }
   });
+
+  const categories = ['Tomar remédio', 'Hora da caminhada', 'Alimentar'];
+
+  const [switchValue, setswitchValue] = useState(false);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -34,17 +56,14 @@ const Rotina = ({ navigation, route}) => {
 
       <Modal isVisible={isModalVisible} onBackdropPress={toggleModal} style={styles.modal}>
         <View style={styles.modalContent}>
-          {/* Aqui você pode adicionar os campos e lógica da tela de NewRoutine */}
           <View style={styles.header2}>
-              <TouchableOpacity style={styles.backButton} onPress={toggleModal}>
-                  <Image source={require('../../../assets/back_button_white.png')} style={styles.backButtonImage} />
-              </TouchableOpacity>
-              <Text style={styles.helloMessage2}>Nova Rotina</Text>
+            <TouchableOpacity style={styles.backButton} onPress={toggleModal}>
+              <Image source={require('../../../assets/back_button_white.png')} style={styles.backButtonImage} />
+            </TouchableOpacity>
+            <Text style={styles.helloMessage2}>Nova Rotina</Text>
           </View>
 
           <View style={styles.formContainer}>
-
-            {/* Input de título */}
             <View style={styles.inputWrapperTitle}>
               <View style={styles.inputContainer2}>
                 <Controller
@@ -63,15 +82,13 @@ const Rotina = ({ navigation, route}) => {
                 />
               </View>
             </View>
-            
-            {/* Input data da rotina */}
+
             <View style={styles.inputWrapper}>
               <Image source={require('../../../assets/newRoutine/calendar.png')} style={styles.iconCalendar} />
               <View style={styles.inputContainer}>
-                {/* {errors.dataNascimento && <Text style={styles.errorText}>A data de nascimento é obrigatória.</Text>} */}
                 <Controller
                   control={control}
-                  rules={{ required: true }}
+                  rules={{ required: true, pattern: /^(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[0-2])\/(20\d{2})$/ }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInputMask
                       type={'datetime'}
@@ -90,16 +107,18 @@ const Rotina = ({ navigation, route}) => {
               </View>
             </View>
 
-            {/* Input hora */}
             <View style={styles.inputWrapper}>
               <Image source={require('../../../assets/newRoutine/clock.png')} style={styles.iconClock} />
               <View style={styles.inputContainer}>
-                {/* {errors.nome && <Text style={styles.errorText}>Este campo é obrigatório.</Text>} */}
                 <Controller
                   control={control}
-                  rules={{ required: true }}
+                  rules={{ required: true, pattern: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/ }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
+                    <TextInputMask
+                      type={'datetime'}
+                      options={{
+                        format: 'HH:mm'
+                      }}
                       style={[styles.input, styles.textInputWithPadding]}
                       onBlur={onBlur}
                       onChangeText={onChange}
@@ -111,38 +130,47 @@ const Rotina = ({ navigation, route}) => {
                 />
               </View>
             </View>
-              
-            {/* Input categoria */}
+
             <View style={styles.inputWrapper}>
               <Image source={require('../../../assets/newRoutine/grid.png')} style={styles.categoryIcon} />
-              <View style={styles.inputContainer}>
-                {/* {errors.tipoSanguineo && <Text style={styles.errorText}>O tipo Sanguíneo é obrigatório.</Text>} */}
-                <Controller
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      style={[styles.input, styles.textInputWithPadding]}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      placeholder="Categoria"
-                    />
-                  )}
-                  name="categoria"
-                />
-              </View>
+              <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
+                <Text style={styles.dropdownText}>{selectedCategory || "Categoria"}</Text>
+                <Image source={require('../../../assets/newRoutine/dropSelect.png')} style={styles.dropdownIcon} />
+              </TouchableOpacity>
+              {isDropdownVisible && (
+                <View style={styles.dropdown}>
+                  <FlatList
+                    data={categories}
+                    keyExtractor={(item) => item}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity style={styles.dropdownItem} onPress={() => handleCategorySelect(item)}>
+                        <Text style={styles.dropdownItemText}>{item}</Text>
+                      </TouchableOpacity>
+                    )}
+                  />
+                </View>
+              )}
             </View>
           </View>
+
+          <View style={styles.switchWrapper}>
+              <Switch
+                trackColor={{ false: "#767577", true: "#4CD964" }}
+                thumbColor={isNotificationEnabled ? "#4CD964" : "#f4f3f4"}
+                onValueChange={toggleNotificationSwitch}
+                value={isNotificationEnabled}
+              />
+              <Text style={styles.switchText}>Ativar notificação</Text>
+            </View>
+
         </View>
       </Modal>
-
     </View>
   );
 };
 
 const { height } = Dimensions.get('window');
-const modalHeight = height * 0.9; // Ajuste o valor conforme necessário
+const modalHeight = height * 0.92;
 
 const styles = StyleSheet.create({
   container: {
@@ -179,7 +207,7 @@ const styles = StyleSheet.create({
   },
   newRoutineButton: {
     position: 'absolute',
-    top: '20%',  // Coloca o botão logo abaixo do header
+    top: '20%',
     right: 15,
     padding: 10,
     backgroundColor: '#B4026D',
@@ -202,23 +230,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: modalHeight,
     padding: 20,
-    borderTopLeftRadius: 10, // Adiciona borda arredondada na parte superior esquerda
+    borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderBottomLeftRadius: 10, // Adiciona borda arredondada na parte inferior esquerda
     borderBottomRightRadius: 10,
     alignItems: 'center',
   },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#B4026D',
-    borderRadius: 8,
-  },
-  header2 : {
+  header2: {
     height: 80,
     width: '113%',
     alignItems: 'center',
@@ -244,10 +262,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   formContainer: {
-    // marginBottom: 10,
     marginTop: 95,
   },
- inputWrapper: {
+  inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 50,
@@ -263,7 +280,7 @@ const styles = StyleSheet.create({
     width: 320,
     marginBottom: -30,
   },
- inputContainer: {
+  inputContainer: {
     flex: 1,
   },
   iconCalendar: {
@@ -271,7 +288,7 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: -20,
   },
- iconClock: {
+  iconClock: {
     width: 23.918,
     height: 24,
     marginRight: -27,
@@ -283,7 +300,6 @@ const styles = StyleSheet.create({
   },
   textInputWithPadding: {
     paddingLeft: 43,
-    // paddingRight: 16,
     height: 55,
     borderColor: 'gray',
     borderBottomWidth: 1,
@@ -291,15 +307,62 @@ const styles = StyleSheet.create({
   },
   textInputWithPadding2: {
     paddingLeft: 35,
-    // paddingRight: 56,
     width: 170,
     height: 55,
     borderColor: 'gray',
     borderBottomWidth: 1,
     borderRadius: 4,
-    // alignItems: 'baseline',
   },
-  
+  dropdownButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 45,
+    height: 55,
+    borderColor: 'gray',
+    borderBottomWidth: 1,
+    borderRadius: 4,
+    width: 320,
+  },
+  dropdownText: {
+    flex: 1,
+    fontSize: 16,
+    color: 'black',
+  },
+  dropdownIcon: {
+    width: 27.5,
+    height: 14.5,
+    marginRight: 10,
+  },
+  dropdown: {
+    position: 'absolute',
+    top: 60,
+    left: 0,
+    width: '100%',
+    backgroundColor: 'white',
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 15,
+    zIndex: 1,
+  },
+  dropdownItem: {
+    padding: 10,
+  },
+  dropdownItemText: {
+    fontSize: 16,
+    color: 'black',
+  },
+  switchWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 75,
+    justifyContent: 'space-between',
+    width: 185,
+    marginLeft: -135,
+  },
+  switchText: {
+    fontSize: 16,
+    color: 'black',
+  },
 });
 
 export default Rotina;
