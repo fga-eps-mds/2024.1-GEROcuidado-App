@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
 import styles from "./style";
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import database from '../../db'; // Importe o banco de dados
+import { Q } from '@nozbe/watermelondb';
 
 export default function RecuperarSenha({ navigation }) {
     const [email, setEmail] = useState('');
@@ -25,7 +27,20 @@ export default function RecuperarSenha({ navigation }) {
             return;
         }
 
-        Alert.alert("E-mail enviado! Verifique sua caixa de entrada");
+        try {
+            const userCollection = database.collections.get('users');
+            const users = await userCollection.query(Q.where('email', email)).fetch();
+
+            if (users.length > 0) {
+                // Aqui você pode adicionar a lógica para enviar o e-mail de redefinição de senha
+                Alert.alert("E-mail enviado!", "Verifique sua caixa de entrada.");
+            } else {
+                Alert.alert("Erro", "E-mail não cadastrado.");
+            }
+        } catch (error) {
+            console.error("Erro ao tentar enviar e-mail de recuperação:", error);
+            Alert.alert("Erro", "Houve um erro ao tentar enviar o e-mail de recuperação.");
+        }
     };
 
     return (
