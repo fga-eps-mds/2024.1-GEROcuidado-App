@@ -15,6 +15,8 @@ const ElderEdit = ({ route, navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   useEffect(() => {
     const fetchElder = async () => {
@@ -106,6 +108,16 @@ const ElderEdit = ({ route, navigation }) => {
     hideModal();
   };
 
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
+  const selectBloodType = (type) => {
+    setBloodType(type);
+    setDropdownVisible(false);
+  };
+
+
   if (!elder) {
     return <Text>Carregando...</Text>;
   }
@@ -141,11 +153,31 @@ const ElderEdit = ({ route, navigation }) => {
 
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/tipo_sanguineo.png')} style={styles.bloodIcon} />
-          <TextInput
-            style={styles.input}
-            value={bloodType}
-            onChangeText={setBloodType}
-          />
+          <View style={styles.dropdownWrapper}>
+            <TextInput
+              style={styles.input}
+              value={bloodType}
+              onChangeText={setBloodType}
+              placeholder="Tipo sanguíneo"
+              onTouchStart={toggleDropdown}
+            />
+            <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
+              <Image source={require('../../assets/registerElder/Down-arrow.png')} style={styles.dropdownIcon} />
+            </TouchableOpacity>
+            {dropdownVisible && (
+              <View style={styles.dropdownContainer}>
+                {bloodTypes.map((item) => (
+                  <TouchableOpacity
+                    key={item}
+                    onPress={() => selectBloodType(item)}
+                    style={styles.dropdownItem}
+                  >
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
         </View>
 
         <View style={styles.inputWrapper}>
@@ -422,6 +454,39 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 16,
   },
+
+  dropdownWrapper: {
+    flex: 1,
+    position: 'relative',
+  },
+  dropdownButton: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+  },
+  dropdownIcon: {
+    width: 20,
+    height: 13,
+    resizeMode: 'contain',
+  },
+  dropdownContainer: {
+    position: 'absolute',
+    top: 40,
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    zIndex: 10,
+  },
+
+  dropdownItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+
 });
 
 export default ElderEdit;
