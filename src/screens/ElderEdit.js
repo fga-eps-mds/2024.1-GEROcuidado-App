@@ -9,6 +9,7 @@ const ElderEdit = ({ route, navigation }) => {
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [bloodType, setBloodType] = useState('');
+  const [food, setFood] = useState('');
   const [medication, setMedication] = useState('');
   const [phone, setPhone] = useState('');
   const [description, setDescription] = useState('');
@@ -27,6 +28,7 @@ const ElderEdit = ({ route, navigation }) => {
           name: data.nome,
           birthdate: new Date(data.dataNascimento).toLocaleDateString('pt-BR'),
           bloodType: data.tipoSanguineo,
+          food: data.alimentacao,
           medication: data.medicacoes,
           phone: data.telefoneResponsavel,
           description: data.descricao,
@@ -35,6 +37,7 @@ const ElderEdit = ({ route, navigation }) => {
         setName(data.nome);
         setBirthdate(new Date(data.dataNascimento).toLocaleDateString('pt-BR'));
         setBloodType(data.tipoSanguineo);
+        setFood(data.alimentacao);
         setMedication(data.medicacoes);
         setPhone(data.telefoneResponsavel);
         setDescription(data.descricao);
@@ -76,6 +79,7 @@ const ElderEdit = ({ route, navigation }) => {
           idoso.nome = name;
           idoso.dataNascimento = parseDate(birthdate).toISOString();
           idoso.tipoSanguineo = bloodType;
+          idoso.alimentacao = food;
           idoso.medicacoes = medication;
           idoso.telefoneResponsavel = phone;
           idoso.descricao = description;
@@ -178,6 +182,16 @@ const ElderEdit = ({ route, navigation }) => {
               </View>
             )}
           </View>
+        </View>
+
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/alimento.png')} style={styles.iconAlimento} />
+          <TextInput
+            style={styles.input}
+            value={food}
+            onChangeText={setFood}
+            multiline
+          />
         </View>
 
         <View style={styles.inputWrapper}>
@@ -374,6 +388,12 @@ const styles = StyleSheet.create({
   iconMedication: {
     width: 14,
     height: 26,
+    marginRight: -15,
+  },
+
+  iconAlimento: {
+    width: 18,
+    height: 22,
     marginRight: -15,
   },
 
