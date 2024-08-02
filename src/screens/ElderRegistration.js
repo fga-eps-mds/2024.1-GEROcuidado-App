@@ -54,6 +54,7 @@ const ElderRegistration = ({ route, navigation }) => {
       name: '',
       birthdate: '',
       bloodtype: '',
+      alimento: '',      
       medication: '',
       phone: '',
       description: '',
@@ -83,6 +84,7 @@ const ElderRegistration = ({ route, navigation }) => {
           idoso.nome = data.name;
           idoso.dataNascimento = parseDate(data.birthdate);
           idoso.telefoneResponsavel = data.phone;
+          idoso.alimento = data.alimento|| '';
           idoso.tipoSanguineo = data.bloodtype || '';
           idoso.medicacoes = data.medication || '';
           idoso.observacoes = data.description || '';
@@ -236,6 +238,29 @@ const ElderRegistration = ({ route, navigation }) => {
                 </View>
               )}
               name="bloodtype"
+            />
+          </View>
+        </View>
+        
+        {/* Alimentacao */}
+        <View style={styles.inputWrapper}>
+          <Image source={require('../../assets/registerElder/alimento.png')} style={styles.iconAlimento} />
+          <View style={styles.inputContainer}>
+            {errors.alimento && <Text style={styles.errorText}>{errors.alimento.message}</Text>}
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={[styles.input, styles.textInputWithPadding, styles.alimentoInput]}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Alimentação"
+                  multiline
+                  textAlignVertical="top"
+                />
+              )}
+              name="alimento"
             />
           </View>
         </View>
@@ -429,9 +454,19 @@ const styles = StyleSheet.create({
     marginRight: -15,
   },
 
+  iconAlimento: {
+    width: 18,
+    height: 22,
+    marginRight: -15,
+  },
+
   medicationInput: {
      paddingTop: 10,
   },
+
+  alimentoInput: {
+    paddingTop: 10,
+  },  
 
   iconNota: {
     width: 22,
