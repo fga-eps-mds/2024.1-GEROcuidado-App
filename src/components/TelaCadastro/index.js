@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
-import styles from "./style";
+import { View, Text, TextInput, TouchableOpacity, Alert, Image } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import database from '../../db';
 import { Q } from '@nozbe/watermelondb';
-
-const logo = require('../../../assets/logo_login_gerocuidado.png');
+import { launchImageLibrary } from 'react-native-image-picker';
+import styles from "./style";
 
 export default function TelaCadastro({ navigation }) {
     const [nome, setNome] = useState('');
@@ -13,8 +12,8 @@ export default function TelaCadastro({ navigation }) {
     const [confirmEmail, setConfirmEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
-    const [admin, setAdmin] = useState(false); 
-    const [foto, setFoto] = useState(''); 
+    const [admin, setAdmin] = useState(false);
+    const [foto, setFoto] = useState('');
 
     const [nomeError, setNomeError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -132,10 +131,10 @@ export default function TelaCadastro({ navigation }) {
         if (password.length >= 8) {
             if (/[A-Z]/.test(password) && /[!@#$%^&*(),.?":{}|<>]/.test(password)) {
                 feedback = 'Senha forte';
-                color = styles.passwordStrength.color; 
+                color = styles.passwordStrength.color;
             } else {
                 feedback = 'Senha média. Reforce a senha usando letras maiúsculas e caracteres especiais Ex: !@#$%"*()';
-                color = styles.mediumPassword.color; 
+                color = styles.mediumPassword.color;
             }
         } else {
             feedback = 'Senha fraca! A senha deve ter pelo menos 8 caracteres!';
@@ -147,7 +146,6 @@ export default function TelaCadastro({ navigation }) {
     };
 
     const checkPasswordCompatibility = (password, confirmPassword) => {
-        
         if (password && confirmPassword) {
             if (password !== confirmPassword) {
                 setSenhaCompatibilidadeError("As senhas não correspondem.");
@@ -155,8 +153,16 @@ export default function TelaCadastro({ navigation }) {
                 setSenhaCompatibilidadeError('');
             }
         } else {
-            setSenhaCompatibilidadeError(''); 
+            setSenhaCompatibilidadeError('');
         }
+    };
+
+    const handleChoosePhoto = () => {
+        launchImageLibrary({}, response => {
+            if (response.assets && response.assets.length > 0) {
+                setFoto(response.assets[0].uri);
+            }
+        });
     };
 
     return (
@@ -165,7 +171,13 @@ export default function TelaCadastro({ navigation }) {
                 <Image source={require('../../../assets/back_button.png')} style={styles.backButtonImage} />
             </TouchableOpacity>
             <View style={styles.imageContainer}>
-                <Image source={logo} style={styles.image} />
+                {foto ? (
+                    <Image source={{ uri: foto }} style={styles.profileImage} />
+                ) : (
+                    <TouchableOpacity onPress={handleChoosePhoto} style={styles.photoButton}>
+                        <Icon name="photo-camera" size={40} color="#333333" />
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={styles.inputContainer}>
