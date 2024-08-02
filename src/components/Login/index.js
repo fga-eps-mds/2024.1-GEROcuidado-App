@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, Alert, Pressable } from "react-native";
 import styles from "./style";
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
-import database from '../../db'; 
-import User from "../../model/user"; 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import database from '../../db';
 import { Q } from '@nozbe/watermelondb';
 
 const logo = require('../../../assets/logo_login_gerocuidado.png');
@@ -24,8 +23,8 @@ export default function Login({ navigation }) {
 
             if (users.length > 0) {
                 const user = users[0];
-                // Assumindo que a senha esteja em texto simples, o que não é recomendado
-                const isPasswordValid = user.password === senha;
+
+                const isPasswordValid = user.senha === senha;
 
                 if (isPasswordValid) {
                     Alert.alert("Sucesso", "Login realizado com sucesso.");
@@ -54,7 +53,7 @@ export default function Login({ navigation }) {
                 />
             </View>
             <Text style={styles.welcomeText}>Bem Vindo de volta!</Text>
-            
+
             <View style={styles.inputContainer}>
                 <Icon name="email" size={20} color="#333333" style={styles.icon} />
                 <TextInput
@@ -65,7 +64,7 @@ export default function Login({ navigation }) {
                     onChangeText={setEmail}
                 />
             </View>
-            
+
             <View style={styles.inputContainer}>
                 <Icon name="lock" size={20} color="#333333" style={styles.icon} />
                 <TextInput
@@ -75,6 +74,11 @@ export default function Login({ navigation }) {
                     value={senha}
                     onChangeText={setSenha}
                 />
+            </View>
+            <View style={styles.recover}>
+                <Pressable onPress={() => navigation.navigate('RecuperarSenha')}>
+                    <Text style={styles.recoverText}>Esqueci minha senha</Text>
+                </Pressable>
             </View>
   
             <TouchableOpacity

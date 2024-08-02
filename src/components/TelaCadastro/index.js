@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
-import styles from "./style";
+import { View, Text, TextInput, TouchableOpacity, Alert, Image } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import database from '../../db';
 import { Q } from '@nozbe/watermelondb';
-
-const logo = require('../../../assets/logo_login_gerocuidado.png');
+import { launchImageLibrary } from 'react-native-image-picker';
+import styles from "./style";
 
 export default function TelaCadastro({ navigation }) {
     const [nome, setNome] = useState('');
@@ -13,6 +12,8 @@ export default function TelaCadastro({ navigation }) {
     const [confirmEmail, setConfirmEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
+    const [admin, setAdmin] = useState(false);
+    const [foto, setFoto] = useState('');
 
     const [nomeError, setNomeError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -27,11 +28,11 @@ export default function TelaCadastro({ navigation }) {
         await database.write(async () => {
             try {
                 const newUser = await database.collections.get('users').create(user => {
-                    user.name = nome;
+                    user.nome = nome;
                     user.email = email;
-                    user.password = senha;
-                    user.created_at = new Date().toISOString();
-                    user.updated_at = new Date().toISOString();
+                    user.senha = senha;
+                    user.admin = admin;
+                    user.foto = foto;
                 });
 
                 console.log('Usuário criado com sucesso!');
@@ -59,6 +60,8 @@ export default function TelaCadastro({ navigation }) {
         setConfirmEmail('');
         setSenha('');
         setConfirmSenha('');
+        setAdmin(false);
+        setFoto('');
         setNomeError('');
         setEmailError('');
         setConfirmEmailError('');
@@ -98,12 +101,14 @@ export default function TelaCadastro({ navigation }) {
         }
 
         if (senha.length < 8) {
+            setSenhaError("A senha deve ter pelo menos 8 caracteres.");
             valid = false;
         } else {
             setSenhaError("");
         }
 
         if (senha !== confirmSenha) {
+            setConfirmSenhaError("As senhas não correspondem.");
             valid = false;
         } else {
             setConfirmSenhaError("");
@@ -117,7 +122,6 @@ export default function TelaCadastro({ navigation }) {
                 createUser();
             }
         }
-
     };
 
     const checkPasswordStrength = (password) => {
@@ -127,10 +131,10 @@ export default function TelaCadastro({ navigation }) {
         if (password.length >= 8) {
             if (/[A-Z]/.test(password) && /[!@#$%^&*(),.?":{}|<>]/.test(password)) {
                 feedback = 'Senha forte';
-                color = styles.passwordStrength.color; // Darker green color
+                color = styles.passwordStrength.color;
             } else {
                 feedback = 'Senha média. Reforce a senha usando letras maiúsculas e caracteres especiais Ex: !@#$%"*()';
-                color = styles.mediumPassword.color; // Vibrant yellow color
+                color = styles.mediumPassword.color;
             }
         } else {
             feedback = 'Senha fraca! A senha deve ter pelo menos 8 caracteres!';
@@ -142,7 +146,6 @@ export default function TelaCadastro({ navigation }) {
     };
 
     const checkPasswordCompatibility = (password, confirmPassword) => {
-        // Show compatibility error only if both fields are filled
         if (password && confirmPassword) {
             if (password !== confirmPassword) {
                 setSenhaCompatibilidadeError("As senhas não correspondem.");
@@ -150,17 +153,31 @@ export default function TelaCadastro({ navigation }) {
                 setSenhaCompatibilidadeError('');
             }
         } else {
-            setSenhaCompatibilidadeError(''); // Clear error if either field is empty
+            setSenhaCompatibilidadeError('');
         }
+    };
+
+    const handleChoosePhoto = () => {
+        launchImageLibrary({}, response => {
+            if (response.assets && response.assets.length > 0) {
+                setFoto(response.assets[0].uri);
+            }
+        });
     };
 
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TelaInicial')}>
-            <Image source={require('../../../assets/back_button.png')} style={styles.backButtonImage} />
+                <Image source={require('../../../assets/back_button.png')} style={styles.backButtonImage} />
             </TouchableOpacity>
             <View style={styles.imageContainer}>
-                <Image source={logo} style={styles.image} />
+                {foto ? (
+                    <Image source={{ uri: foto }} style={styles.profileImage} />
+                ) : (
+                    <TouchableOpacity onPress={handleChoosePhoto} style={styles.photoButton}>
+                        <Icon name="photo-camera" size={40} color="#333333" />
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={styles.inputContainer}>

@@ -24,6 +24,20 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#000000',
     },
+    instructionsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    instructionsIcon: {
+        width: 20,
+        height: 20,
+        marginRight: 10,
+    },
+    instructionsText: {
+        fontSize: 16,
+        color: '#666666',
+    },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -67,20 +81,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
-    recover:{
-        alignItems: 'flex-start',
-        display: 'flex', 
-        width: '100%',
-        flexDirection: 'column'
+    backButtonImage: {
+        width: 30,
+        height: 30,
     },
-
-    recoverText:{
-        alignItems: 'flex-start',
-        textDecorationLine: 'underline',
-        textAlign: 'left',
-    },
-
 });
 
 export default styles;
