@@ -30,7 +30,7 @@ const ElderEdit = ({ route, navigation }) => {
           birthdate: new Date(data.dataNascimento).toLocaleDateString('pt-BR'),
           bloodType: data.tipoSanguineo,
           food: data.alimentacao,
-          medication: data.medicacoes,
+          medication: data.medicamento,
           phone: data.telefoneResponsavel,
           description: data.descricao,
           image: require('../../assets/elders/elder_1.png'),
@@ -39,7 +39,7 @@ const ElderEdit = ({ route, navigation }) => {
         setBirthdate(new Date(data.dataNascimento).toLocaleDateString('pt-BR'));
         setBloodType(data.tipoSanguineo);
         setFood(data.alimentacao);
-        setMedication(data.medicacoes);
+        setMedication(data.medicamento);
         setPhone(data.telefoneResponsavel);
         setDescription(data.descricao);
       } catch (error) {
@@ -81,7 +81,7 @@ const ElderEdit = ({ route, navigation }) => {
           idoso.dataNascimento = parseDate(birthdate).toISOString();
           idoso.tipoSanguineo = bloodType;
           idoso.alimentacao = food;
-          idoso.medicacoes = medication;
+          idoso.medicamento = medication;
           idoso.telefoneResponsavel = phone;
           idoso.descricao = description;
         });

@@ -21,7 +21,7 @@ const ElderVisualization = ({ route, navigation }) => {
         birthdate: birthdate,
         bloodType: idoso._raw.tipoSanguineo,
         food: idoso._raw.alimentacao,
-        medication: idoso._raw.medicacoes,
+        medication: idoso._raw.medicamento,
         phone: idoso._raw.telefoneResponsavel,
         description: idoso._raw.descricao,
         image: require('../../assets/elders/elder_1.png'),

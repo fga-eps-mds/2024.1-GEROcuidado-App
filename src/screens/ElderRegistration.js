@@ -86,7 +86,7 @@ const ElderRegistration = ({ route, navigation }) => {
           idoso.telefoneResponsavel = data.phone;
           idoso.alimentacao = data.food|| '';
           idoso.tipoSanguineo = data.bloodtype || '';
-          idoso.medicacoes = data.medication || '';
+          idoso.medicamento = data.medication || '';
           idoso.observacoes = data.description || '';
           idoso.user_id = user.id; // Associando o idoso ao usuário
         });
@@ -277,7 +277,7 @@ const ElderRegistration = ({ route, navigation }) => {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  placeholder="Medicações"
+                  placeholder="Medicamentos"
                   multiline
                   textAlignVertical="top"
                 />

@@ -21,7 +21,7 @@ export const mySchema = appSchema({
         { name: 'dataNascimento', type: 'number' },
         { name: 'tipoSanguineo', type: 'string', isOptional: true },
         { name: 'alimentacao', type: 'string', isOptional: true },
-        { name: 'medicacoes', type: 'string', isOptional: true },
+        { name: 'medicamento', type: 'string', isOptional: true },
         { name: 'telefoneResponsavel', type: 'string' },
         { name: 'descricao', type: 'string', isOptional: true },
       ],
