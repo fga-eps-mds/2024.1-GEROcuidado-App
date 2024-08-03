@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
+import { TextInputMask } from 'react-native-masked-text';
 import database, { idososCollection } from '../db';
 
 const ElderEdit = ({ route, navigation }) => {
@@ -148,7 +149,11 @@ const ElderEdit = ({ route, navigation }) => {
 
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/birthday.png')} style={styles.iconBirthday} />
-          <TextInput
+          <TextInputMask
+            type={'datetime'}
+            options={{
+              format: 'DD/MM/YYYY'
+            }}
             style={styles.input}
             value={birthdate}
             onChangeText={setBirthdate}
