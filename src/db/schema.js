@@ -24,6 +24,19 @@ export const mySchema = appSchema({
         { name: 'descricao', type: 'string', isOptional: true },
       ],
     }),
+    tableSchema({
+      name: 'rotinas',
+      columns: [
+        { name: 'titulo', type: 'string' },
+        { name: 'dataRotina', type: 'number' },
+        { name: 'horaRotina', type: 'number' },
+        { name: 'categoria', type: 'string' },
+        { name: 'notificacao', type: 'string' },
+        { name: 'descricao', type: 'string' },
+        // { name: 'token', type: 'string' },
+        { name: 'idoso_id', type: 'string', isIndexed: true },  // Relacionamento com Idoso
+      ],
+    }),
   ],
 });
 

@@ -2,15 +2,16 @@ import { Model } from '@nozbe/watermelondb'
 import { field, text, date, relation } from '@nozbe/watermelondb/decorators'
 
 export default class Rotina extends Model {
-  static table = 'rotina';
+  static table = 'rotinas';
 
   @text('titulo') titulo
-  @date('dataHora') dataHora
+  @date('dataRotina') dataRotina
+  @date('horaRotina') horaRotina
   @field('categoria') categoria
-  @text('dias') dias
-  @field('descricao') descricao
-  @text('token') token
   @text('notificacao') notificacao
-  @date('dataHoraConcluída') dataHoraConcluída
+  @field('descricao') descricao
+  // @text('token') token
+  // @date('dataHoraConcluída') dataHoraConcluída
+  // @text('dias') dias
   @relation('idoso', 'idoso_id') idoso
 }
