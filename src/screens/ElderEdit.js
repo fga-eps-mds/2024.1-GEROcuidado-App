@@ -63,6 +63,11 @@ const ElderEdit = ({ route, navigation }) => {
     const telefoneResponsavel = phone;
     const [dia, mes, ano] = birthdate.split('/').map(Number);
 
+    if (!name.trim()) {
+        showErrorModal("O nome não pode estar vazio.");
+        return;
+    }
+
     if (!validarTelefone(telefoneResponsavel)) {
       showErrorModal("Número de telefone inválido. Deve conter 11 dígitos.");
       return;
