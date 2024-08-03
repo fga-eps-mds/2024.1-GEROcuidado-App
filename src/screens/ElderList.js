@@ -15,6 +15,7 @@ const ElderList = ({ route, navigation }) => {
         id: idoso._raw.id,
         name: idoso._raw.nome,
         birthdate: new Date(idoso._raw.dataNascimento).toLocaleDateString(),
+        food: idoso._raw.alimentacao,
         bloodType: idoso._raw.tipoSanguineo,
         phone: idoso._raw.telefoneResponsavel,
         description: idoso._raw.descricao,
