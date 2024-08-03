@@ -404,7 +404,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   errorText: {
+    position: 'absolute',
     color: 'red',
+    bottom: -20,
     marginTop: 4,
   },
   buttonCadastro: {
