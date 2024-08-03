@@ -2,8 +2,25 @@ import React, { useState } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
 import styles from "./style";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import emailjs from 'emailjs-com';
 import database from '../../db';
 import { Q } from '@nozbe/watermelondb';
+
+
+const sendEmail = (email, code) => {
+    const templateParams = {
+        to_email: email,
+        verification_code: code,
+    };
+  
+    emailjs.send('service_6g3ogk9', 'template_4am7eqm', templateParams, '3SMsRsRznGKJA1cFH')
+      .then((response) => {
+        console.log('Email enviado com sucesso:', response);
+      })
+      .catch((error) => {
+        console.log('Erro ao enviar o e-mail:', error);
+      });
+  };
 
 export default function RecuperarSenha({ navigation }) {
     const [email, setEmail] = useState('');
@@ -27,12 +44,11 @@ export default function RecuperarSenha({ navigation }) {
         }
 
         const code = generateRandomCode();
+        sendEmail(email, code);
+        Alert.alert("E-mail enviado!", `Código de verificação: ${code}`);
 
 //        console.log('Email:', email);
 //        console.log('Generated Code:', code);
-
-        // Colocar a lógica de envio, aqui só está simulando
-        Alert.alert("E-mail enviado!", `Código de verificação: ${code}`);
 
         navigation.navigate('VerificarCodigo', { email, code });
     };
