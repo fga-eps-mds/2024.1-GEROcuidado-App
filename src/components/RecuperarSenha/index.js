@@ -26,7 +26,30 @@ export default function RecuperarSenha({ navigation }) {
             return;
         }
 
-        Alert.alert("E-mail enviado! Verifique sua caixa de entrada");
+        const code = generateRandomCode();
+
+//        console.log('Email:', email);
+//        console.log('Generated Code:', code);
+
+        // Colocar a lógica de envio, aqui só está simulando
+        Alert.alert("E-mail enviado!", `Código de verificação: ${code}`);
+
+        navigation.navigate('VerificarCodigo', { email, code });
+    };
+
+    const generateRandomCode = () => {
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const numbers = '0123456789';
+        let code = '';
+        
+        for (let i = 0; i < 3; i++) {
+            code += letters.charAt(Math.floor(Math.random() * letters.length));
+        }
+        for (let i = 0; i < 3; i++) {
+            code += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        }
+
+        return code;
     };
 
     return (

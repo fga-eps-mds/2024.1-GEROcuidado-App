@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import styles from './style';
 
-export default function VerifyCode({ route, navigation }) {
+export default function VerificarCodigo({ navigation, route }) {
   const [code, setCode] = useState('');
+  const { email, code: generatedCode } = route.params || {};
+
+//  console.log('Received Email:', email);
+ console.log('Received Generated Code:', generatedCode);
 
   const handleVerifyCode = () => {
-    // Lógica para verificar o código
-    if (code === "123456") { // Exemplo: código estático obs: Tirar o comentário e colocar a lógica randomica do código  
+    if (code === generatedCode) { 
       Alert.alert("Código verificado!", "Agora você pode redefinir sua senha.");
-      navigation.navigate('RedefinirSenha'); // Redireciona para a tela de redefinição de senha
+      navigation.navigate('RedefinirSenha', { email });
     } else {
       Alert.alert("Erro", "Código de verificação incorreto.");
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Verifique seu e-mail</Text>

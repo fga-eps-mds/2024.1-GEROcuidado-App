@@ -2,13 +2,19 @@ import React, { useState } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
 import styles from "./style";
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import database from '../../db';
+import { Q } from '@nozbe/watermelondb';
 
-export default function PasswordRecovery({ navigation }) {
+
+export default function RedefinirSenha({ navigation, route }) {
+    const [email, setEmail] = useState(route.params?.email || '');
     const [senha, setSenha] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
     const [senhaFeedback, setSenhaFeedback] = useState('');
     const [senhaFeedbackColor, setSenhaFeedbackColor] = useState('red');
     const [senhaCompatibilidadeError, setSenhaCompatibilidadeError] = useState('');
+
+//    console.log('ReDEFINIR Email:', email);
 
     const handleRedefinirSenha = async () => {
         if (!senha || !confirmSenha) {
@@ -26,10 +32,25 @@ export default function PasswordRecovery({ navigation }) {
             return;
         }
 
-        // Colocar lógica para salvar a nova senha no banco de dados!!!
+        try {
+            await database.write(async () => {
+                const users = await database.collections.get('users').query(Q.where('email', email)).fetch();
+                if (users.length > 0) {
+                    const user = users[0];
+                    await user.update(user => {
+                        user.senha = senha;
+                    });
 
-        Alert.alert("Senha redefinida com sucesso!");
-        navigation.navigate('Login');
+                    Alert.alert("Senha redefinida com sucesso!");
+                    navigation.navigate('Login');
+                } else {
+                    Alert.alert("Erro", "Usuário não encontrado.");
+                }
+            });
+        } catch (error) {
+            console.error("Erro ao atualizar a senha:", error);
+            Alert.alert("Erro", "Erro ao atualizar a senha.");
+        }
     };
 
     const checkPasswordStrength = (password) => {

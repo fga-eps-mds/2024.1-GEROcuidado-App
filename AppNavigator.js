@@ -11,7 +11,7 @@ import ScreenLogin from './src/screens/ScreenLogin';
 import Register from './src/screens/Register';
 import Recover from './src/screens/Recover';
 import VerifyCode from './src/screens/VerifyCode';
-import PasswordRecovery from './src/screens/PasswordRecovery'
+import PasswordRecovery from './src/screens/PasswordRecovery';
 
 
 const Stack = createNativeStackNavigator();
