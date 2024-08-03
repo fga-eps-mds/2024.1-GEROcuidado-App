@@ -1,16 +1,44 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, FlatList, Switch, Alert } from 'react-native';
+import React, { useState, useEffect  } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, FlatList, Switch, Alert, ScrollView} from 'react-native';
 import Modal from 'react-native-modal';
 import { useForm, Controller } from 'react-hook-form';
 import { TextInputMask } from 'react-native-masked-text';
 import moment from 'moment';
+import database, { rotinasCollection } from '../../db';
+
+const eAnoBissexto = (ano) => {
+  return (ano % 4 === 0 && ano % 100 !== 0) || (ano % 400 === 0);
+};
+
+const validarData = (dia, mes, ano) => {
+  const diasNoMes = {
+    1: 31,
+    2: eAnoBissexto(ano) ? 29 : 28,
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31
+  };
+  return dia > 0 && dia <= diasNoMes[mes];
+};
 
 const Rotina = ({ navigation, route }) => {
-  const { user } = route.params;
+
+  const { user, idoso } = route.params;
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [rotinas, setRotinas] = useState([]);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -34,24 +62,66 @@ const Rotina = ({ navigation, route }) => {
     defaultValues: {
       titulo: '',
       dataRotina: '',
-      horaInicio: '',
-      categoria: ''
+      horaRotina: '',
+      categoria: '',
+      notificacao: '',
+      descricao: ''
     }
   });
 
   const categories = ['Tomar remédio', 'Hora da caminhada', 'Alimentar'];
 
-  const validateDate = (dataRotina) => {
-    const date = moment(dataRotina, 'DD/MM/YYYY', true);
-    return date.isValid() && date.isSameOrAfter(moment(), 'day');
+  const onSubmit = async (data) => {
+    
+    const { titulo, dataRotina, horaRotina, categoria, notificacao ,descricao } = data;
+    const [dia, mes, ano] = dataRotina.split('/').map(Number);
+
+    if (!validarData(dia, mes, ano)) {
+      setErrorMessage('Data de nascimento inválida.');
+      setModalVisible(true);
+      return;
+    }
+    const formattedData = `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+
+
+    // Adicionando console.log para fazer testes
+    console.log('Rotina cadastrada com Sucesso! Segue abaixo os dados:', {
+      titulo,
+      dataRotina: formattedData,
+      horaRotina,
+      categoria,
+      notificacao,
+      descricao,
+      // idIdoso: idoso.id,
+    });
+    Alert.alert("Sucesso no cadastro da rotina!");
+
+    try {
+      setLoading(true);
+      await database.write(async () => {
+        await rotinasCollection.create((rotinas) => {
+          rotinas.titulo = titulo;
+          rotinas.dataRotina = formattedData;
+          rotinas.horaRotina = horaRotina;
+          rotinas.categoria = categoria;
+          rotinas.notificacao = notificacao;
+          rotinas.descricao = descricao;
+          rotinas.idIdoso = idoso.id;
+        });
+      });
+      // Atualiza a lista de rotinas
+      // await fetchRotinas();
+      setLoading(false);
+      toggleModal();
+      // reset();
+      // navigation.navigate('NewRoutine', { user });
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage('Erro ao cadastrar rotina.');
+      setModalVisible(true);
+    }
   };
 
-  const onSubmit = (date) => {
-    if(!validateDate(date.dataRotina)){
-        Alert.alert("Data inválida", "Por favor, insira uma data válida!");
-    }
-  }
-  // console.log(data);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -64,118 +134,148 @@ const Rotina = ({ navigation, route }) => {
         <Text style={styles.newRoutineText}>     + Nova rotina     </Text>
       </TouchableOpacity>
 
+      <TouchableOpacity style={styles.buttonCadastro} onPress={() => navigation.navigate('NewRoutine', { user })}>
+        <Text style={styles.buttonText}>visualizar</Text>
+      </TouchableOpacity>
+  
       <Modal isVisible={isModalVisible} onBackdropPress={toggleModal} style={styles.modal}>
-        <View style={styles.modalContent}>
-          <View style={styles.header2}>
-            <TouchableOpacity style={styles.backButton} onPress={toggleModal}>
-              <Image source={require('../../../assets/back_button_white.png')} style={styles.backButtonImage} />
-            </TouchableOpacity>
-            <Text style={styles.helloMessage2}>Nova Rotina</Text>
-          </View>
 
-          <View style={styles.formContainer}>
-            <View style={styles.inputWrapperTitle}>
-              <View style={styles.inputContainer2}>
-                <Controller
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      style={[styles.input, styles.textInputWithPadding2]}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      placeholder="Adicionar Título"
-                    />
-                  )}
-                  name="titulo"
-                />
-              </View>
-            </View>
-
-            <View style={styles.inputWrapper}>
-              <Image source={require('../../../assets/newRoutine/calendar.png')} style={styles.iconCalendar} />
-              <View style={styles.inputContainer}>
-                <Controller
-                  control={control}
-                  rules={{ required: true, pattern: /^(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[0-2])\/(20\d{2})$/ }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInputMask
-                      type={'datetime'}
-                      options={{
-                        format: 'DD/MM/YYYY'
-                      }}
-                      style={[styles.input, styles.textInputWithPadding]}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      placeholder="Data da rotina"
-                    />
-                  )}
-                  name="dataRotina"
-                />
-              </View>
-            </View>
-
-            <View style={styles.inputWrapper}>
-              <Image source={require('../../../assets/newRoutine/clock.png')} style={styles.iconClock} />
-              <View style={styles.inputContainer}>
-                <Controller
-                  control={control}
-                  rules={{ required: true, pattern: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/ }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInputMask
-                      type={'datetime'}
-                      options={{
-                        format: 'HH:mm'
-                      }}
-                      style={[styles.input, styles.textInputWithPadding]}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      placeholder="Horário de Início"
-                    />
-                  )}
-                  name="horaInicio"
-                />
-              </View>
-            </View>
-
-            <View style={styles.inputWrapper}>
-              <Image source={require('../../../assets/newRoutine/grid.png')} style={styles.categoryIcon} />
-              <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
-                <Text style={styles.dropdownText}>{selectedCategory || "Categoria"}</Text>
-                <Image source={require('../../../assets/newRoutine/dropSelect.png')} style={styles.dropdownIcon} />
+          <View style={styles.modalContent}>
+            <View style={styles.header2}>
+              <TouchableOpacity style={styles.backButton} onPress={toggleModal}>
+                <Image source={require('../../../assets/back_button_white.png')} style={styles.backButtonImage} />
               </TouchableOpacity>
-              {isDropdownVisible && (
-                <View style={styles.dropdown}>
-                  <FlatList
-                    data={categories}
-                    keyExtractor={(item) => item}
-                    renderItem={({ item }) => (
-                      <TouchableOpacity style={styles.dropdownItem} onPress={() => handleCategorySelect(item)}>
-                        <Text style={styles.dropdownItemText}>{item}</Text>
-                      </TouchableOpacity>
+              <Text style={styles.helloMessage2}>Nova Rotina</Text>
+            </View>
+
+            <View style={styles.formContainer}>
+              <View style={styles.inputWrapperTitle}>
+                <View style={styles.inputContainer2}>
+                  <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        style={[styles.input, styles.textInputWithPadding2]}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        placeholder="Adicionar Título"
+                      />
                     )}
+                    name="titulo"
                   />
                 </View>
-              )}
-            </View>
-          </View>
+              </View>
 
-          <View style={styles.switchWrapper}>
+              <View style={styles.inputWrapper}>
+                <Image source={require('../../../assets/newRoutine/calendar.png')} style={styles.iconCalendar} />
+                <View style={styles.inputContainer}>
+                  <Controller
+                    control={control}
+                    rules={{ required: true, pattern: /^(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[0-2])\/(20\d{2})$/ }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInputMask
+                        type={'datetime'}
+                        options={{
+                          format: 'DD/MM/YYYY'
+                        }}
+                        style={[styles.input, styles.textInputWithPadding]}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        placeholder="Data da rotina"
+                      />
+                    )}
+                    name="dataRotina"
+                  />
+                </View>
+              </View>
+
+              <View style={styles.inputWrapper}>
+                <Image source={require('../../../assets/newRoutine/clock.png')} style={styles.iconClock} />
+                <View style={styles.inputContainer}>
+                  <Controller
+                    control={control}
+                    rules={{ required: true, pattern: /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/ }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInputMask
+                        type={'datetime'}
+                        options={{
+                          format: 'HH:mm'
+                        }}
+                        style={[styles.input, styles.textInputWithPadding]}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        placeholder="Horário de Início"
+                      />
+                    )}
+                    name="horaInicio"
+                  />
+                </View>
+              </View>
+
+              <View style={styles.inputWrapper}>
+                <Image source={require('../../../assets/newRoutine/grid.png')} style={styles.categoryIcon} />
+                <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
+                  <Text style={styles.dropdownText}>{selectedCategory || "Categoria"}</Text>
+                  <Image source={require('../../../assets/newRoutine/dropSelect.png')} style={styles.dropdownIcon} />
+                </TouchableOpacity>
+                {isDropdownVisible && (
+                  <View style={styles.dropdown}>
+                    <FlatList
+                      data={categories}
+                      keyExtractor={(item) => item}
+                      renderItem={({ item }) => (
+                        <TouchableOpacity style={styles.dropdownItem} onPress={() => handleCategorySelect(item)}>
+                          <Text style={styles.dropdownItemText}>{item}</Text>
+                        </TouchableOpacity>
+                      )}
+                    />
+                  </View>
+                )}
+              </View>
+            </View>
+
+            <View style={styles.switchWrapper}>
               <Switch
-                trackColor={{ false: "#767577", true: "#4CD964" }}
-                thumbColor={isNotificationEnabled ? "#4CD964" : "#f4f3f4"}
+                trackColor={{ false: "#767577", true: "#2CCDB5" }}
+                thumbColor={isNotificationEnabled ? "#ffff" : "#ffff"}
                 onValueChange={toggleNotificationSwitch}
                 value={isNotificationEnabled}
               />
               <Text style={styles.switchText}>Ativar notificação</Text>
             </View>
+            
+            {/* <ScrollView contentContainerStyle={styles.containerScrow}> */}
+              <View style={styles.inputWrapperDescrição}>
+                <Image source={require('../../../assets/registerElder/nota.png')} style={styles.iconNota} />
+                <View style={styles.inputContainer}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <TextInput
+                        style={[styles.input, styles.textInputWithPadding,]}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        multiline={true}
+                        numberOfLines={4}
+                        placeholder="Descrição"
+                      />
+                    )}
+                    name="descricao"
+                  />
+                </View>
+              </View>
+          {/* </ScrollView> */}
             <TouchableOpacity style={styles.saveButton} onPress={handleSubmit(onSubmit)}>
               <Text style={styles.saveButtonText}>Criar</Text>
             </TouchableOpacity>
-        </View>
+
+          </View>
+
       </Modal>
     </View>
   );
@@ -192,6 +292,12 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f5f5f5',
   },
+  // containerScrow: {
+  //   flexGrow: 1,
+  //   padding: -40,
+  //   paddingBottom: 32,
+  //   justifyContent: 'center',
+  // },
   header: {
     height: '23%',
     width: '110%',
@@ -284,6 +390,14 @@ const styles = StyleSheet.create({
     width: 320,
     marginBottom: -40,
   },
+  inputWrapperDescrição: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 50,
+    marginLeft: -1,
+    width: 325,
+    marginBottom: -40,
+  },
   inputWrapperTitle: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -318,7 +432,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   textInputWithPadding2: {
-    paddingLeft: 35,
+    paddingLeft: 15,
     width: 170,
     height: 55,
     borderColor: 'gray',
@@ -380,7 +494,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 120,
     alignSelf: 'center',
     width: '50%',
   },
@@ -388,6 +502,26 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  buttonCadastro: {
+    backgroundColor: '#2CCDB5',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 100,
+    alignSelf: 'center',
+    width: '50%',
+    marginBottom: -150,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  iconNota: {
+    width: 22,
+    height: 22,
+    marginRight: -20,
   },
 });
 
