@@ -24,7 +24,7 @@ export default function VerificarCodigo({ navigation, route }) {
       <TextInput
         style={styles.input}
         placeholder="Código de verificação"
-        keyboardType="number-pad"
+        keyboardType="email-address"
         value={code}
         onChangeText={setCode}
       />
