@@ -248,6 +248,31 @@ const Rotina = ({ navigation, route }) => {
               <Text style={styles.switchText}>Ativar notificação</Text>
             </View>
             <Text style={styles.repeteText}>Se repete às:</Text>
+            <View style={styles.repeteContainer}>
+                <View style={styles.inputWrapperRepete}>
+                 <TouchableOpacity style={styles.repeteButton}>
+                    <Text style={styles.repeteButtonText}>D</Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity style={styles.repeteButton}>
+                    <Text style={styles.repeteButtonText}>S</Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity style={styles.repeteButton}>
+                     <Text style={styles.repeteButtonText}>T</Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity style={styles.repeteButton}>
+                     <Text style={styles.repeteButtonText}>Q</Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity style={styles.repeteButton}>
+                     <Text style={styles.repeteButtonText}>Q</Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity style={styles.repeteButton}>
+                     <Text style={styles.repeteButtonText}>S</Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity style={styles.repeteButton}>
+                     <Text style={styles.repeteButtonText}>S</Text>
+                 </TouchableOpacity>
+                </View>
+              </View>
             
             {/* <ScrollView contentContainerStyle={styles.containerScrow}> */}
               <View style={styles.inputWrapperDescrição}>
@@ -394,7 +419,7 @@ const styles = StyleSheet.create({
   inputWrapperDescrição: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 90,
+    marginTop: 120,
     marginLeft: -1,
     width: 325,
     marginBottom: -40,
@@ -411,19 +436,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   iconCalendar: {
-    width: 20,
-    height: 20,
+    width: 25,
+    height: 25,
     marginRight: -20,
+    color: "#616161",
   },
   iconClock: {
-    width: 23.918,
-    height: 24,
+    width: 25,
+    height: 25,
     marginRight: -27,
+    color: "#616161",
   },
   categoryIcon: {
-    width: 29,
-    height: 24,
+    width: 25,
+    height: 25,
     marginRight: -30,
+    color: "#616161",
   },
   textInputWithPadding: {
     paddingLeft: 43,
@@ -489,15 +517,44 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
-    repeteText:  {
-      position: 'absolute',
-      top: 420,
-      left: 20,
-      fontSize: 16,
-      marginBottom: 12,
-      textAlign:'left',
-      color: '#616161',
-    },
+  repeteText:  {
+    position: 'absolute',
+    top: 420,
+    left: 20,
+    fontSize: 16,
+    marginBottom: 12,
+    textAlign:'left',
+    color: '#616161',
+  },
+  repeteContainer: {
+    width: '100%',
+    position: 'absolute',
+    top: 455,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputWrapperRepete: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  repeteButton: {
+    backgroundColor: 'white',
+    padding: 4,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 2,
+    width: 40,
+    height: 40,
+  },
+  repeteButtonText: {
+    color: "#616161",
+    fontSize: 20,
+    fontWeight: 'semibold',
+  },
   saveButton: {
     backgroundColor: '#2CCDB5',
     padding: 12,
@@ -505,7 +562,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 60,
     alignSelf: 'center',
-    width: '50%',
+    width: '70%',
   },
   saveButtonText: {
     color: '#fff',
