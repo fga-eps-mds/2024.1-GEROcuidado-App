@@ -247,6 +247,7 @@ const Rotina = ({ navigation, route }) => {
               />
               <Text style={styles.switchText}>Ativar notificação</Text>
             </View>
+            <Text style={styles.repeteText}>Se repete às:</Text>
             
             {/* <ScrollView contentContainerStyle={styles.containerScrow}> */}
               <View style={styles.inputWrapperDescrição}>
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   inputWrapperDescrição: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 90,
     marginLeft: -1,
     width: 325,
     marginBottom: -40,
@@ -461,7 +462,6 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: 'absolute',
-    top: 60,
     left: 0,
     width: '100%',
     backgroundColor: 'white',
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
   switchWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 75,
+    marginTop: 60,
     justifyContent: 'space-between',
     width: 185,
     marginLeft: -135,
@@ -489,12 +489,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
+    repeteText:  {
+      position: 'absolute',
+      top: 420,
+      left: 20,
+      fontSize: 16,
+      marginBottom: 12,
+      textAlign:'left',
+      color: '#616161',
+    },
   saveButton: {
     backgroundColor: '#2CCDB5',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 120,
+    marginTop: 60,
     alignSelf: 'center',
     width: '50%',
   },
