@@ -13,5 +13,15 @@ module.exports = {
       '!src/{db,model}/*.js'
     ],
     coverageReporters: ['text', 'lcov'],
-    testResultsProcessor: "jest-sonar-reporter"
+    reporters: [
+      "default",
+      [
+        "jest-sonar",
+        {
+          "outputDirectory": "reports",
+          "outputName": "sonar-report.xml",
+          "sonarQubeVersion": "LATEST"
+        }
+      ]
+    ]
   };
