@@ -3,7 +3,7 @@ import pluginReact from "eslint-plugin-react";
 
 
 export default [
-  { files: ["**/*.{js,mjs,cjs,jsx}"] },
+  { files: ["src/**/*.{js,mjs,cjs,jsx}"] },
   {
     settings: {
       react: {
@@ -14,11 +14,6 @@ export default [
   { languageOptions: { globals: globals.node } },
   pluginReact.configs.flat.recommended,
   {
-    rules: {
-      "react/prop-types": "off"
-    }
-  },
-  {
-    ignores: ["**/model/*.js"]
+    ignores: ["**/model/*.js", "coverage/*.js"]
   }
 ];
