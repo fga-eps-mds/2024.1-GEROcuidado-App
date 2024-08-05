@@ -65,6 +65,13 @@ const Rotina = ({ navigation, route }) => {
       horaRotina: '',
       categoria: '',
       notificacao: '',
+      domingo: false,
+      segunda: false,
+      terca: false,
+      quarta: false,
+      quinta: false,
+      sexta: false,
+      sabado: false,
       descricao: ''
     }
   });
@@ -73,7 +80,7 @@ const Rotina = ({ navigation, route }) => {
 
   const onSubmit = async (data) => {
     
-    const { titulo, dataRotina, horaRotina, categoria, notificacao ,descricao } = data;
+    const { titulo, dataRotina, horaRotina, categoria, notificacao, domingo ,descricao } = data;
     const [dia, mes, ano] = dataRotina.split('/').map(Number);
 
     if (!validarData(dia, mes, ano)) {
@@ -91,6 +98,7 @@ const Rotina = ({ navigation, route }) => {
       horaRotina,
       categoria,
       notificacao,
+      domingo,
       descricao,
       // idIdoso: idoso.id,
     });
@@ -250,29 +258,106 @@ const Rotina = ({ navigation, route }) => {
             <Text style={styles.repeteText}>Se repete às:</Text>
             <View style={styles.repeteContainer}>
                 <View style={styles.inputWrapperRepete}>
-                 <TouchableOpacity style={styles.repeteButton}>
-                    <Text style={styles.repeteButtonText}>D</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity style={styles.repeteButton}>
-                    <Text style={styles.repeteButtonText}>S</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity style={styles.repeteButton}>
-                     <Text style={styles.repeteButtonText}>T</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity style={styles.repeteButton}>
-                     <Text style={styles.repeteButtonText}>Q</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity style={styles.repeteButton}>
-                     <Text style={styles.repeteButtonText}>Q</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity style={styles.repeteButton}>
-                     <Text style={styles.repeteButtonText}>S</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity style={styles.repeteButton}>
-                     <Text style={styles.repeteButtonText}>S</Text>
-                 </TouchableOpacity>
+                  <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                          <TouchableOpacity
+                              style={value ? styles.repeteSelectedButton : styles.repeteButton}
+                              onPress={() => setValue('domingo', !value)}
+                          >
+                            <Text style={value ? styles.repeteSelectedButtonText : styles.repeteButtonText}>
+                              D
+                            </Text>
+                          </TouchableOpacity>
+                      )}
+                      name="domingo"
+                  />
+                  <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                          <TouchableOpacity
+                              style={value ? styles.repeteSelectedButton : styles.repeteButton}
+                              onPress={() => setValue('segunda', !value)}
+                          >
+                            <Text style={value ? styles.repeteSelectedButtonText : styles.repeteButtonText}>
+                              S
+                            </Text>
+                          </TouchableOpacity>
+                      )}
+                      name="segunda"
+                  />
+                  <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                          <TouchableOpacity
+                              style={value ? styles.repeteSelectedButton : styles.repeteButton}
+                              onPress={() => setValue('terca', !value)}
+                          >
+                            <Text style={value ? styles.repeteSelectedButtonText : styles.repeteButtonText}>
+                              T
+                            </Text>
+                          </TouchableOpacity>
+                      )}
+                      name="terca"
+                  />
+                  <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                          <TouchableOpacity
+                              style={value ? styles.repeteSelectedButton : styles.repeteButton}
+                              onPress={() => setValue('quarta', !value)}
+                          >
+                            <Text style={value ? styles.repeteSelectedButtonText : styles.repeteButtonText}>
+                              Q
+                            </Text>
+                          </TouchableOpacity>
+                      )}
+                      name="quarta"
+                  />
+                  <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                          <TouchableOpacity
+                              style={value ? styles.repeteSelectedButton : styles.repeteButton}
+                              onPress={() => setValue('quinta', !value)}
+                          >
+                            <Text style={value ? styles.repeteSelectedButtonText : styles.repeteButtonText}>
+                              Q
+                            </Text>
+                          </TouchableOpacity>
+                      )}
+                      name="quinta"
+                  />
+                  <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                          <TouchableOpacity
+                              style={value ? styles.repeteSelectedButton : styles.repeteButton}
+                              onPress={() => setValue('sexta', !value)}
+                          >
+                            <Text style={value ? styles.repeteSelectedButtonText : styles.repeteButtonText}>
+                              S
+                            </Text>
+                          </TouchableOpacity>
+                      )}
+                      name="sexta"
+                  />
+                  <Controller
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                          <TouchableOpacity
+                              style={value ? styles.repeteSelectedButton : styles.repeteButton}
+                              onPress={() => setValue('sabado', !value)}
+                          >
+                            <Text style={value ? styles.repeteSelectedButtonText : styles.repeteButtonText}>
+                              S
+                            </Text>
+                          </TouchableOpacity>
+                      )}
+                      name="sabado"
+                  />
                 </View>
-              </View>
+            </View>
             
             {/* <ScrollView contentContainerStyle={styles.containerScrow}> */}
               <View style={styles.inputWrapperDescrição}>
@@ -550,8 +635,26 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
+  repeteSelectedButton: {
+    backgroundColor: '#2CCDB5',
+    padding: 4,
+    borderRadius: 50,
+    borderWidth: 2,
+    color: 'white',
+    borderColor: '#2CCDB5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 2,
+    width: 40,
+    height: 40,
+  },
   repeteButtonText: {
     color: "#616161",
+    fontSize: 20,
+    fontWeight: 'semibold',
+  },
+  repeteSelectedButtonText: {
+    color: "#fff",
     fontSize: 20,
     fontWeight: 'semibold',
   },
