@@ -27,6 +27,23 @@ const validarData = (dia, mes, ano) => {
   };
   return dia > 0 && dia <= diasNoMes[mes];
 };
+const EDiasSemana = { // Enumeração em JavaScript
+  Domingo: 0,
+  Segunda: 1,
+  Terca: 2,
+  Quarta: 3,
+  Quinta: 4,
+  Sexta: 5,
+  Sabado: 6,
+  getName: function (value) { // Método para obter o nome do dia a partir do valor
+    for (let key in this) {
+      if (this[key] === value) {
+        return key;
+      }
+    }
+    return null;
+  }
+};
 
 const Rotina = ({ navigation, route }) => {
 
@@ -39,6 +56,7 @@ const Rotina = ({ navigation, route }) => {
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [rotinas, setRotinas] = useState([]);
+  const [diasSelecionados, setDiasSelecionados] = useState([]); // Estado para armazenar dias selecionados
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
@@ -77,9 +95,14 @@ const Rotina = ({ navigation, route }) => {
   });
 
   const categories = ['Tomar remédio', 'Hora da caminhada', 'Alimentar'];
+  const toggleDiaSemana = (dia) => { // Função para alternar seleção de dias
+      setDiasSelecionados((prevDias) =>
+        prevDias.includes(dia) ? prevDias.filter(d => d !== dia) : [...prevDias, dia]
+      );
+    };
 
   const onSubmit = async (data) => {
-    
+
     const { titulo, dataRotina, horaRotina, categoria, notificacao, domingo ,descricao } = data;
     const [dia, mes, ano] = dataRotina.split('/').map(Number);
 
@@ -100,6 +123,7 @@ const Rotina = ({ navigation, route }) => {
       notificacao,
       domingo,
       descricao,
+      diasSelecionados, // Incluindo dias selecionados no console log
       // idIdoso: idoso.id,
     });
     Alert.alert("Sucesso no cadastro da rotina!");
@@ -114,6 +138,7 @@ const Rotina = ({ navigation, route }) => {
           rotinas.categoria = categoria;
           rotinas.notificacao = notificacao;
           rotinas.descricao = descricao;
+          rotinas.diasSelecionados = diasSelecionados; // Salvando dias selecionados
           rotinas.idIdoso = idoso.id;
         });
       });
@@ -145,7 +170,7 @@ const Rotina = ({ navigation, route }) => {
       <TouchableOpacity style={styles.buttonCadastro} onPress={() => navigation.navigate('NewRoutine', { user })}>
         <Text style={styles.buttonText}>visualizar</Text>
       </TouchableOpacity>
-  
+
       <Modal isVisible={isModalVisible} onBackdropPress={toggleModal} style={styles.modal}>
 
           <View style={styles.modalContent}>
@@ -358,7 +383,7 @@ const Rotina = ({ navigation, route }) => {
                   />
                 </View>
             </View>
-            
+
             {/* <ScrollView contentContainerStyle={styles.containerScrow}> */}
               <View style={styles.inputWrapperDescrição}>
                 <Image source={require('../../../assets/registerElder/nota.png')} style={styles.iconNota} />
@@ -453,7 +478,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex',
     margin: 1,
     marginTop: 7,
-    margin: 7,
+    margin: 9,
   },
   modalContent: {
     backgroundColor: 'white',
@@ -461,19 +486,19 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10, // Adiciona borda arredondada na parte inferior esquerda
+    borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     alignItems: 'center',
   },
   header2: {
-    height: 80,
+    height: 60,
     width: '113%',
     alignItems: 'center',
     paddingLeft: 20,
     backgroundColor: "#2CCDB5",
     flexDirection: 'row',
-    borderRadius: 10,
-    marginTop: -20,
+    borderRadius: 0,
+    marginTop: -26.6,
   },
   backButtonImage: {
     width: 27,
@@ -481,13 +506,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 10,
-    marginTop: -10,
+    marginTop: -5,
     marginLeft: -5,
   },
   helloMessage2: {
     fontSize: 18,
     color: 'white',
-    marginTop: -10,
+    marginTop: -5,
     fontWeight: 'bold',
   },
   formContainer: {
@@ -512,8 +537,8 @@ const styles = StyleSheet.create({
   inputWrapperTitle: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: -85,
-    marginLeft: 160,
+    marginTop: -80,
+    marginLeft: 130,
     width: 320,
     marginBottom: -30,
   },
@@ -523,7 +548,7 @@ const styles = StyleSheet.create({
   iconCalendar: {
     width: 25,
     height: 25,
-    marginRight: -20,
+    marginRight: -27,
     color: "#616161",
   },
   iconClock: {
@@ -539,33 +564,35 @@ const styles = StyleSheet.create({
     color: "#616161",
   },
   textInputWithPadding: {
-    paddingLeft: 43,
+    paddingLeft: 50,
     height: 55,
-    borderColor: 'gray',
+    borderColor: 'black',
     borderBottomWidth: 1,
     borderRadius: 4,
   },
   textInputWithPadding2: {
-    paddingLeft: 15,
-    width: 170,
-    height: 55,
-    borderColor: 'gray',
+    paddingLeft: 19,
+    width: 200,
+    height: 50,
+    borderColor: 'black',
     borderBottomWidth: 1,
     borderRadius: 4,
+    fontWeight: 'bold',
+    fontSize: 20,
   },
   dropdownButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 45,
     height: 55,
-    borderColor: 'gray',
+    borderColor: 'black',
     borderBottomWidth: 1,
     borderRadius: 4,
     width: 320,
   },
   dropdownText: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 15,
     color: 'black',
   },
   dropdownIcon: {
@@ -578,7 +605,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     backgroundColor: 'white',
-    borderColor: 'gray',
+    borderColor: 'black',
     borderWidth: 1,
     borderRadius: 15,
     zIndex: 1,
@@ -604,7 +631,7 @@ const styles = StyleSheet.create({
   },
   repeteText:  {
     position: 'absolute',
-    top: 420,
+    top: 390,
     left: 20,
     fontSize: 16,
     marginBottom: 12,
@@ -614,7 +641,7 @@ const styles = StyleSheet.create({
   repeteContainer: {
     width: '100%',
     position: 'absolute',
-    top: 455,
+    top: 430,
     justifyContent: 'center',
     alignItems: 'center',
   },
