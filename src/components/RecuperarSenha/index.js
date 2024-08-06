@@ -6,7 +6,6 @@ import emailjs from 'emailjs-com';
 import database from '../../db';
 import { Q } from '@nozbe/watermelondb';
 
-
 const sendEmail = (email, code) => {
     const templateParams = {
         to_email: email,
@@ -20,7 +19,7 @@ const sendEmail = (email, code) => {
       .catch((error) => {
         console.log('Erro ao enviar o e-mail:', error);
       });
-  };
+};
 
 export default function RecuperarSenha({ navigation }) {
     const [email, setEmail] = useState('');
@@ -42,14 +41,17 @@ export default function RecuperarSenha({ navigation }) {
             Alert.alert("Erro", "Por favor, insira um e-mail válido.");
             return;
         }
+        
+        const user = await database.get('users').query(Q.where('email', email)).fetch();
+
+        if (user.length === 0) {
+            Alert.alert("Erro", "E-mail não cadastrado.");
+            return;
+        }
 
         const code = generateRandomCode();
         sendEmail(email, code);
         Alert.alert("E-mail enviado!", `Código de verificação: ${code}`);
-
-//        console.log('Email:', email);
-//        console.log('Generated Code:', code);
-
         navigation.navigate('VerificarCodigo', { email, code });
     };
 
