@@ -39,3 +39,5 @@ yarn-error.*
 # on your local machine
 ios
 android
+
+.idea/

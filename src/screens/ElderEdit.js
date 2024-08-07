@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import database, { idososCollection } from '../db';
+import { TextInputMask } from 'react-native-masked-text';
 
 const ElderEdit = ({ route, navigation }) => {
   const { elderId, user } = route.params; // Recebendo elderId e user como parâmetros de rota
@@ -51,7 +52,7 @@ const ElderEdit = ({ route, navigation }) => {
   };
 
   const handleSave = async () => {
-    const telefoneResponsavel = phone;
+    const telefoneResponsavel = phone.replace(/\D/g, '');
     const [dia, mes, ano] = birthdate.split('/').map(Number);
 
     if (!validarTelefone(telefoneResponsavel)) {
@@ -146,7 +147,13 @@ const ElderEdit = ({ route, navigation }) => {
 
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/phone.png')} style={styles.iconPhone} />
-          <TextInput
+          <TextInputMask
+            type={'cel-phone'}
+            options={{
+              maskType: 'BRL',
+              withDDD: true,
+              dddMask: '(99) '
+            }}
             style={styles.input}
             value={phone}
             onChangeText={setPhone}
@@ -229,20 +236,20 @@ const validarData = (dia, mes, ano) => {
     11: 30,
     12: 31,
   };
-
-  if (ano < 1900 || ano > 2024) {
-    return false;
-  }
-  if (mes < 1 || mes > 12) {
-    return false;
-  }
-  if (dia < 1 || dia > diasNoMes[mes]) {
-    return false;
-  }
-  if (dia.toString().length !== 2 || mes.toString().length !== 2 || ano.toString().length !== 4) {
-    return false;
-  }
-  return true;
+  return dia > 0 && dia <= diasNoMes[mes];
+  // if (ano < 1900 || ano > 2024) {
+  //   return false;
+  // }
+  // if (mes < 1 || mes > 12) {
+  //   return false;
+  // }
+  // if (dia < 1 || dia > diasNoMes[mes]) {
+  //   return false;
+  // }
+  // if (dia.toString().length !== 2 || mes.toString().length !== 2 || ano.toString().length !== 4) {
+  //   return false;
+  // }
+  // return true;
 };
 
 const styles = StyleSheet.create({

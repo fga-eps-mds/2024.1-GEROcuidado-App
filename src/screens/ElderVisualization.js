@@ -16,7 +16,7 @@ const ElderVisualization = ({ route, navigation }) => {
         birthdate: birthdate,
         bloodType: idoso._raw.tipoSanguineo,
         phone: idoso._raw.telefoneResponsavel,
-        description: idoso._raw.observacoes,
+        description: idoso._raw.descricao,
         image: require('../../assets/elders/elder_1.png'),
       });
     };

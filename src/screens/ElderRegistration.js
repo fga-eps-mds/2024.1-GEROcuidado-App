@@ -22,136 +22,115 @@ const validarData = (dia, mes, ano) => {
     9: 30,
     10: 31,
     11: 30,
-    12: 31,
+    12: 31
   };
+  
+    // if (ano < 1900 || ano > 2024) {
+    //   return false;
+    // }
+    // if (mes < 1 || mes > 12) {
+    //   return false;
+    // }
+    // if (dia < 1 || dia > diasNoMes[mes]) {
+    //   return false;
+    // }
+    // if (dia.toString().length !== 2 || mes.toString().length !== 2 || ano.toString().length !== 4) {
+    //   return false;
+    // }
+    // return true;
 
-  if (ano < 1900 || ano > 2024) {
-    return false;
-  }
-  if (mes < 1 || mes > 12) {
-    return false;
-  }
-  if (dia < 1 || dia > diasNoMes[mes]) {
-    return false;
-  }
-  if (dia.toString().length !== 2 || mes.toString().length !== 2 || ano.toString().length !== 4) {
-    return false;
-  }
-  return true;
-};
-
-const validarTelefone = (telefone) => {
-  const regexTelefone = /^\d{11}$/;
-  return regexTelefone.test(telefone);
+  return dia > 0 && dia <= diasNoMes[mes];
 };
 
 const ElderRegistration = ({ route, navigation }) => {
-  const { user } = route.params; // Recebendo o user como parâmetro de rota
+  const { user } = route.params;
+  const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
+
+  const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
     defaultValues: {
-      name: '',
-      birthdate: '',
-      bloodtype: '',
-      phone: '',
-      description: '',
+      nome: '',
+      dataNascimento: '',
+      tipoSanguineo: '',
+      telefoneResponsavel: '',
+      descricao: ''
     }
   });
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
-
-  const [successModalVisible, setSuccessModalVisible] = useState(false);
-  const [successModalMessage, setSuccessModalMessage] = useState('');
-
-  const parseDate = (dateString) => {
-    const [day, month, year] = dateString.split('/').map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
-  };
-  
-  const createIdoso = async (data) => {
-    await database.write(async () => {
-      try {
-        await idososCollection.create((idoso) => {
-          idoso.nome = data.name;
-          idoso.dataNascimento = parseDate(data.birthdate);
-          idoso.telefoneResponsavel = data.phone;
-          idoso.tipoSanguineo = data.bloodtype || '';
-          idoso.observacoes = data.description || '';
-          idoso.user_id = user.id; // Associando o idoso ao usuário
-        });
-        console.log("Idoso criado com sucesso!");
-      } catch (error) {
-        console.error("Erro ao criar idoso:", error);
-      }
-    });
-  };
-
-  const showErrorModal = (message) => {
-    setModalMessage(message);
-    setModalVisible(true);
-  };
-
-  const showSuccessModal = (message) => {
-    setSuccessModalMessage(message);
-    setSuccessModalVisible(true);
-  };
-
   const onSubmit = async (data) => {
-    const telefoneResponsavel = data.phone;
-    const [dia, mes, ano] = data.birthdate.split('/').map(Number);
-
-    if (!validarTelefone(telefoneResponsavel)) {
-      showErrorModal("Número de telefone inválido. Deve conter 11 dígitos.");
-      return;
-    }
+    const { nome, dataNascimento, tipoSanguineo, telefoneResponsavel, descricao } = data;
+    const [dia, mes, ano] = dataNascimento.split('/').map(Number);
 
     if (!validarData(dia, mes, ano)) {
-      showErrorModal("Data de nascimento inválida.");
+      setErrorMessage('Data de nascimento inválida.');
+      setModalVisible(true);
       return;
     }
 
+    const telefoneNumerico = telefoneResponsavel.replace(/\D/g, '');
+    if (telefoneNumerico.length !== 11) {
+      setErrorMessage('Número de telefone inválido. Deve conter 11 dígitos.');
+      setModalVisible(true);
+      return;
+    }
+
+    const formattedData = `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+
     try {
-      await createIdoso(data);
-      showSuccessModal("Cadastro realizado com sucesso!");
-      setTimeout(() => {
-        setSuccessModalVisible(false);
-        navigation.navigate('ElderList', { user });
-      }, 2000);
+      setLoading(true);
+      await database.write(async () => {
+        await idososCollection.create((idoso) => {
+          idoso.nome = nome;
+          idoso.dataNascimento = formattedData;
+          idoso.tipoSanguineo = tipoSanguineo;
+          idoso.telefoneResponsavel = telefoneResponsavel;
+          idoso.descricao = descricao;
+          idoso.idUsuario = user.id;
+        });
+      });
+      setLoading(false);
+      navigation.navigate('ElderList', { user });
     } catch (error) {
-      showErrorModal("Erro ao criar idoso: " + error.message);
+      setLoading(false);
+      setErrorMessage('Erro ao cadastrar idoso.');
+      setModalVisible(true);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('ElderList', { user })}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
 
       <View style={styles.imageContainer}>
         <Image source={require('../../assets/elders/elder_1.png')} style={styles.elderImage} />
       </View>
-
+      
       <View style={styles.formContainer}>
 
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/user.png')} style={styles.iconUser} />
           <View style={styles.inputContainer}>
-            {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+            {errors.nome && <Text style={styles.errorText}>Este campo é obrigatório.</Text>}
             <Controller
               control={control}
-              rules={{ required: 'O nome é obrigatório' }}
+              rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={[styles.input, styles.textInputWithPadding]}
+                  style={[styles.input, errors.name && styles.inputError, styles.textInputWithPadding]}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Nome"
                 />
               )}
-              name="name"
+              name="nome"
             />
           </View>
         </View>
@@ -159,24 +138,24 @@ const ElderRegistration = ({ route, navigation }) => {
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/birthday.png')} style={styles.iconBirthday} />
           <View style={styles.inputContainer}>
-            {errors.birthdate && <Text style={styles.errorText}>{errors.birthdate.message}</Text>}
+            {errors.dataNascimento && <Text style={styles.errorText}>A data de nascimento é obrigatória.</Text>}
             <Controller
               control={control}
-              rules={{ required: 'A data de nascimento é obrigatória' }}
+              rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInputMask
                   type={'datetime'}
                   options={{
                     format: 'DD/MM/YYYY'
                   }}
-                  style={[styles.input, styles.textInputWithPadding]}
+                  style={[styles.input, errors.dataNascimento && styles.inputError, styles.textInputWithPadding]}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Data de nascimento"
                 />
               )}
-              name="birthdate"
+              name="dataNascimento"
             />
           </View>
         </View>
@@ -184,19 +163,20 @@ const ElderRegistration = ({ route, navigation }) => {
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/tipo_sanguineo.png')} style={styles.bloodIcon} />
           <View style={styles.inputContainer}>
-            {errors.bloodtype && <Text style={styles.errorText}>{errors.bloodtype.message}</Text>}
+            {errors.tipoSanguineo && <Text style={styles.errorText}>O tipo Sanguíneo é obrigatório.</Text>}
             <Controller
               control={control}
+              rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={[styles.input, styles.textInputWithPadding]}
+                  style={[styles.input, errors.tipoSanguineo && styles.inputError, styles.textInputWithPadding]}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  placeholder="Tipo sanguíneo"
+                  placeholder="Tipo Sanguíneo"
                 />
               )}
-              name="bloodtype"
+              name="tipoSanguineo"
             />
           </View>
         </View>
@@ -204,21 +184,29 @@ const ElderRegistration = ({ route, navigation }) => {
         <View style={styles.inputWrapper}>
           <Image source={require('../../assets/registerElder/phone.png')} style={styles.iconPhone} />
           <View style={styles.inputContainer}>
-            {errors.phone && <Text style={styles.errorText}>{errors.phone.message}</Text>}
+          {errors.telefoneResponsavel && <Text style={styles.errorText}>O Telefone é Obrigatório.</Text>}
             <Controller
               control={control}
-              rules={{ required: 'O telefone é obrigatório' }}
+              rules={{ 
+                required: true,
+                validate: value => value.replace(/\D/g, '').length === 11 || 'O telefone deve conter 11 dígitos'
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[styles.input, styles.textInputWithPadding]}
+                <TextInputMask
+                  type={'cel-phone'}
+                  options={{
+                    maskType: 'BRL',
+                    withDDD: true,
+                    dddMask: '(99) '
+                  }}
+                  style={[styles.input, errors.telefoneResponsavel && styles.inputError, styles.textInputWithPadding]}
                   onBlur={onBlur}
-                  keyboardType="numeric"
                   onChangeText={onChange}
                   value={value}
-                  placeholder="Telefone Responsável"
+                  placeholder='Telefone Responsável'
                 />
               )}
-              name="phone"
+              name="telefoneResponsavel"
             />
           </View>
         </View>
@@ -230,20 +218,21 @@ const ElderRegistration = ({ route, navigation }) => {
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={[styles.input, styles.textInputWithPadding, { height: 60 }]}
+                  style={[styles.input, styles.textInputWithPadding,]}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  multiline={true}
+                  numberOfLines={4}
                   placeholder="Observações"
-                  multiline
                 />
               )}
-              name="description"
+              name="descricao"
             />
           </View>
         </View>
       </View>
-
+        
       <TouchableOpacity style={styles.buttonCadastro} onPress={handleSubmit(onSubmit)}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
@@ -253,12 +242,13 @@ const ElderRegistration = ({ route, navigation }) => {
 
       <Modal isVisible={modalVisible} onBackdropPress={() => setModalVisible(false)}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalText}>{modalMessage}</Text>
+          <Text style={styles.modalText}>{errorMessage}</Text>
           <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
             <Text style={styles.modalButtonText}>OK</Text>
           </TouchableOpacity>
         </View>
       </Modal>
+
       <Modal isVisible={successModalVisible} onBackdropPress={() => setSuccessModalVisible(false)}>
         <View style={styles.modalContent}>
           <Text style={styles.modalText}>{successModalMessage}</Text>
