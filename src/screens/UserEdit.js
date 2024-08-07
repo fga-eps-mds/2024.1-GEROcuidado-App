@@ -29,7 +29,7 @@ const UserEdit = ({ route, navigation }) => {
             await user.update((usr) => {
                 usr.name = name;
                 usr.email = email;
-                usr.foto = foto; // Atualizando a foto
+                usr.foto = foto;
                 if (newPassword) {
                     usr.password = newPassword;
                 }
@@ -130,7 +130,7 @@ const UserEdit = ({ route, navigation }) => {
                     <Icon name="lock" size={20} color="#333333" style={styles.iconUser} />
                     <TextInput
                         style={styles.input}
-                        placeholder="Confirme sua Senha"
+                        placeholder="Confirme Senha"
                         value={confirmPassword}
                         secureTextEntry
                         onChangeText={setConfirmPassword}
