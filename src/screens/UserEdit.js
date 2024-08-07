@@ -6,10 +6,11 @@ import { launchImageLibrary } from 'react-native-image-picker';
 
 const UserEdit = ({ route, navigation }) => {
     const { user } = route.params;
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+    const [name, setName] = useState(user.name);
+    const [email, setEmail] = useState(user.email);
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [foto, setFoto] = useState(user.foto || '');
 
     const handleSave = async () => {
         if (!name) {
@@ -27,6 +28,8 @@ const UserEdit = ({ route, navigation }) => {
             const user = await usersCollection.find(userId);
             await user.update((usr) => {
                 usr.name = name;
+                usr.email = email;
+                usr.foto = foto; // Atualizando a foto
                 if (newPassword) {
                     usr.password = newPassword;
                 }
@@ -38,6 +41,14 @@ const UserEdit = ({ route, navigation }) => {
         } catch (error) {
             Alert.alert("Erro", "Não foi possível atualizar os dados.");
         }
+    };
+
+    const handleChoosePhoto = () => {
+        launchImageLibrary({}, response => {
+            if (response.assets && response.assets.length > 0) {
+                setFoto(response.assets[0].uri);
+            }
+        });
     };
 
     const handleDeleteAccount = async () => {
@@ -75,6 +86,16 @@ const UserEdit = ({ route, navigation }) => {
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                 <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
             </TouchableOpacity>
+
+            <View style={styles.imageContainer}>
+                {foto ? (
+                    <Image source={{ uri: foto }} style={styles.elderImage} />
+                ) : (
+                    <TouchableOpacity onPress={handleChoosePhoto} style={styles.photoButton}>
+                        <Icon name="photo-camera" size={40} color="#333333" />
+                    </TouchableOpacity>
+                )}
+            </View>
 
             <View style={styles.formContainer}>
                 <View style={styles.inputWrapper}>
@@ -156,6 +177,15 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
         borderRadius: 5,
+    },
+    photoButton: {
+        width: 150,
+        height: 150,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     formContainer: {
         marginBottom: 10,
