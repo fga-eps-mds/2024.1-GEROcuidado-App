@@ -6,6 +6,7 @@ export const mySchema = appSchema({
     tableSchema({
       name: 'users',
       columns: [
+        { name: 'userId', type: 'string', isIndexed: true },
         { name: 'nome', type: 'string' },
         { name: 'email', type: 'string' },
         { name: 'senha', type: 'string' },
