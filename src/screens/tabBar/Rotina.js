@@ -477,8 +477,8 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'flex',
     margin: 1,
-    marginTop: 7,
-    margin: 9,
+    marginTop: 2,
+    margin: 2,
   },
   modalContent: {
     backgroundColor: 'white',
@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2CCDB5",
     flexDirection: 'row',
     borderRadius: 0,
-    marginTop: -26.6,
+    marginTop: -26.6, 
   },
   backButtonImage: {
     width: 27,
