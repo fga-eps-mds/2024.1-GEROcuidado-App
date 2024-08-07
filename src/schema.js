@@ -7,6 +7,7 @@ export default appSchema({
     tableSchema({
       name: 'users',
       columns: [
+        { name: 'userId', type: 'string' },
         { name: 'name', type: 'string' },
         { name: 'email', type: 'string' },
         { name: 'password', type: 'string' },

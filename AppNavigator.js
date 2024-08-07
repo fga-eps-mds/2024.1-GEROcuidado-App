@@ -9,6 +9,11 @@ import ElderEdit from './src/screens/ElderEdit';
 import Home from './src/screens/Home';
 import ScreenLogin from './src/screens/ScreenLogin';
 import Register from './src/screens/Register';
+// import Recover from './src/screens/Recover';
+// import VerifyCode from './src/screens/VerifyCode';
+// import PasswordRecovery from './src/screens/PasswordRecovery';
+import UserEdit from './src/screens/UserEdit';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +31,10 @@ const AppNavigator = () => {
         <Stack.Screen name="ElderRegistration" component={ElderRegistration} />
         <Stack.Screen name="ElderVisualization" component={ElderVisualization} />
         <Stack.Screen name="ElderEdit" component={ElderEdit} />
+        <Stack.Screen name="UserEdit" component={UserEdit} />
+        {/* <Stack.Screen name="RecuperarSenha" component={Recover} />
+        <Stack.Screen name="VerificarCodigo" component={VerifyCode} />
+        <Stack.Screen name="RedefinirSenha" component={PasswordRecovery} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -73,7 +73,7 @@ const UserProfile = ({ route, navigation }) => {
           description="Edite sua conta"
           smallImage={require('../../assets/engrenagem.png')}
           rightImage={require('../../assets/Arrow.png')}
-          onPress={() => handlePress('Perfil')}
+          onPress={() => navigation.navigate('UserEdit', { user })}
           style={styles.optionSpacing}
         />
       </View>
