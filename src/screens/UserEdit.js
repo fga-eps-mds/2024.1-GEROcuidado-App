@@ -130,7 +130,7 @@ const UserEdit = ({ route, navigation }) => {
                     <Icon name="lock" size={20} color="#333333" style={styles.iconUser} />
                     <TextInput
                         style={styles.input}
-                        placeholder="Confirme Senha"
+                        placeholder="Confirme sua Senha"
                         value={confirmPassword}
                         secureTextEntry
                         onChangeText={setConfirmPassword}
