@@ -9,8 +9,6 @@ import ElderEdit from './src/screens/ElderEdit';
 import Home from './src/screens/Home';
 import ScreenLogin from './src/screens/ScreenLogin';
 import Register from './src/screens/Register';
-import UserEdit from './src/screens/UserEdit';
-
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +26,6 @@ const AppNavigator = () => {
         <Stack.Screen name="ElderRegistration" component={ElderRegistration} />
         <Stack.Screen name="ElderVisualization" component={ElderVisualization} />
         <Stack.Screen name="ElderEdit" component={ElderEdit} />
-        <Stack.Screen name="UserEdit" component={UserEdit} />
       </Stack.Navigator>
     </NavigationContainer>
   );
