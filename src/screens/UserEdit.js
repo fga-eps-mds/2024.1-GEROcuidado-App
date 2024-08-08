@@ -1,16 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import database, { usersCollection } from '../db';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { Q } from '@nozbe/watermelondb';
 
 const UserEdit = ({ route, navigation }) => {
-    const { user } = route.params;
-    const [name, setName] = useState(user.name);
+    const { user } = route.params;  // userId foi removido
+    const [name, setName] = useState(user.nome);
     const [email, setEmail] = useState(user.email);
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [foto, setFoto] = useState(user.foto || '');
+    const [senhaFeedback, setSenhaFeedback] = useState('');
+    const [senhaFeedbackColor, setSenhaFeedbackColor] = useState('red');
+    const [isPasswordStrong, setIsPasswordStrong] = useState(false);
+
+    const checkPasswordStrength = (password) => {
+        let feedback = '';
+        let color = 'red';
+        let strength = false;
+
+        if (password.length >= 8) {
+            if (/[A-Z]/.test(password) && /[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+                feedback = 'Senha forte';
+                color = styles.passwordStrength.color;
+                strength = true;
+            } else {
+                feedback = 'Senha média. Reforce a senha usando letras maiúsculas e caracteres especiais Ex: !@#$%"*()';
+                color = styles.mediumPassword.color;
+                strength = true;
+            }
+        } else {
+            feedback = 'Senha fraca! A senha deve ter pelo menos 8 caracteres!';
+            color = 'red';
+            strength = false;
+        }
+
+        setSenhaFeedback(feedback);
+        setSenhaFeedbackColor(color);
+        setIsPasswordStrong(strength);
+    };
 
     const handleSave = async () => {
         if (!name) {
@@ -23,22 +53,33 @@ const UserEdit = ({ route, navigation }) => {
             return;
         }
 
+        if (newPassword && !isPasswordStrong) {
+            Alert.alert("Erro", "A senha deve ser no mínimo média ou forte.");
+            return;
+        }
+
         try {
-            const { userId } = route.params;
-            const user = await usersCollection.find(userId);
-            await user.update((usr) => {
-                usr.name = name;
-                usr.email = email;
-                usr.foto = foto;
-                if (newPassword) {
-                    usr.password = newPassword;
+            await database.write(async () => {
+                // Busca o usuário pelo e-mail
+                const userToUpdate = await usersCollection.query(Q.where('email', email)).fetch();
+                if (userToUpdate.length === 0) {
+                    throw new Error("Usuário não encontrado");
                 }
-                usr.updated_at = Date.now();
+
+                await userToUpdate[0].update((user) => {
+                    user.nome = name;
+                    user.email = email;
+                    user.foto = foto;
+                    if (newPassword) {
+                        user.senha = newPassword;
+                    }
+                });
             });
 
             Alert.alert("Sucesso", "Dados atualizados com sucesso.");
             navigation.goBack();
         } catch (error) {
+            console.log(error);  // Para debugar o erro específico
             Alert.alert("Erro", "Não foi possível atualizar os dados.");
         }
     };
@@ -65,10 +106,14 @@ const UserEdit = ({ route, navigation }) => {
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            const { userId } = route.params;
-                            const user = await usersCollection.find(userId);
-                            await user.markAsDeleted();
-                            await user.destroyPermanently();
+                            // Buscando o usuário pelo e-mail
+                            const userToDelete = await usersCollection.query(Q.where('email', email)).fetch();
+                            if (userToDelete.length === 0) {
+                                throw new Error("Usuário não encontrado");
+                            }
+
+                            await userToDelete[0].markAsDeleted();
+                            await userToDelete[0].destroyPermanently();
 
                             Alert.alert("Sucesso", "Conta apagada com sucesso.");
                             navigation.goBack();
@@ -123,19 +168,27 @@ const UserEdit = ({ route, navigation }) => {
                         placeholder="Nova Senha"
                         value={newPassword}
                         secureTextEntry
-                        onChangeText={setNewPassword}
+                        onChangeText={text => {
+                            setNewPassword(text);
+                            checkPasswordStrength(text);
+                        }}
                     />
                 </View>
                 <View style={styles.inputWrapper}>
                     <Icon name="lock" size={20} color="#333333" style={styles.iconUser} />
                     <TextInput
                         style={styles.input}
-                        placeholder="Confirme sua Senha"
+                        placeholder="Confirme Senha"
                         value={confirmPassword}
                         secureTextEntry
                         onChangeText={setConfirmPassword}
                     />
                 </View>
+
+                <Text style={[styles.passwordStrength, { color: senhaFeedbackColor }]}>
+                    {senhaFeedback}
+                </Text>
+
                 <TouchableOpacity
                     style={styles.buttonSalvar}
                     onPress={handleSave}
@@ -232,6 +285,16 @@ const styles = StyleSheet.create({
     iconUser: {
         position: 'absolute',
         left: 10,
+    },
+    passwordStrength: {
+        marginTop: 10,
+        fontSize: 14,
+    },
+    mediumPassword: {
+        color: 'orange',
+    },
+    passwordStrength: {
+        color: 'green',
     },
 });
 
