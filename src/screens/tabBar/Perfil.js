@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Modal from 'react-native-modal';
-import OptionProfile from '../components/OptionProfile';
+import OptionProfile from '../../components/OptionProfile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const UserProfile = ({ route, navigation }) => {
+const Perfil = ({ route, navigation }) => {
   const { user } = route.params;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -22,11 +22,11 @@ const UserProfile = ({ route, navigation }) => {
   };
 
   const handleLogout = async () => {
-    try { 
-      await AsyncStorage.removeItem('user'); 
-  
+    try {
+      await AsyncStorage.removeItem('user');
+
       hideModal();
-  
+
       navigation.navigate('TelaInicial');
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
@@ -36,12 +36,12 @@ const UserProfile = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image source={require('../../assets/icon_caregiver.png')} style={styles.logo_caregiver} />
+        <Image source={require('../../../assets/icon_caregiver.png')} style={styles.logo_caregiver} />
         <Text style={styles.helloMessage}>Olá, {user.name}</Text>
 
         <View style={styles.logoutContainer}>
           <TouchableOpacity style={styles.button} onPress={showModal}>
-            <Image source={require('../../assets/logout.png')} style={styles.LogoutImage} />
+            <Image source={require('../../../assets/logout.png')} style={styles.LogoutImage} />
           </TouchableOpacity>
         </View>
       </View>
@@ -70,8 +70,8 @@ const UserProfile = ({ route, navigation }) => {
         <OptionProfile
           name="Perfil de usuário"
           description="Edite sua conta"
-          smallImage={require('../../assets/engrenagem.png')}
-          rightImage={require('../../assets/Arrow.png')}
+          smallImage={require('../../../assets/engrenagem.png')}
+          rightImage={require('../../../assets/Arrow.png')}
           onPress={() => handlePress('Perfil')}
           style={styles.optionSpacing}
         />
@@ -81,8 +81,8 @@ const UserProfile = ({ route, navigation }) => {
         <OptionProfile
           name="Gerenciar idosos"
           description="Visualize e edite idosos"
-          smallImage={require('../../assets/IconIdoso.png')}
-          rightImage={require('../../assets/Arrow.png')}
+          smallImage={require('../../../assets/IconIdoso.png')}
+          rightImage={require('../../../assets/Arrow.png')}
           onPress={() => navigation.navigate('ElderList', { user })}
           style={styles.optionSpacing}
         />
@@ -167,21 +167,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   noButton: {
-    borderColor: '#838383', 
+    borderColor: '#838383',
   },
   yesButton: {
-    borderColor: '#2CCDB5', 
+    borderColor: '#2CCDB5',
     backgroundColor: '#2CCDB5',
   },
   modalButtonText: {
     fontSize: 14,
   },
   noButtonText: {
-    color: '#FF0000', 
+    color: '#FF0000',
   },
   yesButtonText: {
     color: '#FFFFFF',
   },
 });
 
-export default UserProfile;
+export default Perfil;

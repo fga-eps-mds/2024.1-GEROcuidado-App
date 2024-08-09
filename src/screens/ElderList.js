@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import Elder from '../components/Elder'; // Certifique-se de que este caminho está correto
-import database, { idososCollection } from '../db';
+import Elder from '../components/Elder';
+import { idososCollection } from '../db';
 import { useFocusEffect } from '@react-navigation/native';
 
 const ElderList = ({ route, navigation }) => {
-  const { user } = route.params; // Certifique-se de que o `user` está sendo passado corretamente
-  const [elders, setElders] = useState([]); // Inicialização correta do estado
+  const { user } = route.params;
+  const [elders, setElders] = useState([]);
 
   const fetchElders = async () => {
     try {
@@ -18,11 +18,11 @@ const ElderList = ({ route, navigation }) => {
         bloodType: idoso._raw.tipoSanguineo,
         phone: idoso._raw.telefoneResponsavel,
         description: idoso._raw.descricao,
-        image: require('../../assets/elders/elder_1.png'), // Certifique-se de que o caminho da imagem está correto
+        image: require('../../assets/elders/elder_1.png'),
       }));
-      setElders(idosoData); // Atualização correta do estado
+      setElders(idosoData);
     } catch (error) {
-      console.error('Erro ao buscar idosos:', error); // Adicione logs de erro para depuração
+      console.error('Erro ao buscar idosos:', error);
     }
   };
 
@@ -33,12 +33,12 @@ const ElderList = ({ route, navigation }) => {
   );
 
   const handleEdit = (elderId) => {
-    navigation.navigate('ElderEdit', { elderId });
+    navigation.navigate('ElderEdit', { elderId, user });
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('UserProfile', { user })}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('TabBarRoutes', { user })}>
         <Image source={require('../../assets/back_button.png')} style={styles.backButtonImage} />
       </TouchableOpacity>
       <Text style={styles.headerText}>De quem está{"\n"}cuidando?</Text>
@@ -56,7 +56,7 @@ const ElderList = ({ route, navigation }) => {
             phone={elder.phone}
             description={elder.description}
             image={elder.image}
-            onPress={() => navigation.navigate('ElderVisualization', { elderId: elder.id })}
+            onPress={() => navigation.navigate('ElderVisualization', { elderId: elder.id, user})}
             onEdit={() => handleEdit(elder.id)}
           />
         ))}
@@ -64,7 +64,7 @@ const ElderList = ({ route, navigation }) => {
 
       <View style={styles.footer}>
         <TouchableOpacity style={styles.plusButton} onPress={() => navigation.navigate('ElderRegistration', { user })}>
-            <Image source={require('../../assets/plus_button.png')} style={styles.plusButtonImage} />
+          <Image source={require('../../assets/plus_button.png')} style={styles.plusButtonImage} />
         </TouchableOpacity>
       </View>
       <Text style={styles.plusText}>Cadastrar{'\n'}um idoso</Text>
