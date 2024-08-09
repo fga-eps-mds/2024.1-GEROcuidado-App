@@ -90,7 +90,7 @@ const ElderRegistration = ({ route, navigation }) => {
           idoso.alimentacao = data.food|| '';
           idoso.tipoSanguineo = data.bloodtype || '';
           idoso.medicamento = data.medication || '';
-          idoso.observacoes = data.description || '';
+          idoso.descricao = data.description || '';
           idoso.user_id = user.id; // Associando o idoso ao usuário
         });
         console.log("Idoso criado com sucesso!");
