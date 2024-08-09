@@ -44,7 +44,6 @@ const EDiasSemana = { // Enumeração em JavaScript
     return null;
   }
 };
-
 const Rotina = ({ navigation, route }) => {
 
   const { user, idoso } = route.params;
@@ -57,7 +56,6 @@ const Rotina = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [rotinas, setRotinas] = useState([]);
   const [diasSelecionados, setDiasSelecionados] = useState([]); // Estado para armazenar dias selecionados
-
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
@@ -76,7 +74,7 @@ const Rotina = ({ navigation, route }) => {
     setIsNotificationEnabled(previousState => !previousState);
   };
 
-  const { control, handleSubmit, setValue, getValues } = useForm({
+  const { control, handleSubmit, setValue, reset, getValues } = useForm({
     defaultValues: {
       titulo: '',
       dataRotina: '',
@@ -96,10 +94,10 @@ const Rotina = ({ navigation, route }) => {
 
   const categories = ['Tomar remédio', 'Hora da caminhada', 'Alimentar'];
   const toggleDiaSemana = (dia) => { // Função para alternar seleção de dias
-      setDiasSelecionados((prevDias) =>
-        prevDias.includes(dia) ? prevDias.filter(d => d !== dia) : [...prevDias, dia]
-      );
-    };
+        setDiasSelecionados((prevDias) =>
+          prevDias.includes(dia) ? prevDias.filter(d => d !== dia) : [...prevDias, dia]
+        );
+      };
 
   const onSubmit = async (data) => {
 
@@ -127,6 +125,9 @@ const Rotina = ({ navigation, route }) => {
       // idIdoso: idoso.id,
     });
     Alert.alert("Sucesso no cadastro da rotina!");
+    toggleModal();
+    reset();
+
 
     try {
       setLoading(true);
@@ -145,9 +146,7 @@ const Rotina = ({ navigation, route }) => {
       // Atualiza a lista de rotinas
       // await fetchRotinas();
       setLoading(false);
-      toggleModal();
-      // reset();
-      // navigation.navigate('NewRoutine', { user });
+      navigation.navigate('NewRoutine', { user });
     } catch (error) {
       setLoading(false);
       setErrorMessage('Erro ao cadastrar rotina.');
@@ -406,9 +405,9 @@ const Rotina = ({ navigation, route }) => {
                 </View>
               </View>
           {/* </ScrollView> */}
-            <TouchableOpacity style={styles.saveButton} onPress={handleSubmit(onSubmit)}>
-              <Text style={styles.saveButtonText}>Criar</Text>
-            </TouchableOpacity>
+           <TouchableOpacity style={styles.saveButton} onPress={handleSubmit(onSubmit)}>
+                         <Text style={styles.saveButtonText}>Criar</Text>
+                       </TouchableOpacity>
 
           </View>
 
@@ -477,8 +476,8 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'flex',
     margin: 1,
-    marginTop: 2,
-    margin: 2,
+    marginTop: 7,
+    margin: 7,
   },
   modalContent: {
     backgroundColor: 'white',
@@ -486,19 +485,19 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
+    borderBottomLeftRadius: 10, // Adiciona borda arredondada na parte inferior esquerda
     borderBottomRightRadius: 10,
     alignItems: 'center',
   },
   header2: {
-    height: 60,
+    height: 80,
     width: '113%',
     alignItems: 'center',
     paddingLeft: 20,
     backgroundColor: "#2CCDB5",
     flexDirection: 'row',
-    borderRadius: 0,
-    marginTop: -26.6, 
+    borderRadius: 10,
+    marginTop: -20,
   },
   backButtonImage: {
     width: 27,
@@ -506,13 +505,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginRight: 10,
-    marginTop: -5,
+    marginTop: -10,
     marginLeft: -5,
   },
   helloMessage2: {
     fontSize: 18,
     color: 'white',
-    marginTop: -5,
+    marginTop: -10,
     fontWeight: 'bold',
   },
   formContainer: {
@@ -537,8 +536,8 @@ const styles = StyleSheet.create({
   inputWrapperTitle: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: -80,
-    marginLeft: 130,
+    marginTop: -85,
+    marginLeft: 160,
     width: 320,
     marginBottom: -30,
   },
@@ -548,7 +547,7 @@ const styles = StyleSheet.create({
   iconCalendar: {
     width: 25,
     height: 25,
-    marginRight: -27,
+    marginRight: -20,
     color: "#616161",
   },
   iconClock: {
@@ -564,35 +563,33 @@ const styles = StyleSheet.create({
     color: "#616161",
   },
   textInputWithPadding: {
-    paddingLeft: 50,
+    paddingLeft: 43,
     height: 55,
-    borderColor: 'black',
+    borderColor: 'gray',
     borderBottomWidth: 1,
     borderRadius: 4,
   },
   textInputWithPadding2: {
-    paddingLeft: 19,
-    width: 200,
-    height: 50,
-    borderColor: 'black',
+    paddingLeft: 15,
+    width: 170,
+    height: 55,
+    borderColor: 'gray',
     borderBottomWidth: 1,
     borderRadius: 4,
-    fontWeight: 'bold',
-    fontSize: 20,
   },
   dropdownButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 45,
     height: 55,
-    borderColor: 'black',
+    borderColor: 'gray',
     borderBottomWidth: 1,
     borderRadius: 4,
     width: 320,
   },
   dropdownText: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 16,
     color: 'black',
   },
   dropdownIcon: {
@@ -605,7 +602,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     backgroundColor: 'white',
-    borderColor: 'black',
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 15,
     zIndex: 1,
@@ -631,7 +628,7 @@ const styles = StyleSheet.create({
   },
   repeteText:  {
     position: 'absolute',
-    top: 390,
+    top: 420,
     left: 20,
     fontSize: 16,
     marginBottom: 12,
@@ -641,7 +638,7 @@ const styles = StyleSheet.create({
   repeteContainer: {
     width: '100%',
     position: 'absolute',
-    top: 430,
+    top: 455,
     justifyContent: 'center',
     alignItems: 'center',
   },
