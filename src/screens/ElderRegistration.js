@@ -49,6 +49,10 @@ const validarTelefone = (telefone) => {
 const ElderRegistration = ({ route, navigation }) => {
   const { user } = route.params; // Recebendo o user como parâmetro de rota
 
+  const [foodHeight, setFoodHeight] = useState(45);
+  const [medicationHeight, setMedicationHeight] = useState(45);
+  const [descriptionHeight, setDescriptionHeight] = useState(60);
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: '',
@@ -66,7 +70,6 @@ const ElderRegistration = ({ route, navigation }) => {
 
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [successModalMessage, setSuccessModalMessage] = useState('');
-  const [medicationHeight, setMedicationHeight] = useState(45);
 
   const [bloodTypeDropdownVisible, setBloodTypeDropdownVisible] = useState(false);
   const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -251,13 +254,14 @@ const ElderRegistration = ({ route, navigation }) => {
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={[styles.input, styles.textInputWithPadding, styles.alimentoInput]}
+                  style={[styles.input, styles.textInputWithPadding, styles.alimentoInput, { height: foodHeight }]}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Alimentação"
                   multiline
                   textAlignVertical="top"
+                  onContentSizeChange={(event) => setFoodHeight(event.nativeEvent.contentSize.height)}
                 />
               )}
               name="food"
@@ -273,13 +277,14 @@ const ElderRegistration = ({ route, navigation }) => {
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={[styles.input, styles.textInputWithPadding, styles.medicationInput]}
+                  style={[styles.input, styles.textInputWithPadding, styles.medicationInput, { height: medicationHeight }]}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Medicamentos"
                   multiline
                   textAlignVertical="top"
+                  onContentSizeChange={(event) => setMedicationHeight(event.nativeEvent.contentSize.height)}
                 />
               )}
               name="medication"
@@ -317,12 +322,17 @@ const ElderRegistration = ({ route, navigation }) => {
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
-                  style={[styles.input, styles.textInputWithPadding, { height: 60 }]}
+                  style={[styles.input, styles.textInputWithPadding, { height: descriptionHeight }]}
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Observações"
                   multiline
+                  onContentSizeChange={(event) => {
+                    if (event.nativeEvent.contentSize.height > descriptionHeight) {
+                      setDescriptionHeight(event.nativeEvent.contentSize.height);
+                    }
+                  }}
                 />
               )}
               name="description"
@@ -463,12 +473,14 @@ const styles = StyleSheet.create({
   },
 
   medicationInput: {
-     paddingTop: 10,
+    paddingTop: 5,
+    paddingBottom: 9,
   },
 
   alimentoInput: {
-    paddingTop: 10,
-  },  
+    paddingTop: 5,
+    paddingBottom: 9,
+  },
 
   iconNota: {
     width: 22,
