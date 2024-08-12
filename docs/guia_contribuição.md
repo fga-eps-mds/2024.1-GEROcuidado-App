@@ -158,8 +158,25 @@ Agora navegue até o repositório no GtHub do Projeto e você verá um botão di
 
 ![image](https://www.freecodecamp.org/portuguese/news/content/images/2023/05/compare.png)
 
+Antes de clicar em create o pull request, adicione uma descrição com todos os campos a seguir:
 
-Ao fazer um pull request atente-se para:
+|   _Type_   |                           Significado                           |
+|:----------:|:---------------------------------------------------------------:|
+|   _Nomear PR_   |            [#NUMERO_ISSUE] Nome do PR             |
+|   _Descrição_    |               insira uma descrição geral do que foi alterado neste PR                |
+|   _US_   |                  Closes #NUMERO_US                   |
+|  _Issue_   |       Closes #NUMERO_ISSUE         |
+| _Principais Implementações_ |         se for de código, descreva altreações relevantes                |
+
+## _Tipos de Mudanças_
+ - [ ] Bug fix (alteração que corrige uma issue e não altera funcionalidades já existentes);
+ - [ ] Nova feature (alteração que adiciona uma funcionalidade e não altera funcionalidades já existentes);
+ - [ ] Alteração disruptiva (Breaking change) (Correção ou funcionalidade que causa alteração nas funcionalidades existentes);
+ - [ ] Documentação
+ - [ ] Experiência do usuário (UX)
+ - [ ] Melhoria de desempenho
+
+Atenção! Ao fazer um pull request atente-se para:
 
 - Seguir o template configurado.
 - Linkar o PR a sua Issue correspondente.
