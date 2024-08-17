@@ -154,7 +154,7 @@ git push origin [Nome_da_branch]
 ```
 <!--![image](https://www.freecodecamp.org/portuguese/news/content/images/2023/05/branch2.png)-->
 
-Agora navegue até o repositório no GtHub do Projeto e você verá um botão dizendo **Compare & pull request**. Clique nele.
+Agora navegue até o repositório no GitHub do Projeto e você verá um botão dizendo **Compare & pull request**. Clique nele.
 
 ![image](https://www.freecodecamp.org/portuguese/news/content/images/2023/05/compare.png)
 
